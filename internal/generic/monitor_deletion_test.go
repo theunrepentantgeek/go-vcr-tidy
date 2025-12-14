@@ -1,20 +1,19 @@
-package generic_test
+package generic
 
 import (
-	"net/url"
 	"testing"
 
 	. "github.com/onsi/gomega"
+
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"
-	"github.com/theunrepentantgeek/go-vcr-tidy/internal/generic"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
 )
 
 func TestMonitorDeletion_SingleGETReturning404_MarksFinished(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	monitor := generic.NewMonitorDeletion(baseURL)
+	monitor := NewMonitorDeletion(baseURL)
 
 	// Single GET returning 404 should finish immediately
 	interaction := fake.NewInteraction(baseURL, "GET", 404)
@@ -29,7 +28,7 @@ func TestMonitorDeletion_SingleGETReturning404_MarksFinished(t *testing.T) {
 func TestMonitorDeletion_TwoGETsThenConfirmation_NothingIsRemoved(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	monitor := generic.NewMonitorDeletion(baseURL)
+	monitor := NewMonitorDeletion(baseURL)
 
 	// Two successful GETs followed by 404
 	get1 := fake.NewInteraction(baseURL, "GET", 200)
@@ -46,7 +45,7 @@ func TestMonitorDeletion_TwoGETsThenConfirmation_NothingIsRemoved(t *testing.T) 
 func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	monitor := generic.NewMonitorDeletion(baseURL)
+	monitor := NewMonitorDeletion(baseURL)
 
 	// Three successful GETs followed by 404
 	get1 := fake.NewInteraction(baseURL, "GET", 200)
@@ -65,7 +64,7 @@ func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T)
 func TestMonitorDeletion_MultipleMiddleGETs_AllMiddleAreRemoved(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	monitor := generic.NewMonitorDeletion(baseURL)
+	monitor := NewMonitorDeletion(baseURL)
 
 	// Many successful GETs followed by 404
 	interactions := make([]interaction.Interface, 0, 10)
@@ -91,7 +90,7 @@ func TestMonitorDeletion_DifferentURL_Ignored(t *testing.T) {
 	g := NewWithT(t)
 	monitoredURL := mustParseURL("https://api.example.com/resource/123")
 	differentURL := mustParseURL("https://api.example.com/resource/456")
-	monitor := generic.NewMonitorDeletion(monitoredURL)
+	monitor := NewMonitorDeletion(monitoredURL)
 
 	interaction := fake.NewInteraction(differentURL, "GET", 200)
 
@@ -120,7 +119,7 @@ func TestMonitorDeletion_AbandonsMonitoring(t *testing.T) {
 
 			g := NewWithT(t)
 			baseURL := mustParseURL("https://api.example.com/resource/123")
-			monitor := generic.NewMonitorDeletion(baseURL)
+			monitor := NewMonitorDeletion(baseURL)
 
 			// Start with some successful GETs
 			// Then a request that should abandon monitoring
@@ -137,7 +136,7 @@ func TestMonitorDeletion_AbandonsMonitoring(t *testing.T) {
 func TestMonitorDeletion_Various2xxStatusCodes_Accumulated(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	monitor := generic.NewMonitorDeletion(baseURL)
+	monitor := NewMonitorDeletion(baseURL)
 
 	// Test various 2xx status codes
 	statusCodes := []int{200, 201, 202, 204, 206}
@@ -165,7 +164,7 @@ func TestMonitorDeletion_URLWithQueryParameters_MonitorsBaseURL(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	urlWithParams := mustParseURL("https://api.example.com/resource/123?param=value")
-	monitor := generic.NewMonitorDeletion(baseURL)
+	monitor := NewMonitorDeletion(baseURL)
 
 	// Interaction with query parameters should match base URL
 	interaction := fake.NewInteraction(urlWithParams, "GET", 200)
@@ -179,44 +178,11 @@ func TestMonitorDeletion_EmptyResult_WhenIgnoringInteraction(t *testing.T) {
 	g := NewWithT(t)
 	monitoredURL := mustParseURL("https://api.example.com/resource/123")
 	differentURL := mustParseURL("https://api.example.com/other")
-	monitor := generic.NewMonitorDeletion(monitoredURL)
+	monitor := NewMonitorDeletion(monitoredURL)
 
 	interaction := fake.NewInteraction(differentURL, "GET", 200)
 	result, err := monitor.Analyze(interaction)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result).To(Equal(analyzer.Result{}))
-}
-
-// Helper functions
-
-func mustParseURL(rawURL string) url.URL {
-	parsed, err := url.Parse(rawURL)
-	if err != nil {
-		panic(err)
-	}
-	return *parsed
-}
-
-// runAnalyzer runs the analyzer with the provided interactions and returns the final result.
-func runAnalyzer(
-	t *testing.T,
-	a analyzer.Interface,
-	interactions ...interaction.Interface,
-) analyzer.Result {
-	t.Helper()
-	g := NewWithT(t)
-
-	var result analyzer.Result
-	var err error
-	limit := len(interactions) - 1
-	for index, inter := range interactions {
-		result, err = a.Analyze(inter)
-		g.Expect(err).ToNot(HaveOccurred())
-		if index < limit {
-			g.Expect(result.Finished).To(BeFalse(), "Analyzer finished prematurely")
-		}
-	}
-
-	return result
 }
