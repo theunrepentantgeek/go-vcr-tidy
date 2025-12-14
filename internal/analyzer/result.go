@@ -7,3 +7,10 @@ type Result struct {
 	// Spawn contains any new analyzers that should be added to the active set, allowing one analyzer to create others.
 	Spawn []Interface
 }
+
+// Finished creates a Result indicating the analyzer is finished.
+func Finished() Result {
+	return Result{
+		Finished: true,
+	}
+}

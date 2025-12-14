@@ -49,7 +49,8 @@ func (m *MonitorDeletion) Analyze(interaction interaction.Interface) (analyzer.R
 					m.interactions[i].MarkForRemoval()
 				}
 			}
-			return analyzer.Result{Finished: true}, nil
+
+			return analyzer.Finished(), nil
 		}
 
 		if statusCode >= 200 && statusCode < 300 {
@@ -59,9 +60,9 @@ func (m *MonitorDeletion) Analyze(interaction interaction.Interface) (analyzer.R
 		}
 
 		// Unexpected status code, abandon monitoring.
-		return analyzer.Result{Finished: true}, nil
+		return analyzer.Finished(), nil
 	}
 
 	// Some other method (e.g. POST, PUT), abandon monitoring.
-	return analyzer.Result{Finished: true}, nil
+	return analyzer.Finished(), nil
 }
