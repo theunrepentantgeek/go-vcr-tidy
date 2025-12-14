@@ -8,6 +8,7 @@ import (
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/generic"
+	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
 )
 
 func TestMonitorDeletion_SingleGETReturning404_MarksFinished(t *testing.T) {
@@ -35,20 +36,11 @@ func TestMonitorDeletion_TwoGETsThenConfirmation_NothingIsRemoved(t *testing.T) 
 	get2 := fake.NewInteraction(baseURL, "GET", 200)
 	get404 := fake.NewInteraction(baseURL, "GET", 404)
 
-	result1, err := monitor.Analyze(get1)
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result1.Finished).To(BeFalse())
-
-	result2, err := monitor.Analyze(get2)
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result2.Finished).To(BeFalse())
-
-	result3, err := monitor.Analyze(get404)
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result3.Finished).To(BeTrue())
+	result := runAnalyzer(t, monitor, get1, get2, get404)
+	g.Expect(result.Finished).To(BeTrue())
 
 	// With only 2 accumulated interactions, none should be excluded
-	g.Expect(result3.Excluded).To(BeEmpty())
+	g.Expect(result.Excluded).To(BeEmpty())
 }
 
 func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T) {
@@ -62,25 +54,12 @@ func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T)
 	get3 := fake.NewInteraction(baseURL, "GET", 200)
 	get404 := fake.NewInteraction(baseURL, "GET", 404)
 
-	result1, err := monitor.Analyze(get1)
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result1.Finished).To(BeFalse())
-
-	result2, err := monitor.Analyze(get2)
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result2.Finished).To(BeFalse())
-
-	result3, err := monitor.Analyze(get3)
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result3.Finished).To(BeFalse())
-
-	result4, err := monitor.Analyze(get404)
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result4.Finished).To(BeTrue())
+	result := runAnalyzer(t, monitor, get1, get2, get3, get404)
+	g.Expect(result.Finished).To(BeTrue())
 
 	// First and last accumulated should remain, middle should be excluded
-	g.Expect(result4.Excluded).To(HaveLen(1))
-	g.Expect(result4.Excluded).To(ContainElement(get2))
+	g.Expect(result.Excluded).To(HaveLen(1))
+	g.Expect(result.Excluded).To(ContainElement(get2))
 }
 
 func TestMonitorDeletion_MultipleMiddleGETs_AllMiddleAreRemoved(t *testing.T) {
@@ -89,21 +68,16 @@ func TestMonitorDeletion_MultipleMiddleGETs_AllMiddleAreRemoved(t *testing.T) {
 	monitor := generic.NewMonitorDeletion(baseURL)
 
 	// Many successful GETs followed by 404
-	interactions := make([]*fake.Interaction, 0, 10)
+	interactions := make([]interaction.Interface, 0, 10)
 	for i := 0; i < 9; i++ {
 		get := fake.NewInteraction(baseURL, "GET", 200)
 		interactions = append(interactions, get)
-
-		result, err := monitor.Analyze(get)
-		g.Expect(err).ToNot(HaveOccurred())
-		g.Expect(result.Finished).To(BeFalse())
 	}
 
 	get404 := fake.NewInteraction(baseURL, "GET", 404)
 	interactions = append(interactions, get404)
 
-	result, err := monitor.Analyze(get404)
-	g.Expect(err).ToNot(HaveOccurred())
+	result := runAnalyzer(t, monitor, interactions...)
 	g.Expect(result.Finished).To(BeTrue())
 
 	// Verify exclusion pattern: all middle interactions should be excluded
@@ -149,18 +123,13 @@ func TestMonitorDeletion_AbandonsMonitoring(t *testing.T) {
 			monitor := generic.NewMonitorDeletion(baseURL)
 
 			// Start with some successful GETs
-			get1 := fake.NewInteraction(baseURL, "GET", 200)
-			result1, err := monitor.Analyze(get1)
-			g.Expect(err).ToNot(HaveOccurred())
-			g.Expect(result1.Finished).To(BeFalse())
-
 			// Then a request that should abandon monitoring
+			get1 := fake.NewInteraction(baseURL, "GET", 200)
 			abandoningRequest := fake.NewInteraction(baseURL, c.method, c.statusCode)
-			result2, err := monitor.Analyze(abandoningRequest)
 
-			g.Expect(err).ToNot(HaveOccurred())
-			g.Expect(result2.Finished).To(BeTrue())
-			g.Expect(result2.Excluded).To(BeEmpty())
+			result := runAnalyzer(t, monitor, get1, abandoningRequest)
+			g.Expect(result.Finished).To(BeTrue())
+			g.Expect(result.Excluded).To(BeEmpty())
 		})
 	}
 }
@@ -172,26 +141,21 @@ func TestMonitorDeletion_Various2xxStatusCodes_Accumulated(t *testing.T) {
 
 	// Test various 2xx status codes
 	statusCodes := []int{200, 201, 202, 204, 206}
-	interactions := make([]*fake.Interaction, 0, len(statusCodes)+1)
+	interactions := make([]interaction.Interface, 0, len(statusCodes))
 
 	for _, code := range statusCodes {
 		get := fake.NewInteraction(baseURL, "GET", code)
 		interactions = append(interactions, get)
-
-		result, err := monitor.Analyze(get)
-		g.Expect(err).ToNot(HaveOccurred())
-		g.Expect(result.Finished).To(BeFalse())
 	}
 
 	get404 := fake.NewInteraction(baseURL, "GET", 404)
 	interactions = append(interactions, get404)
 
-	result, err := monitor.Analyze(get404)
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result.Finished).To(BeTrue())
+	result := runAnalyzer(t, monitor, interactions...)
 
 	// First and last accumulated should remain, middle should be excluded
 	g.Expect(result.Excluded).To(HaveLen(3))
+
 	for i := 1; i < len(statusCodes)-1; i++ {
 		g.Expect(result.Excluded).To(ContainElement(interactions[i]))
 	}
@@ -232,4 +196,27 @@ func mustParseURL(rawURL string) url.URL {
 		panic(err)
 	}
 	return *parsed
+}
+
+// runAnalyzer runs the analyzer with the provided interactions and returns the final result.
+func runAnalyzer(
+	t *testing.T,
+	a analyzer.Interface,
+	interactions ...interaction.Interface,
+) analyzer.Result {
+	t.Helper()
+	g := NewWithT(t)
+
+	var result analyzer.Result
+	var err error
+	limit := len(interactions) - 1
+	for index, inter := range interactions {
+		result, err = a.Analyze(inter)
+		g.Expect(err).ToNot(HaveOccurred())
+		if index < limit {
+			g.Expect(result.Finished).To(BeFalse(), "Analyzer finished prematurely")
+		}
+	}
+
+	return result
 }
