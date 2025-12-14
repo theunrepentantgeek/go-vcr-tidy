@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	. "github.com/onsi/gomega"
-	"github.com/sebdah/goldie/v2"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/generic"
@@ -23,10 +22,10 @@ func TestMonitorDeletion_SingleGETReturning404_MarksFinished(t *testing.T) {
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeTrue())
-	g.Expect(interaction.IsMarkedForRemoval()).To(BeFalse(), "Single 404 should not be marked for removal")
+	g.Expect(result.Excluded).To(BeEmpty(), "Single 404 should not exclude any interactions")
 }
 
-func TestMonitorDeletion_TwoGETsThenConfirmation_OnlyConfirmationRemains(t *testing.T) {
+func TestMonitorDeletion_TwoGETsThenConfirmation_NothingIsRemoved(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := generic.NewMonitorDeletion(baseURL)
@@ -48,10 +47,8 @@ func TestMonitorDeletion_TwoGETsThenConfirmation_OnlyConfirmationRemains(t *test
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result3.Finished).To(BeTrue())
 
-	// With only 2 accumulated interactions, none should be marked for removal
-	g.Expect(get1.IsMarkedForRemoval()).To(BeFalse())
-	g.Expect(get2.IsMarkedForRemoval()).To(BeFalse())
-	g.Expect(get404.IsMarkedForRemoval()).To(BeFalse())
+	// With only 2 accumulated interactions, none should be excluded
+	g.Expect(result3.Excluded).To(BeEmpty())
 }
 
 func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T) {
@@ -81,16 +78,13 @@ func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T)
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result4.Finished).To(BeTrue())
 
-	// First and last accumulated should remain, middle should be removed
-	g.Expect(get1.IsMarkedForRemoval()).To(BeFalse(), "First GET should not be removed")
-	g.Expect(get2.IsMarkedForRemoval()).To(BeTrue(), "Middle GET should be removed")
-	g.Expect(get3.IsMarkedForRemoval()).To(BeFalse(), "Last GET should not be removed")
-	g.Expect(get404.IsMarkedForRemoval()).To(BeFalse(), "Confirmation 404 should not be removed")
+	// First and last accumulated should remain, middle should be excluded
+	g.Expect(result4.Excluded).To(HaveLen(1))
+	g.Expect(result4.Excluded).To(ContainElement(get2))
 }
 
 func TestMonitorDeletion_MultipleMiddleGETs_AllMiddleAreRemoved(t *testing.T) {
 	g := NewWithT(t)
-	goldie := goldie.New(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := generic.NewMonitorDeletion(baseURL)
 
@@ -112,17 +106,11 @@ func TestMonitorDeletion_MultipleMiddleGETs_AllMiddleAreRemoved(t *testing.T) {
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeTrue())
 
-	// Verify removal pattern
-	g.Expect(interactions[0].IsMarkedForRemoval()).To(BeFalse(), "First GET should not be removed")
+	// Verify exclusion pattern: all middle interactions should be excluded
+	g.Expect(result.Excluded).To(HaveLen(7))
 	for i := 1; i < 8; i++ {
-		g.Expect(interactions[i].IsMarkedForRemoval()).To(BeTrue(), "Middle GET %d should be removed", i)
+		g.Expect(result.Excluded).To(ContainElement(interactions[i]), "Middle GET %d should be excluded", i)
 	}
-	g.Expect(interactions[8].IsMarkedForRemoval()).To(BeFalse(), "Last GET should not be removed")
-	g.Expect(interactions[9].IsMarkedForRemoval()).To(BeFalse(), "Confirmation 404 should not be removed")
-
-	// Use goldie to snapshot the state
-	output := formatInteractions(interactions)
-	goldie.Assert(t, "multiple_middle_gets", []byte(output))
 }
 
 func TestMonitorDeletion_DifferentURL_Ignored(t *testing.T) {
@@ -137,71 +125,48 @@ func TestMonitorDeletion_DifferentURL_Ignored(t *testing.T) {
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeFalse())
-	g.Expect(interaction.IsMarkedForRemoval()).To(BeFalse())
+	g.Expect(result.Excluded).To(BeEmpty())
 }
 
-func TestMonitorDeletion_NonGETMethod_AbandonMonitoring(t *testing.T) {
-	g := NewWithT(t)
-	baseURL := mustParseURL("https://api.example.com/resource/123")
-	monitor := generic.NewMonitorDeletion(baseURL)
+func TestMonitorDeletion_AbandonsMonitoring(t *testing.T) {
+	t.Parallel()
 
-	// Start with some successful GETs
-	get1 := fake.NewInteraction(baseURL, "GET", 200)
-	result1, err := monitor.Analyze(get1)
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result1.Finished).To(BeFalse())
+	cases := map[string]struct {
+		method     string
+		statusCode int
+	}{
+		"POST":   {method: "POST", statusCode: 201},
+		"PUT":    {method: "PUT", statusCode: 200},
+		"GET500": {method: "GET", statusCode: 500},
+		"GET301": {method: "GET", statusCode: 301},
+	}
 
-	// Then a POST should abandon monitoring
-	post := fake.NewInteraction(baseURL, "POST", 201)
-	result2, err := monitor.Analyze(post)
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
 
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result2.Finished).To(BeTrue())
-	g.Expect(get1.IsMarkedForRemoval()).To(BeFalse())
-	g.Expect(post.IsMarkedForRemoval()).To(BeFalse())
-}
+			g := NewWithT(t)
+			baseURL := mustParseURL("https://api.example.com/resource/123")
+			monitor := generic.NewMonitorDeletion(baseURL)
 
-func TestMonitorDeletion_PUTMethod_AbandonMonitoring(t *testing.T) {
-	g := NewWithT(t)
-	baseURL := mustParseURL("https://api.example.com/resource/123")
-	monitor := generic.NewMonitorDeletion(baseURL)
+			// Start with some successful GETs
+			get1 := fake.NewInteraction(baseURL, "GET", 200)
+			result1, err := monitor.Analyze(get1)
+			g.Expect(err).ToNot(HaveOccurred())
+			g.Expect(result1.Finished).To(BeFalse())
 
-	put := fake.NewInteraction(baseURL, "PUT", 200)
-	result, err := monitor.Analyze(put)
+			// Then a request that should abandon monitoring
+			abandoningRequest := fake.NewInteraction(baseURL, c.method, c.statusCode)
+			result2, err := monitor.Analyze(abandoningRequest)
 
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result.Finished).To(BeTrue())
-}
-
-func TestMonitorDeletion_GETWith500Status_AbandonMonitoring(t *testing.T) {
-	g := NewWithT(t)
-	baseURL := mustParseURL("https://api.example.com/resource/123")
-	monitor := generic.NewMonitorDeletion(baseURL)
-
-	get500 := fake.NewInteraction(baseURL, "GET", 500)
-	result, err := monitor.Analyze(get500)
-
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result.Finished).To(BeTrue())
-	g.Expect(get500.IsMarkedForRemoval()).To(BeFalse())
-}
-
-func TestMonitorDeletion_GETWith301Status_AbandonMonitoring(t *testing.T) {
-	g := NewWithT(t)
-	baseURL := mustParseURL("https://api.example.com/resource/123")
-	monitor := generic.NewMonitorDeletion(baseURL)
-
-	get301 := fake.NewInteraction(baseURL, "GET", 301)
-	result, err := monitor.Analyze(get301)
-
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result.Finished).To(BeTrue())
-	g.Expect(get301.IsMarkedForRemoval()).To(BeFalse())
+			g.Expect(err).ToNot(HaveOccurred())
+			g.Expect(result2.Finished).To(BeTrue())
+			g.Expect(result2.Excluded).To(BeEmpty())
+		})
+	}
 }
 
 func TestMonitorDeletion_Various2xxStatusCodes_Accumulated(t *testing.T) {
 	g := NewWithT(t)
-	goldie := goldie.New(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := generic.NewMonitorDeletion(baseURL)
 
@@ -225,16 +190,11 @@ func TestMonitorDeletion_Various2xxStatusCodes_Accumulated(t *testing.T) {
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeTrue())
 
-	// First and last accumulated should remain, middle should be removed
-	g.Expect(interactions[0].IsMarkedForRemoval()).To(BeFalse())
+	// First and last accumulated should remain, middle should be excluded
+	g.Expect(result.Excluded).To(HaveLen(3))
 	for i := 1; i < len(statusCodes)-1; i++ {
-		g.Expect(interactions[i].IsMarkedForRemoval()).To(BeTrue())
+		g.Expect(result.Excluded).To(ContainElement(interactions[i]))
 	}
-	g.Expect(interactions[len(statusCodes)-1].IsMarkedForRemoval()).To(BeFalse())
-	g.Expect(get404.IsMarkedForRemoval()).To(BeFalse())
-
-	output := formatInteractions(interactions)
-	goldie.Assert(t, "various_2xx_codes", []byte(output))
 }
 
 func TestMonitorDeletion_URLWithQueryParameters_MonitorsBaseURL(t *testing.T) {
@@ -249,49 +209,6 @@ func TestMonitorDeletion_URLWithQueryParameters_MonitorsBaseURL(t *testing.T) {
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeFalse())
-}
-
-func TestMonitorDeletion_CompleteSequence_GoldenFileSnapshot(t *testing.T) {
-	g := NewWithT(t)
-	goldie := goldie.New(t)
-	baseURL := mustParseURL("https://api.example.com/resources/delete-me")
-	monitor := generic.NewMonitorDeletion(baseURL)
-
-	interactions := []*fake.Interaction{
-		fake.NewInteraction(baseURL, "GET", 200),
-		fake.NewInteraction(baseURL, "GET", 200),
-		fake.NewInteraction(baseURL, "GET", 200),
-		fake.NewInteraction(baseURL, "GET", 200),
-		fake.NewInteraction(baseURL, "GET", 200),
-		fake.NewInteraction(baseURL, "GET", 404),
-	}
-
-	for i, interaction := range interactions {
-		result, err := monitor.Analyze(interaction)
-		g.Expect(err).ToNot(HaveOccurred())
-		if i < len(interactions)-1 {
-			g.Expect(result.Finished).To(BeFalse())
-		} else {
-			g.Expect(result.Finished).To(BeTrue())
-		}
-	}
-
-	output := formatInteractions(interactions)
-	goldie.Assert(t, "complete_sequence", []byte(output))
-}
-
-func TestMonitorDeletion_NoAccumulatedGETs_404StillFinishes(t *testing.T) {
-	g := NewWithT(t)
-	baseURL := mustParseURL("https://api.example.com/resource/123")
-	monitor := generic.NewMonitorDeletion(baseURL)
-
-	// Immediate 404 without any accumulated GETs
-	get404 := fake.NewInteraction(baseURL, "GET", 404)
-	result, err := monitor.Analyze(get404)
-
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result.Finished).To(BeTrue())
-	g.Expect(get404.IsMarkedForRemoval()).To(BeFalse())
 }
 
 func TestMonitorDeletion_EmptyResult_WhenIgnoringInteraction(t *testing.T) {
@@ -315,15 +232,4 @@ func mustParseURL(rawURL string) url.URL {
 		panic(err)
 	}
 	return *parsed
-}
-
-func formatInteractions(interactions []*fake.Interaction) string {
-	result := ""
-	for i, interaction := range interactions {
-		if i > 0 {
-			result += "\n"
-		}
-		result += interaction.String()
-	}
-	return result
 }

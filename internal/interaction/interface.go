@@ -16,8 +16,6 @@ type Interface interface {
 	Request() Request
 	// Response returns the response object.
 	Response() Response
-	// MarkForRemoval marks this interaction as removable.
-	MarkForRemoval()
 }
 
 // Request is an abstract representation of an HTTP request.

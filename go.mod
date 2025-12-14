@@ -4,6 +4,7 @@ go 1.23.2
 
 require (
 	github.com/google/go-cmp v0.7.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/onsi/gomega v1.38.3 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sebdah/goldie/v2 v2.8.0 // indirect

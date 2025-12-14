@@ -43,13 +43,18 @@ func (m *MonitorDeletion) Analyze(interaction interaction.Interface) (analyzer.R
 	if method == "GET" {
 		if statusCode == 404 {
 			// Deletion confirmed.
-			// Mark all accumulated interactions except the first and last as removable.
-			if len(m.interactions) > 2 {
-				for i := 1; i < len(m.interactions)-1; i++ {
-					m.interactions[i].MarkForRemoval()
-				}
+			// We should exclude all interactions except the first and last.
+			if len(m.interactions) < 2 {
+				// No intermediate interactions to exclude.
+				return analyzer.Finished(), nil
 			}
 
+			excluded := m.interactions[1 : len(m.interactions)-1]
+			return analyzer.FinishedWithExclusions(excluded), nil
+		}
+
+		if statusCode == 301 || statusCode == 302 || statusCode == 303 || statusCode == 307 || statusCode == 308 {
+			// Redirects are unexpected, abandon monitoring.
 			return analyzer.Finished(), nil
 		}
 

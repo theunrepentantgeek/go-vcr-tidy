@@ -4,18 +4,20 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/google/uuid"
+
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
 )
 
 // Interaction is a fake interaction to use during testing.
 type Interaction struct {
-	fullURL       url.URL
-	baseURL       url.URL
-	method        string
-	statusCode    int
-	requestBody   string
-	responseBody  string
-	markedRemoval bool
+	id           string
+	fullURL      url.URL
+	baseURL      url.URL
+	method       string
+	statusCode   int
+	requestBody  string
+	responseBody string
 }
 
 var (
@@ -32,11 +34,15 @@ func NewInteraction(
 	method string,
 	statusCode int,
 ) *Interaction {
+	// Fake interactions use GUIDs for IDs.
+	id := uuid.New().String()
+
 	// Remove all query parameters to get the base URL.
 	baseURL := fullURL
 	baseURL.RawQuery = ""
 
 	return &Interaction{
+		id:         id,
 		fullURL:    fullURL,
 		baseURL:    baseURL,
 		method:     method,
@@ -70,26 +76,10 @@ func (i *Interaction) Response() interaction.Response {
 	}
 }
 
-// MarkForRemoval marks this interaction as removable.
-func (i *Interaction) MarkForRemoval() {
-	i.markedRemoval = true
-}
-
-// IsMarkedForRemoval returns whether this interaction has been marked for removal.
-func (i *Interaction) IsMarkedForRemoval() bool {
-	return i.markedRemoval
-}
-
 // String returns a one-line representation suitable for table display.
 func (i *Interaction) String() string {
-	removed := " "
-	if i.markedRemoval {
-		removed = "X"
-	}
-
 	return fmt.Sprintf(
-		"[%s] %-6s %3d %s",
-		removed,
+		"%-6s %3d %s",
 		i.method,
 		i.statusCode,
 		i.baseURL.String())
