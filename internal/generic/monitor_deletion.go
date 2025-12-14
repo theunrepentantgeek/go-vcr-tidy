@@ -12,9 +12,9 @@ import (
 // followed by a GET that returns 404 (Not Found).
 // Once the DELETE is confirmed, the analyzer marks itself as Finished.
 // All the GET request returning 2xx are accumulated over multiple interactions, and when the 404 is seen, the analyzer
-// flags all but the first and last as removable.
-// If any other requests to that URL are seen (e.g. a POST or PUT), the analyzer abandons monitoring and marks itself
-// as Finished.
+// indicates all but the first and last are removable.
+// If any other requests to that URL are seen (e.g. a POST or PUT), or if a GET returns a non-2xx and non-404 status
+// code, the analyzer abandons monitoring and marks itself as Finished.
 type MonitorDeletion struct {
 	baseURL      url.URL
 	interactions []interaction.Interface
