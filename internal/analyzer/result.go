@@ -12,6 +12,13 @@ type Result struct {
 	Excluded []interaction.Interface
 }
 
+// Spawn creates a Result that spawns one or more new analyzers.
+func Spawn(analyzers ...Interface) Result {
+	return Result{
+		Spawn: analyzers,
+	}
+}
+
 // Finished creates a Result indicating the analyzer is finished.
 func Finished() Result {
 	return Result{
