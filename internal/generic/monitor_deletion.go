@@ -50,7 +50,7 @@ func (m *MonitorDeletion) Analyze(interaction interaction.Interface) (analyzer.R
 			}
 
 			excluded := m.interactions[1 : len(m.interactions)-1]
-			return analyzer.FinishedWithExclusions(excluded), nil
+			return analyzer.FinishedWithExclusions(excluded...), nil
 		}
 
 		if statusCode == 301 || statusCode == 302 || statusCode == 303 || statusCode == 307 || statusCode == 308 {

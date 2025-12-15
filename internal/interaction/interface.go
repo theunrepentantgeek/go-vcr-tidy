@@ -1,6 +1,10 @@
 package interaction
 
-import "net/url"
+import (
+	"net/url"
+
+	"github.com/google/uuid"
+)
 
 // Interface is an abstract representation of an HTTL request/response pair.
 // This provides a wrapper around interactions from go-vcr that will act as an insulation layer, allowing us to adapt to
@@ -8,6 +12,8 @@ import "net/url"
 // can use for testing, as well as a natural place for reusable transformations (say, if multiple analyzers want to
 // deserialize JSON from the response body).
 type Interface interface {
+	// ID is a unique identifier for the interaction.
+	ID() uuid.UUID
 	// FullURL returns the full URL of the request.
 	FullURL() url.URL
 	// URL returns the URL of the request without any parameters

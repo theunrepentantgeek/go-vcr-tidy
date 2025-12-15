@@ -11,7 +11,7 @@ import (
 
 // Interaction is a fake interaction to use during testing.
 type Interaction struct {
-	id           string
+	id           uuid.UUID
 	fullURL      url.URL
 	baseURL      url.URL
 	method       string
@@ -35,7 +35,7 @@ func NewInteraction(
 	statusCode int,
 ) *Interaction {
 	// Fake interactions use GUIDs for IDs.
-	id := uuid.New().String()
+	id := uuid.New()
 
 	// Remove all query parameters to get the base URL.
 	baseURL := fullURL
@@ -48,6 +48,11 @@ func NewInteraction(
 		method:     method,
 		statusCode: statusCode,
 	}
+}
+
+// ID is a unique identifier for the interaction.
+func (i *Interaction) ID() uuid.UUID {
+	return i.id
 }
 
 // FullURL returns the full URL of the request.
