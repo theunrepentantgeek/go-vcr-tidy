@@ -18,3 +18,4 @@ case iteration uses `for name, c := range cases`.
 
 * All tests are marked with `t.Parallel()` unless the test cannot run in parallel.
 * Helper methods are always marked with `t.Helper()`.
+* Only use a test package (e.g. with the suffix _test) if needed to avoid circular imports.
