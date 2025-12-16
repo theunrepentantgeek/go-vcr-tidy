@@ -65,22 +65,6 @@ func (i *Interaction) URL() url.URL {
 	return i.baseURL
 }
 
-// Request returns the request object.
-func (i *Interaction) Request() interaction.Request {
-	return &fakeRequest{
-		method: i.method,
-		body:   i.requestBody,
-	}
-}
-
-// Response returns the response object.
-func (i *Interaction) Response() interaction.Response {
-	return &fakeResponse{
-		statusCode: i.statusCode,
-		body:       i.responseBody,
-	}
-}
-
 // String returns a one-line representation suitable for table display.
 func (i *Interaction) String() string {
 	return fmt.Sprintf(
@@ -90,34 +74,12 @@ func (i *Interaction) String() string {
 		i.baseURL.String())
 }
 
-// fakeRequest is a fake HTTP request.
-type fakeRequest struct {
-	method string
-	body   string
-}
-
 // Method returns the HTTP method of the request.
-func (r *fakeRequest) Method() string {
+func (r *Interaction) Method() string {
 	return r.method
 }
 
-// Body returns the body of the request as a string.
-func (r *fakeRequest) Body() string {
-	return r.body
-}
-
-// fakeResponse is a fake HTTP response.
-type fakeResponse struct {
-	statusCode int
-	body       string
-}
-
 // StatusCode returns the HTTP status code of the response.
-func (r *fakeResponse) StatusCode() int {
+func (r *Interaction) StatusCode() int {
 	return r.statusCode
-}
-
-// Body returns the body of the response as a string.
-func (r *fakeResponse) Body() string {
-	return r.body
 }

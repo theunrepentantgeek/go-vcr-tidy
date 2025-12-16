@@ -37,8 +37,8 @@ func (m *MonitorDeletion) Analyze(interaction interaction.Interface) (analyzer.R
 		return analyzer.Result{}, nil
 	}
 
-	method := interaction.Request().Method()
-	statusCode := interaction.Response().StatusCode()
+	method := interaction.Method()
+	statusCode := interaction.StatusCode()
 
 	if method == "GET" {
 		if statusCode == 404 {

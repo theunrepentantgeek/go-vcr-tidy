@@ -18,24 +18,8 @@ type Interface interface {
 	FullURL() url.URL
 	// URL returns the URL of the request without any parameters
 	URL() url.URL
-	// Request returns the request object.
-	Request() Request
-	// Response returns the response object.
-	Response() Response
-}
-
-// Request is an abstract representation of an HTTP request.
-type Request interface {
 	// The HTTP method of the request, e.g. "GET", "POST", etc.
 	Method() string
-	// Body returns the body of the request as a string.
-	Body() string
-}
-
-// Response is an abstract representation of an HTTP response.
-type Response interface {
 	// StatusCode returns the HTTP status code of the response.
 	StatusCode() int
-	// Body returns the body of the response as a string.
-	Body() string
 }
