@@ -18,8 +18,8 @@ type Cleaner struct {
 	padlock sync.Mutex
 }
 
-// NewCleaner creates a new Cleaner instance with the specified analyzers included.
-func NewCleaner(analyzers ...analyzer.Interface) *Cleaner {
+// New creates a new Cleaner instance with the specified analyzers included.
+func New(analyzers ...analyzer.Interface) *Cleaner {
 	result := &Cleaner{
 		analyzers:            make(map[uuid.UUID]analyzer.Interface),
 		interactionsToRemove: make(map[uuid.UUID]bool),
@@ -52,8 +52,8 @@ func (c *Cleaner) exclude(interactions ...interaction.Interface) {
 	}
 }
 
-// analyze processes an interaction through all active analyzers, handling spawning and finishing as needed.
-func (c *Cleaner) analyze(interaction interaction.Interface) error {
+// Analyze processes an interaction through all active analyzers, handling spawning and finishing as needed.
+func (c *Cleaner) Analyze(interaction interaction.Interface) error {
 	var toRemove []uuid.UUID
 	var toAdd []analyzer.Interface
 
@@ -80,4 +80,9 @@ func (c *Cleaner) analyze(interaction interaction.Interface) error {
 	c.Add(toAdd...)
 
 	return nil
+}
+
+func (c *Cleaner) ShouldRemove(interaction interaction.Interface) bool {
+	_, ok := c.interactionsToRemove[interaction.ID()]
+	return ok
 }
