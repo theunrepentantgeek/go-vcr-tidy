@@ -2,6 +2,7 @@ package fake
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 
 	"github.com/google/uuid"
@@ -11,13 +12,14 @@ import (
 
 // Interaction is a fake interaction to use during testing.
 type Interaction struct {
-	id           uuid.UUID
-	fullURL      url.URL
-	baseURL      url.URL
-	method       string
-	statusCode   int
-	requestBody  string
-	responseBody string
+	id              uuid.UUID
+	fullURL         url.URL
+	baseURL         url.URL
+	method          string
+	statusCode      int
+	requestBody     string
+	responseBody    string
+	responseHeaders map[string][]string
 }
 
 var (
@@ -42,11 +44,12 @@ func NewInteraction(
 	baseURL.RawQuery = ""
 
 	return &Interaction{
-		id:         id,
-		fullURL:    fullURL,
-		baseURL:    baseURL,
-		method:     method,
-		statusCode: statusCode,
+		id:              id,
+		fullURL:         fullURL,
+		baseURL:         baseURL,
+		method:          method,
+		statusCode:      statusCode,
+		responseHeaders: make(map[string][]string),
 	}
 }
 
@@ -82,4 +85,25 @@ func (r *Interaction) Method() string {
 // StatusCode returns the HTTP status code of the response.
 func (r *Interaction) StatusCode() int {
 	return r.statusCode
+}
+
+// ResponseHeader returns the first value for the named response header, if present.
+func (r *Interaction) ResponseHeader(name string) (string, bool) {
+	if r.responseHeaders == nil {
+		return "", false
+	}
+
+	key := http.CanonicalHeaderKey(name)
+	values, ok := r.responseHeaders[key]
+	if !ok || len(values) == 0 {
+		return "", false
+	}
+
+	return values[0], true
+}
+
+// SetResponseHeader sets a response header value for the fake interaction.
+func (r *Interaction) SetResponseHeader(name, value string) {
+	key := http.CanonicalHeaderKey(name)
+	r.responseHeaders[key] = []string{value}
 }

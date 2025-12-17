@@ -22,4 +22,6 @@ type Interface interface {
 	Method() string
 	// StatusCode returns the HTTP status code of the response.
 	StatusCode() int
+	// ResponseHeader returns the value of the specified response header.
+	ResponseHeader(name string) (string, bool)
 }

@@ -1,6 +1,7 @@
 package vcrcleaner
 
 import (
+	"net/http"
 	"net/url"
 
 	"github.com/google/uuid"
@@ -55,4 +56,20 @@ func (v *vcrInteraction) Method() string {
 // StatusCode returns the HTTP status code of the response.
 func (v *vcrInteraction) StatusCode() int {
 	return v.interaction.Response.Code
+}
+
+// ResponseHeader returns the first value for the named response header, if present.
+func (v *vcrInteraction) ResponseHeader(name string) (string, bool) {
+	headers := v.interaction.Response.Headers
+	if headers == nil {
+		return "", false
+	}
+
+	key := http.CanonicalHeaderKey(name)
+	values, ok := headers[key]
+	if !ok || len(values) == 0 {
+		return "", false
+	}
+
+	return values[0], true
 }
