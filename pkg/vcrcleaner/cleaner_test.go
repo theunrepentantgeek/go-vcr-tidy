@@ -1,6 +1,9 @@
 package vcrcleaner
 
 import (
+	"path"
+	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/andreyvit/diff"
@@ -20,11 +23,32 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 	// Contains fully qualified path, keyed by filename, without extension
 	recordings := map[string]string{}
 
+	files, err := filepath.Glob(filepath.Join("testdata", "*.yaml"))
+	if err != nil {
+		t.Fatalf("Failed to find test data files: %v", err)
+	}
+
+	for _, file := range files {
+		baseName := strings.TrimSuffix(filepath.Base(file), ".yaml")
+		recordings[baseName] = strings.TrimSuffix(file, ".yaml") // Cassette names do not include .yaml
+	}
+
 	// Construct our test matrix - run every option for every file
-	cases := map[string]struct {
+	type testcase struct {
 		option        Option
 		recordingPath string
-	}{}
+	}
+
+	cases := map[string]testcase{}
+	for analyzerName, option := range analyzers {
+		for recordingName, recordingPath := range recordings {
+			testName := path.Join(analyzerName, recordingName)
+			cases[testName] = testcase{
+				option:        option,
+				recordingPath: recordingPath,
+			}
+		}
+	}
 
 	// Run each option as a golden test
 	for name, c := range cases {
@@ -32,25 +56,38 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			t.Parallel()
 			g := goldie.New(t, goldie.WithSubTestNameForDir(true))
 
-			// Create a cassette from it
-			cassette.Load()
+			// Load the cassette from the file
+			cas, err := cassette.Load(c.recordingPath)
+			if err != nil {
+				t.Fatalf("Failed to load cassette from %s: %v", c.recordingPath, err)
+			}
+
+			// Get baseline YAML for the cassette.
+			// We don't use the YAML from the file directly because we don't want our diffs to be polluted by other
+			// format changes.
+			baseline, err := cassetteToYaml(cas)
+			if err != nil {
+				t.Fatalf("Failed to get baseline cassette YAML: %v", err)
+			}
 
 			// Clean it
 			cleaner := New(c.option)
+			err = cleaner.Clean(cas)
+			if err != nil {
+				t.Fatalf("Failed to clean cassette: %v", err)
+			}
 
-			// Serialize it back to YAML
-			cleaned := "" // serialized cleaned cassette
-
-			// Load the original recording
-			yamls := "" // load from c.recordingPath
+			// Get cleaned YAML for the cassette.
+			cleaned, err := cassetteToYaml(cas)
+			if err != nil {
+				t.Fatalf("Failed to get cleaned cassette YAML: %v", err)
+			}
 
 			// Compare it to the original yaml
+			d := diff.LineDiff(cleaned, baseline)
 
-			diff.LineDiff(yaml, cleaned)
-
-			// use goldie to assert the result
-			g.Assert(t, name, []byte("resulting yaml content"))
+			// use goldie to assert the changes made
+			g.Assert(t, name, []byte(d))
 		})
 	}
-
 }
