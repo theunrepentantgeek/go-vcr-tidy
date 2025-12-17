@@ -1,6 +1,8 @@
 package generic
 
 import (
+	"github.com/go-logr/logr"
+
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
 )
@@ -11,7 +13,7 @@ import (
 type DetectDeletion struct {
 }
 
-var _ analyzer.Interface = (*DetectDeletion)(nil)
+var _ analyzer.Interface = &DetectDeletion{}
 
 // NewDetectDeletion creates a new DetectDeletion analyzer.
 func NewDetectDeletion() *DetectDeletion {
@@ -21,8 +23,10 @@ func NewDetectDeletion() *DetectDeletion {
 // Analyze processes another interaction in the sequence.
 // interaction is the interaction to analyze.
 func (d *DetectDeletion) Analyze(
+	log logr.Logger,
 	interaction interaction.Interface,
 ) (analyzer.Result, error) {
+	_ = log // currently unused
 	reqURL := interaction.URL()
 	method := interaction.Method()
 	statusCode := interaction.StatusCode()

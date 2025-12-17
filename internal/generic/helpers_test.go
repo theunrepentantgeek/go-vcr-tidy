@@ -4,6 +4,7 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/go-logr/logr"
 	. "github.com/onsi/gomega"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -21,6 +22,7 @@ import (
 // interactions are the interactions to feed to the analyzer.
 func runAnalyzer(
 	t *testing.T,
+	log logr.Logger,
 	a analyzer.Interface,
 	interactions ...interaction.Interface,
 ) analyzer.Result {
@@ -31,7 +33,7 @@ func runAnalyzer(
 	var err error
 	limit := len(interactions) - 1
 	for index, inter := range interactions {
-		result, err = a.Analyze(inter)
+		result, err = a.Analyze(log, inter)
 		g.Expect(err).ToNot(HaveOccurred())
 		if index < limit {
 			g.Expect(result.Finished).To(BeFalse(), "Analyzer finished prematurely")

@@ -3,6 +3,8 @@ package generic
 import (
 	"testing"
 
+	"github.com/go-logr/logr"
+	"github.com/go-logr/logr/testr"
 	. "github.com/onsi/gomega"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -14,10 +16,11 @@ func TestDetectDeletion_SuccessfulDELETE_SpawnsMonitor(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	detector := NewDetectDeletion()
+	log := newTestLogger(t)
 
 	// Successful DELETE should spawn a MonitorDeletion analyzer
 	deleteInteraction := fake.NewInteraction(baseURL, "DELETE", 200)
-	result, err := detector.Analyze(deleteInteraction)
+	result, err := detector.Analyze(log, deleteInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeFalse())
@@ -44,9 +47,10 @@ func TestDetectDeletion_Various2xxDELETEStatusCodes_SpawnsMonitor(t *testing.T) 
 			g := NewWithT(t)
 			baseURL := mustParseURL("https://api.example.com/resource/123")
 			detector := NewDetectDeletion()
+			log := newTestLogger(t)
 
 			deleteInteraction := fake.NewInteraction(baseURL, "DELETE", c.statusCode)
-			result, err := detector.Analyze(deleteInteraction)
+			result, err := detector.Analyze(log, deleteInteraction)
 
 			g.Expect(err).ToNot(HaveOccurred())
 			g.Expect(result.Spawn).To(HaveLen(1))
@@ -61,13 +65,13 @@ func TestDetectDeletion_FailedDELETE_DoesNotSpawn(t *testing.T) {
 	cases := map[string]struct {
 		statusCode int
 	}{
-		"400 Bad Request":    {statusCode: 400},
-		"401 Unauthorized":   {statusCode: 401},
-		"403 Forbidden":      {statusCode: 403},
-		"404 Not Found":      {statusCode: 404},
-		"500 Server Error":   {statusCode: 500},
-		"301 Redirect":       {statusCode: 301},
-		"100 Informational":  {statusCode: 100},
+		"400 Bad Request":   {statusCode: 400},
+		"401 Unauthorized":  {statusCode: 401},
+		"403 Forbidden":     {statusCode: 403},
+		"404 Not Found":     {statusCode: 404},
+		"500 Server Error":  {statusCode: 500},
+		"301 Redirect":      {statusCode: 301},
+		"100 Informational": {statusCode: 100},
 	}
 
 	for name, c := range cases {
@@ -76,9 +80,10 @@ func TestDetectDeletion_FailedDELETE_DoesNotSpawn(t *testing.T) {
 			g := NewWithT(t)
 			baseURL := mustParseURL("https://api.example.com/resource/123")
 			detector := NewDetectDeletion()
+			log := newTestLogger(t)
 
 			deleteInteraction := fake.NewInteraction(baseURL, "DELETE", c.statusCode)
-			result, err := detector.Analyze(deleteInteraction)
+			result, err := detector.Analyze(log, deleteInteraction)
 
 			g.Expect(err).ToNot(HaveOccurred())
 			g.Expect(result).To(Equal(analyzer.Result{}))
@@ -107,9 +112,10 @@ func TestDetectDeletion_NonDELETEMethods_DoesNotSpawn(t *testing.T) {
 			g := NewWithT(t)
 			baseURL := mustParseURL("https://api.example.com/resource/123")
 			detector := NewDetectDeletion()
+			log := newTestLogger(t)
 
 			interaction := fake.NewInteraction(baseURL, c.method, c.statusCode)
-			result, err := detector.Analyze(interaction)
+			result, err := detector.Analyze(log, interaction)
 
 			g.Expect(err).ToNot(HaveOccurred())
 			g.Expect(result).To(Equal(analyzer.Result{}))
@@ -121,6 +127,7 @@ func TestDetectDeletion_MultipleDELETEs_SpawnsMultipleMonitors(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 	detector := NewDetectDeletion()
+	log := newTestLogger(t)
 
 	// Different URLs being deleted
 	url1 := mustParseURL("https://api.example.com/resource/123")
@@ -131,15 +138,15 @@ func TestDetectDeletion_MultipleDELETEs_SpawnsMultipleMonitors(t *testing.T) {
 	delete2 := fake.NewInteraction(url2, "DELETE", 204)
 	delete3 := fake.NewInteraction(url3, "DELETE", 202)
 
-	result1, err := detector.Analyze(delete1)
+	result1, err := detector.Analyze(log, delete1)
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result1.Spawn).To(HaveLen(1))
 
-	result2, err := detector.Analyze(delete2)
+	result2, err := detector.Analyze(log, delete2)
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result2.Spawn).To(HaveLen(1))
 
-	result3, err := detector.Analyze(delete3)
+	result3, err := detector.Analyze(log, delete3)
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result3.Spawn).To(HaveLen(1))
 
@@ -154,6 +161,7 @@ func TestDetectDeletion_NeverFinishes(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	detector := NewDetectDeletion()
+	log := newTestLogger(t)
 
 	// Process various interactions
 	interactions := []*fake.Interaction{
@@ -166,7 +174,7 @@ func TestDetectDeletion_NeverFinishes(t *testing.T) {
 	}
 
 	for _, inter := range interactions {
-		result, err := detector.Analyze(inter)
+		result, err := detector.Analyze(log, inter)
 		g.Expect(err).ToNot(HaveOccurred())
 		g.Expect(result.Finished).To(BeFalse(), "DetectDeletion should never finish")
 	}
@@ -177,9 +185,10 @@ func TestDetectDeletion_SpawnedMonitorHasCorrectURL(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	detector := NewDetectDeletion()
+	log := newTestLogger(t)
 
 	deleteInteraction := fake.NewInteraction(baseURL, "DELETE", 200)
-	result, err := detector.Analyze(deleteInteraction)
+	result, err := detector.Analyze(log, deleteInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Spawn).To(HaveLen(1))
@@ -194,11 +203,17 @@ func TestDetectDeletion_EmptyResult_WhenNoAction(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	detector := NewDetectDeletion()
+	log := newTestLogger(t)
 
 	// Non-DELETE interaction
 	getInteraction := fake.NewInteraction(baseURL, "GET", 200)
-	result, err := detector.Analyze(getInteraction)
+	result, err := detector.Analyze(log, getInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result).To(Equal(analyzer.Result{}))
+}
+
+func newTestLogger(t *testing.T) logr.Logger {
+	t.Helper()
+	return testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 }

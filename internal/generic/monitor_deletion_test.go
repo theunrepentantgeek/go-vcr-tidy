@@ -3,6 +3,8 @@ package generic
 import (
 	"testing"
 
+	"github.com/go-logr/logr"
+	"github.com/go-logr/logr/testr"
 	. "github.com/onsi/gomega"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -14,11 +16,12 @@ func TestMonitorDeletion_SingleGETReturning404_MarksFinished(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
+	log := newTestLogger(t)
 
 	// Single GET returning 404 should finish immediately
 	interaction := fake.NewInteraction(baseURL, "GET", 404)
 
-	result, err := monitor.Analyze(interaction)
+	result, err := monitor.Analyze(log, interaction)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeTrue())
@@ -29,13 +32,14 @@ func TestMonitorDeletion_TwoGETsThenConfirmation_NothingIsRemoved(t *testing.T) 
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
+	log := newTestLogger(t)
 
 	// Two successful GETs followed by 404
 	get1 := fake.NewInteraction(baseURL, "GET", 200)
 	get2 := fake.NewInteraction(baseURL, "GET", 200)
 	get404 := fake.NewInteraction(baseURL, "GET", 404)
 
-	result := runAnalyzer(t, monitor, get1, get2, get404)
+	result := runAnalyzer(t, log, monitor, get1, get2, get404)
 	g.Expect(result.Finished).To(BeTrue())
 
 	// With only 2 accumulated interactions, none should be excluded
@@ -46,6 +50,7 @@ func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T)
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
+	log := newTestLogger(t)
 
 	// Three successful GETs followed by 404
 	get1 := fake.NewInteraction(baseURL, "GET", 200)
@@ -53,7 +58,7 @@ func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T)
 	get3 := fake.NewInteraction(baseURL, "GET", 200)
 	get404 := fake.NewInteraction(baseURL, "GET", 404)
 
-	result := runAnalyzer(t, monitor, get1, get2, get3, get404)
+	result := runAnalyzer(t, log, monitor, get1, get2, get3, get404)
 	g.Expect(result.Finished).To(BeTrue())
 
 	// First and last accumulated should remain, middle should be excluded
@@ -65,6 +70,7 @@ func TestMonitorDeletion_MultipleMiddleGETs_AllMiddleAreRemoved(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
+	log := newTestLogger(t)
 
 	// Many successful GETs followed by 404
 	interactions := make([]interaction.Interface, 0, 10)
@@ -76,7 +82,7 @@ func TestMonitorDeletion_MultipleMiddleGETs_AllMiddleAreRemoved(t *testing.T) {
 	get404 := fake.NewInteraction(baseURL, "GET", 404)
 	interactions = append(interactions, get404)
 
-	result := runAnalyzer(t, monitor, interactions...)
+	result := runAnalyzer(t, log, monitor, interactions...)
 	g.Expect(result.Finished).To(BeTrue())
 
 	// Verify exclusion pattern: all middle interactions should be excluded
@@ -91,10 +97,11 @@ func TestMonitorDeletion_DifferentURL_Ignored(t *testing.T) {
 	monitoredURL := mustParseURL("https://api.example.com/resource/123")
 	differentURL := mustParseURL("https://api.example.com/resource/456")
 	monitor := NewMonitorDeletion(monitoredURL)
+	log := newTestLogger(t)
 
 	interaction := fake.NewInteraction(differentURL, "GET", 200)
 
-	result, err := monitor.Analyze(interaction)
+	result, err := monitor.Analyze(log, interaction)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeFalse())
@@ -120,13 +127,14 @@ func TestMonitorDeletion_AbandonsMonitoring(t *testing.T) {
 			g := NewWithT(t)
 			baseURL := mustParseURL("https://api.example.com/resource/123")
 			monitor := NewMonitorDeletion(baseURL)
+			log := newTestLogger(t)
 
 			// Start with some successful GETs
 			// Then a request that should abandon monitoring
 			get1 := fake.NewInteraction(baseURL, "GET", 200)
 			abandoningRequest := fake.NewInteraction(baseURL, c.method, c.statusCode)
 
-			result := runAnalyzer(t, monitor, get1, abandoningRequest)
+			result := runAnalyzer(t, log, monitor, get1, abandoningRequest)
 			g.Expect(result.Finished).To(BeTrue())
 			g.Expect(result.Excluded).To(BeEmpty())
 		})
@@ -137,6 +145,7 @@ func TestMonitorDeletion_Various2xxStatusCodes_Accumulated(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
+	log := newTestLogger(t)
 
 	// Test various 2xx status codes
 	statusCodes := []int{200, 201, 202, 204, 206}
@@ -150,7 +159,7 @@ func TestMonitorDeletion_Various2xxStatusCodes_Accumulated(t *testing.T) {
 	get404 := fake.NewInteraction(baseURL, "GET", 404)
 	interactions = append(interactions, get404)
 
-	result := runAnalyzer(t, monitor, interactions...)
+	result := runAnalyzer(t, log, monitor, interactions...)
 
 	// First and last accumulated should remain, middle should be excluded
 	g.Expect(result.Excluded).To(HaveLen(3))
@@ -165,10 +174,11 @@ func TestMonitorDeletion_URLWithQueryParameters_MonitorsBaseURL(t *testing.T) {
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	urlWithParams := mustParseURL("https://api.example.com/resource/123?param=value")
 	monitor := NewMonitorDeletion(baseURL)
+	log := newTestLogger(t)
 
 	// Interaction with query parameters should match base URL
 	interaction := fake.NewInteraction(urlWithParams, "GET", 200)
-	result, err := monitor.Analyze(interaction)
+	result, err := monitor.Analyze(log, interaction)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeFalse())
@@ -179,10 +189,16 @@ func TestMonitorDeletion_EmptyResult_WhenIgnoringInteraction(t *testing.T) {
 	monitoredURL := mustParseURL("https://api.example.com/resource/123")
 	differentURL := mustParseURL("https://api.example.com/other")
 	monitor := NewMonitorDeletion(monitoredURL)
+	log := newTestLogger(t)
 
 	interaction := fake.NewInteraction(differentURL, "GET", 200)
-	result, err := monitor.Analyze(interaction)
+	result, err := monitor.Analyze(log, interaction)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result).To(Equal(analyzer.Result{}))
+}
+
+func newTestLogger(t *testing.T) logr.Logger {
+	t.Helper()
+	return testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 }

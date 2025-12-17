@@ -3,6 +3,7 @@ package cleaner
 import (
 	"sync"
 
+	"github.com/go-logr/logr"
 	"github.com/google/uuid"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
@@ -53,12 +54,12 @@ func (c *Cleaner) exclude(interactions ...interaction.Interface) {
 }
 
 // Analyze processes an interaction through all active analyzers, handling spawning and finishing as needed.
-func (c *Cleaner) Analyze(interaction interaction.Interface) error {
+func (c *Cleaner) Analyze(log logr.Logger, interaction interaction.Interface) error {
 	var toRemove []uuid.UUID
 	var toAdd []analyzer.Interface
 
 	for id, a := range c.analyzers {
-		result, err := a.Analyze(interaction)
+		result, err := a.Analyze(log, interaction)
 		if err != nil {
 			return err
 		}

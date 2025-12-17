@@ -3,6 +3,8 @@ package generic
 import (
 	"net/url"
 
+	"github.com/go-logr/logr"
+
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
 )
@@ -30,7 +32,8 @@ func NewMonitorDeletion(url url.URL) *MonitorDeletion {
 }
 
 // Analyze processes another interaction in the sequence.
-func (m *MonitorDeletion) Analyze(interaction interaction.Interface) (analyzer.Result, error) {
+func (m *MonitorDeletion) Analyze(log logr.Logger, interaction interaction.Interface) (analyzer.Result, error) {
+	_ = log // currently unused
 	reqURL := interaction.URL()
 	if reqURL.String() != m.baseURL.String() {
 		// Not the URL we're monitoring, ignore.
