@@ -3,8 +3,6 @@ package generic
 import (
 	"testing"
 
-	"github.com/go-logr/logr"
-	"github.com/go-logr/logr/testr"
 	. "github.com/onsi/gomega"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -196,9 +194,4 @@ func TestMonitorDeletion_EmptyResult_WhenIgnoringInteraction(t *testing.T) {
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result).To(Equal(analyzer.Result{}))
-}
-
-func newTestLogger(t *testing.T) logr.Logger {
-	t.Helper()
-	return testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 }

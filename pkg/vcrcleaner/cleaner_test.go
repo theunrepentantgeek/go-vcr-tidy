@@ -55,6 +55,7 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			g := goldie.New(t, goldie.WithSubTestNameForDir(true))
+			log := newTestLogger(t)
 
 			// Load the cassette from the file
 			cas, err := cassette.Load(c.recordingPath)
@@ -71,7 +72,7 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			}
 
 			// Clean it
-			cleaner := New(c.option)
+			cleaner := New(log, c.option)
 			err = cleaner.Clean(cas)
 			if err != nil {
 				t.Fatalf("Failed to clean cassette: %v", err)

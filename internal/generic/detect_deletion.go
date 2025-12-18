@@ -26,10 +26,9 @@ func (d *DetectDeletion) Analyze(
 	log logr.Logger,
 	interaction interaction.Interface,
 ) (analyzer.Result, error) {
-	_ = log // currently unused
-	reqURL := interaction.URL()
-	method := interaction.Method()
-	statusCode := interaction.StatusCode()
+	reqURL := interaction.Request().URL()
+	method := interaction.Request().Method()
+	statusCode := interaction.Response().StatusCode()
 
 	if method == "DELETE" && statusCode >= 200 && statusCode < 300 {
 		// Start monitoring for deletion confirmation via GET requests.

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/go-logr/logr"
+	"github.com/go-logr/logr/testr"
 	. "github.com/onsi/gomega"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -51,4 +52,10 @@ func mustParseURL(rawURL string) url.URL {
 	}
 
 	return *parsed
+}
+
+// newTestLogger creates a test logger for the given test.
+func newTestLogger(t *testing.T) logr.Logger {
+	t.Helper()
+	return testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 }

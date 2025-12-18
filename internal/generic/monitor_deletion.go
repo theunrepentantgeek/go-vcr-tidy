@@ -34,16 +34,15 @@ func NewMonitorDeletion(url url.URL) *MonitorDeletion {
 // Analyze processes another interaction in the sequence.
 func (m *MonitorDeletion) Analyze(log logr.Logger, interaction interaction.Interface) (analyzer.Result, error) {
 	_ = log // currently unused
-	reqURL := interaction.URL()
+	reqURL := interaction.Request().URL()
 	if reqURL.String() != m.baseURL.String() {
 		// Not the URL we're monitoring, ignore.
 		return analyzer.Result{}, nil
 	}
 
-	method := interaction.Method()
-	statusCode := interaction.StatusCode()
-
+	method := interaction.Request().Method()
 	if method == "GET" {
+		statusCode := interaction.Response().StatusCode()
 		if statusCode == 404 {
 			// Deletion confirmed.
 			// We should exclude all interactions except the first and last.

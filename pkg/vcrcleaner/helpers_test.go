@@ -2,7 +2,10 @@ package vcrcleaner
 
 import (
 	"os"
+	"testing"
 
+	"github.com/go-logr/logr"
+	"github.com/go-logr/logr/testr"
 	"github.com/rotisserie/eris"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 	"gopkg.in/yaml.v3"
@@ -52,4 +55,10 @@ func (m *memoryFS) WriteFile(name string, data []byte) error {
 func (m *memoryFS) IsFileExists(name string) bool {
 	_, ok := m.data[name]
 	return ok
+}
+
+// newTestLogger creates a test logger for the given test.
+func newTestLogger(t *testing.T) logr.Logger {
+	t.Helper()
+	return testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 }

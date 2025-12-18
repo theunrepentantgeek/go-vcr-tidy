@@ -14,14 +14,26 @@ import (
 type Interface interface {
 	// ID is a unique identifier for the interaction.
 	ID() uuid.UUID
+	// Request returns the request portion of the interaction.
+	Request() Request
+	// Response returns the response portion of the interaction.
+	Response() Response
+}
+
+// Request is an abstract representation of an HTTP request.
+type Request interface {
 	// FullURL returns the full URL of the request.
 	FullURL() url.URL
 	// URL returns the URL of the request without any parameters
 	URL() url.URL
 	// The HTTP method of the request, e.g. "GET", "POST", etc.
 	Method() string
+}
+
+// Response is an abstract representation of an HTTP response.
+type Response interface {
 	// StatusCode returns the HTTP status code of the response.
 	StatusCode() int
 	// ResponseHeader returns the value of the specified response header.
-	ResponseHeader(name string) (string, bool)
+	Header(name string) (string, bool)
 }
