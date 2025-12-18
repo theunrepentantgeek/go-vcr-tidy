@@ -1,6 +1,7 @@
 package vcrcleaner
 
 import (
+	"github.com/go-logr/logr"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/cleaner"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 )
@@ -9,12 +10,17 @@ import (
 type Cleaner struct {
 	core    *cleaner.Cleaner
 	mapping map[int]*vcrInteraction
+	log     logr.Logger
 }
 
-func New(options ...Option) *Cleaner {
+func New(
+	log logr.Logger,
+	options ...Option,
+) *Cleaner {
 	result := &Cleaner{
 		core:    cleaner.New(),
 		mapping: make(map[int]*vcrInteraction),
+		log:     log,
 	}
 
 	for _, option := range options {
@@ -42,7 +48,7 @@ func (c *Cleaner) Clean(cas *cassette.Cassette) error {
 func (c *Cleaner) inspect(i *cassette.Interaction) error {
 	vi := newVCRInteraction(i)
 	c.mapping[i.ID] = vi
-	return c.core.Analyze(vi)
+	return c.core.Analyze(c.log, vi)
 }
 
 // markIfExcluded marks an interaction for removal, if needed.

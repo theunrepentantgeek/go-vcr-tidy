@@ -32,6 +32,11 @@ func (d *DetectDeletion) Analyze(
 
 	if method == "DELETE" && statusCode >= 200 && statusCode < 300 {
 		// Start monitoring for deletion confirmation via GET requests.
+		log.Info(
+			"Found DELETE to monitor",
+			"url", reqURL,
+		)
+
 		monitor := NewMonitorDeletion(reqURL)
 		return analyzer.Spawn(monitor), nil
 	}

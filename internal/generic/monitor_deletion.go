@@ -25,7 +25,9 @@ type MonitorDeletion struct {
 var _ analyzer.Interface = (*MonitorDeletion)(nil)
 
 // NewMonitorDeletion creates a new MonitorDeletion analyzer for the specified URL.
-func NewMonitorDeletion(url url.URL) *MonitorDeletion {
+func NewMonitorDeletion(
+	url url.URL,
+) *MonitorDeletion {
 	return &MonitorDeletion{
 		baseURL: url,
 	}
@@ -48,16 +50,22 @@ func (m *MonitorDeletion) Analyze(log logr.Logger, interaction interaction.Inter
 			// We should exclude all interactions except the first and last.
 			if len(m.interactions) < 2 {
 				// No intermediate interactions to exclude.
+				log.Info(
+					"Short DELETE monitor, nothing to exclude",
+					"url", m.baseURL,
+				)
+
 				return analyzer.Finished(), nil
 			}
 
+			log.Info(
+				"Long DELETE found, excluding intermediate GETs",
+				"url", m.baseURL,
+				"removed", len(m.interactions)-2,
+			)
+
 			excluded := m.interactions[1 : len(m.interactions)-1]
 			return analyzer.FinishedWithExclusions(excluded...), nil
-		}
-
-		if statusCode == 301 || statusCode == 302 || statusCode == 303 || statusCode == 307 || statusCode == 308 {
-			// Redirects are unexpected, abandon monitoring.
-			return analyzer.Finished(), nil
 		}
 
 		if statusCode >= 200 && statusCode < 300 {
@@ -67,9 +75,21 @@ func (m *MonitorDeletion) Analyze(log logr.Logger, interaction interaction.Inter
 		}
 
 		// Unexpected status code, abandon monitoring.
+		log.Info(
+			"Abandoning DELETE monitor due to unexpected GET status code",
+			"url", m.baseURL,
+			"statusCode", statusCode,
+		)
+
 		return analyzer.Finished(), nil
 	}
 
 	// Some other method (e.g. POST, PUT), abandon monitoring.
+	log.Info(
+		"Abandoning DELETE monitor, resource changed",
+		"url", m.baseURL,
+		"method", method,
+	)
+
 	return analyzer.Finished(), nil
 }
