@@ -16,7 +16,8 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 
 	// Analyzers we want to test
 	analyzers := map[string]Option{
-		"Reduce Delete Monitoring": ReduceDeleteMonitoring(),
+		"Reduce Delete Monitoring":              ReduceDeleteMonitoring(),
+		"Reduce Long Running Operation polling": ReduceAzureLongRunningOperationPolling(),
 	}
 
 	// Find all the *.yaml files under testdata
@@ -54,7 +55,7 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 	for name, c := range cases {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			g := goldie.New(t, goldie.WithSubTestNameForDir(true))
+			g := goldie.New(t, goldie.WithTestNameForDir(true))
 			log := newTestLogger(t)
 
 			// Load the cassette from the file
@@ -85,7 +86,7 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			}
 
 			// Compare it to the original yaml
-			d := diff.LineDiff(cleaned, baseline)
+			d := diff.LineDiff(baseline, cleaned)
 
 			// use goldie to assert the changes made
 			g.Assert(t, name, []byte(d))

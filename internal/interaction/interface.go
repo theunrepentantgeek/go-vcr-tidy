@@ -24,8 +24,8 @@ type Interface interface {
 type Request interface {
 	// FullURL returns the full URL of the request.
 	FullURL() url.URL
-	// URL returns the URL of the request without any parameters
-	URL() url.URL
+	// BaseURL returns the BaseURL of the request without any parameters
+	BaseURL() url.URL
 	// The HTTP method of the request, e.g. "GET", "POST", etc.
 	Method() string
 }
@@ -36,4 +36,6 @@ type Response interface {
 	StatusCode() int
 	// ResponseHeader returns the value of the specified response header.
 	Header(name string) (string, bool)
+	// Body returns the body of the response.
+	Body() []byte
 }

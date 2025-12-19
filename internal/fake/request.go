@@ -15,8 +15,8 @@ func (r *fakeRequest) FullURL() url.URL {
 	return r.fullURL
 }
 
-// URL returns the URL of the request without any parameters
-func (r *fakeRequest) URL() url.URL {
+// BaseURL returns the BaseURL of the request without any parameters
+func (r *fakeRequest) BaseURL() url.URL {
 	return r.baseURL
 }
 

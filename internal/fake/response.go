@@ -34,3 +34,7 @@ func (r *fakeResponse) SetResponseHeader(name, value string) {
 	key := http.CanonicalHeaderKey(name)
 	r.responseHeaders[key] = []string{value}
 }
+
+func (r *fakeResponse) Body() []byte {
+	return []byte(r.responseBody)
+}

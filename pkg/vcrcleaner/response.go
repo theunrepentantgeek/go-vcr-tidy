@@ -27,3 +27,7 @@ func (r *vcrResponse) Header(name string) (string, bool) {
 
 	return values[0], true
 }
+
+func (r *vcrResponse) Body() []byte {
+	return []byte(r.parent.interaction.Response.Body)
+}

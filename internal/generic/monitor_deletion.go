@@ -36,7 +36,7 @@ func NewMonitorDeletion(
 // Analyze processes another interaction in the sequence.
 func (m *MonitorDeletion) Analyze(log logr.Logger, interaction interaction.Interface) (analyzer.Result, error) {
 	_ = log // currently unused
-	reqURL := interaction.Request().URL()
+	reqURL := interaction.Request().BaseURL()
 	if reqURL.String() != m.baseURL.String() {
 		// Not the URL we're monitoring, ignore.
 		return analyzer.Result{}, nil

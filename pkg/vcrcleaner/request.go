@@ -18,8 +18,8 @@ func (r *vcrRequest) FullURL() url.URL {
 	return *result
 }
 
-// URL returns the base URL of the request (without query parameters or fragment).
-func (r *vcrRequest) URL() url.URL {
+// BaseURL returns the base BaseURL of the request (without query parameters or fragment).
+func (r *vcrRequest) BaseURL() url.URL {
 	result := r.FullURL()
 	result.RawQuery = ""
 	result.Fragment = ""

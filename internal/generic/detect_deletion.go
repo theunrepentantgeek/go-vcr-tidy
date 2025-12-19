@@ -26,7 +26,7 @@ func (d *DetectDeletion) Analyze(
 	log logr.Logger,
 	interaction interaction.Interface,
 ) (analyzer.Result, error) {
-	reqURL := interaction.Request().URL()
+	reqURL := interaction.Request().BaseURL()
 	method := interaction.Request().Method()
 	statusCode := interaction.Response().StatusCode()
 
