@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// Interface is an abstract representation of an HTTL request/response pair.
+// Interface is an abstract representation of an HTTP request/response pair.
 // This provides a wrapper around interactions from go-vcr that will act as an insulation layer, allowing us to adapt to
 // changes in the API provided by go-vcr without requiring extensive changes here (hopefully!). It also provides seam we
 // can use for testing, as well as a natural place for reusable transformations (say, if multiple analyzers want to

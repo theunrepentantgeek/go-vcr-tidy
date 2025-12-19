@@ -6,7 +6,7 @@ The popular library [go-vcr](https://github.com/dnaeon/go-vcr) enables reliable 
 
 For large and/or complex systems, these recordings are often large, resulting in tests that can take a long time to run.
 
-This library aims to improve replay times by providing a set of tools that can be used to reduce the size of recordings by eliding selected interactions from the recording. The intial focus will be on tools that work with Azure interactions (because that's my need), but pull requests for other patterns will be welcomed.
+This library aims to improve replay times by providing a set of tools that can be used to reduce the size of recordings by eliding selected interactions from the recording. The initial focus will be on tools that work with Azure interactions (because that's my need), but pull requests for other patterns will be welcomed.
 
 Planned tools include:
 

@@ -10,7 +10,7 @@ We use [gomega](https://github.com/onsi/gomega) for unit test assertions, and [g
 golden tests, where required.
 
 Test cases are ordered in each test file, with later tests able to assume that system properties asserted by earlier 
-tests are held. This helps to narrow the focus of each test. As a direct corolloary of this, when diagnosing test 
+tests are held. This helps to narrow the focus of each test. As a direct corollary of this, when diagnosing test 
 failures, the earliest failing test in a file is a good place to start.
 
 Table tests use `cases := map[string]struct{...}` to capture test cases, with the name of the test as the map key. Test 
