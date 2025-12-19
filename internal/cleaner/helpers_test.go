@@ -1,0 +1,13 @@
+package cleaner
+
+import "net/url"
+
+// mustParseURL parses a raw URL string and panics on error.
+func mustParseURL(rawURL string) url.URL {
+	parsed, err := url.Parse(rawURL)
+	if err != nil {
+		panic(err)
+	}
+
+	return *parsed
+}
