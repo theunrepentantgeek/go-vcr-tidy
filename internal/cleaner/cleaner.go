@@ -35,6 +35,9 @@ func New(analyzers ...analyzer.Interface) *Cleaner {
 
 // Add one or more analyzers to the cleaner's active set.
 func (c *Cleaner) Add(analyzers ...analyzer.Interface) {
+	c.padlock.Lock()
+	defer c.padlock.Unlock()
+
 	for _, a := range analyzers {
 		// We give each analyzer a unique identifier to make it easy to track them when finished
 		c.analyzers[uuid.New()] = a
@@ -43,9 +46,6 @@ func (c *Cleaner) Add(analyzers ...analyzer.Interface) {
 
 // Remove one or more analyzers from the cleaner's active set.
 func (c *Cleaner) remove(ids ...uuid.UUID) {
-	c.padlock.Lock()
-	defer c.padlock.Unlock()
-
 	for _, id := range ids {
 		delete(c.analyzers, id)
 	}
@@ -87,9 +87,6 @@ func (c *Cleaner) Analyze(
 		// Exclude any interactions marked for exclusion (if any)
 		c.exclude(result.Excluded...)
 	}
-
-	c.padlock.Lock()
-	defer c.padlock.Unlock()
 
 	c.remove(toRemove...)
 	c.Add(toAdd...)
