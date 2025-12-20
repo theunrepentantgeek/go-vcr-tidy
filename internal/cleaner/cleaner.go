@@ -5,6 +5,8 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/google/uuid"
+	"github.com/rotisserie/eris"
+
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
 )
@@ -41,6 +43,9 @@ func (c *Cleaner) Add(analyzers ...analyzer.Interface) {
 
 // Remove one or more analyzers from the cleaner's active set.
 func (c *Cleaner) remove(ids ...uuid.UUID) {
+	c.padlock.Lock()
+	defer c.padlock.Unlock()
+
 	for _, id := range ids {
 		delete(c.analyzers, id)
 	}
@@ -48,34 +53,43 @@ func (c *Cleaner) remove(ids ...uuid.UUID) {
 
 // exclude adds the specified interactions to the set of interactions to be removed.
 func (c *Cleaner) exclude(interactions ...interaction.Interface) {
+	c.padlock.Lock()
+	defer c.padlock.Unlock()
+
 	for _, inter := range interactions {
 		c.interactionsToRemove[inter.ID()] = true
 	}
 }
 
 // Analyze processes an interaction through all active analyzers, handling spawning and finishing as needed.
-func (c *Cleaner) Analyze(log logr.Logger, interaction interaction.Interface) error {
-	var toRemove []uuid.UUID
-	var toAdd []analyzer.Interface
+func (c *Cleaner) Analyze(
+	log logr.Logger,
+	i interaction.Interface,
+) error {
+	var (
+		toRemove []uuid.UUID
+		toAdd    []analyzer.Interface
+	)
 
 	for id, a := range c.analyzers {
-		result, err := a.Analyze(log, interaction)
+		result, err := a.Analyze(log, i)
 		if err != nil {
-			return err
-		}
-
-		if len(result.Excluded) > 0 {
-			c.exclude(result.Excluded...)
+			return eris.Wrapf(err, "analyzing interaction ID %s", i.ID())
 		}
 
 		if result.Finished {
 			toRemove = append(toRemove, id)
 		}
 
-		if len(result.Spawn) > 0 {
-			toAdd = append(toAdd, result.Spawn...)
-		}
+		// Add any spawned analyzers (if any)
+		toAdd = append(toAdd, result.Spawn...)
+
+		// Exclude any interactions marked for exclusion (if any)
+		c.exclude(result.Excluded...)
 	}
+
+	c.padlock.Lock()
+	defer c.padlock.Unlock()
 
 	c.remove(toRemove...)
 	c.Add(toAdd...)
@@ -83,7 +97,11 @@ func (c *Cleaner) Analyze(log logr.Logger, interaction interaction.Interface) er
 	return nil
 }
 
-func (c *Cleaner) ShouldRemove(interaction interaction.Interface) bool {
-	_, ok := c.interactionsToRemove[interaction.ID()]
+func (c *Cleaner) ShouldRemove(i interaction.Interface) bool {
+	c.padlock.Lock()
+	defer c.padlock.Unlock()
+
+	_, ok := c.interactionsToRemove[i.ID()]
+
 	return ok
 }

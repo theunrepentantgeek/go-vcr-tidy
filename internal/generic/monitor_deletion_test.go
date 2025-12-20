@@ -11,15 +11,17 @@ import (
 )
 
 func TestMonitorDeletion_SingleGETReturning404_MarksFinished(t *testing.T) {
+	t.Parallel()
+
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
 	log := newTestLogger(t)
 
 	// Single GET returning 404 should finish immediately
-	interaction := fake.NewInteraction(baseURL, "GET", 404)
+	i := fake.NewInteraction(baseURL, "GET", 404)
 
-	result, err := monitor.Analyze(log, interaction)
+	result, err := monitor.Analyze(log, i)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeTrue())
@@ -27,6 +29,8 @@ func TestMonitorDeletion_SingleGETReturning404_MarksFinished(t *testing.T) {
 }
 
 func TestMonitorDeletion_TwoGETsThenConfirmation_NothingIsRemoved(t *testing.T) {
+	t.Parallel()
+
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
@@ -45,6 +49,8 @@ func TestMonitorDeletion_TwoGETsThenConfirmation_NothingIsRemoved(t *testing.T) 
 }
 
 func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T) {
+	t.Parallel()
+
 	g := NewWithT(t)
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
@@ -65,14 +71,17 @@ func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T)
 }
 
 func TestMonitorDeletion_MultipleMiddleGETs_AllMiddleAreRemoved(t *testing.T) {
+	t.Parallel()
 	g := NewWithT(t)
+
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
 	log := newTestLogger(t)
 
 	// Many successful GETs followed by 404
 	interactions := make([]interaction.Interface, 0, 10)
-	for i := 0; i < 9; i++ {
+
+	for range 9 {
 		get := fake.NewInteraction(baseURL, "GET", 200)
 		interactions = append(interactions, get)
 	}
@@ -85,21 +94,24 @@ func TestMonitorDeletion_MultipleMiddleGETs_AllMiddleAreRemoved(t *testing.T) {
 
 	// Verify exclusion pattern: all middle interactions should be excluded
 	g.Expect(result.Excluded).To(HaveLen(7))
+
 	for i := 1; i < 8; i++ {
 		g.Expect(result.Excluded).To(ContainElement(interactions[i]), "Middle GET %d should be excluded", i)
 	}
 }
 
 func TestMonitorDeletion_DifferentURL_Ignored(t *testing.T) {
+	t.Parallel()
 	g := NewWithT(t)
+
 	monitoredURL := mustParseURL("https://api.example.com/resource/123")
 	differentURL := mustParseURL("https://api.example.com/resource/456")
 	monitor := NewMonitorDeletion(monitoredURL)
 	log := newTestLogger(t)
 
-	interaction := fake.NewInteraction(differentURL, "GET", 200)
+	i := fake.NewInteraction(differentURL, "GET", 200)
 
-	result, err := monitor.Analyze(log, interaction)
+	result, err := monitor.Analyze(log, i)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeFalse())
@@ -121,8 +133,9 @@ func TestMonitorDeletion_AbandonsMonitoring(t *testing.T) {
 
 	for name, c := range cases {
 		t.Run(name, func(t *testing.T) {
-
+			t.Parallel()
 			g := NewWithT(t)
+
 			baseURL := mustParseURL("https://api.example.com/resource/123")
 			monitor := NewMonitorDeletion(baseURL)
 			log := newTestLogger(t)
@@ -140,7 +153,9 @@ func TestMonitorDeletion_AbandonsMonitoring(t *testing.T) {
 }
 
 func TestMonitorDeletion_Various2xxStatusCodes_Accumulated(t *testing.T) {
+	t.Parallel()
 	g := NewWithT(t)
+
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
 	log := newTestLogger(t)
@@ -168,29 +183,33 @@ func TestMonitorDeletion_Various2xxStatusCodes_Accumulated(t *testing.T) {
 }
 
 func TestMonitorDeletion_URLWithQueryParameters_MonitorsBaseURL(t *testing.T) {
+	t.Parallel()
 	g := NewWithT(t)
+
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 	urlWithParams := mustParseURL("https://api.example.com/resource/123?param=value")
 	monitor := NewMonitorDeletion(baseURL)
 	log := newTestLogger(t)
 
 	// Interaction with query parameters should match base URL
-	interaction := fake.NewInteraction(urlWithParams, "GET", 200)
-	result, err := monitor.Analyze(log, interaction)
+	i := fake.NewInteraction(urlWithParams, "GET", 200)
+	result, err := monitor.Analyze(log, i)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeFalse())
 }
 
 func TestMonitorDeletion_EmptyResult_WhenIgnoringInteraction(t *testing.T) {
+	t.Parallel()
 	g := NewWithT(t)
+
 	monitoredURL := mustParseURL("https://api.example.com/resource/123")
 	differentURL := mustParseURL("https://api.example.com/other")
 	monitor := NewMonitorDeletion(monitoredURL)
 	log := newTestLogger(t)
 
-	interaction := fake.NewInteraction(differentURL, "GET", 200)
-	result, err := monitor.Analyze(log, interaction)
+	i := fake.NewInteraction(differentURL, "GET", 200)
+	result, err := monitor.Analyze(log, i)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result).To(Equal(analyzer.Result{}))

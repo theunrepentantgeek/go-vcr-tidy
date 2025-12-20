@@ -9,5 +9,5 @@ import (
 // Interface is an abstract representation of an analyzer that processes a sequence of interactions.
 type Interface interface {
 	// Analyze processes another in a series of interactions.
-	Analyze(log logr.Logger, interaction interaction.Interface) (Result, error)
+	Analyze(log logr.Logger, i interaction.Interface) (Result, error)
 }

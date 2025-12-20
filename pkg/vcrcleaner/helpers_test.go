@@ -15,6 +15,7 @@ func cassetteToYaml(cas *cassette.Cassette) (string, error) {
 	cas.MarshalFunc = yaml.Marshal // Odd to need to do this explicitly
 
 	fs := newMemoryFS()
+
 	err := cas.SaveWithFS(fs)
 	if err != nil {
 		return "", eris.Wrap(err, "failed to convert cassette to YAML")
@@ -29,7 +30,7 @@ func cassetteToYaml(cas *cassette.Cassette) (string, error) {
 	return string(cleanedBytes), nil
 }
 
-// memoryFS is an in-memory filesystem for testing
+// memoryFS is an in-memory filesystem for testing.
 type memoryFS struct {
 	data map[string][]byte
 }
@@ -44,21 +45,25 @@ func (m *memoryFS) ReadFile(name string) ([]byte, error) {
 	if data, ok := m.data[name]; ok {
 		return data, nil
 	}
+
 	return nil, os.ErrNotExist
 }
 
 func (m *memoryFS) WriteFile(name string, data []byte) error {
 	m.data[name] = data
+
 	return nil
 }
 
 func (m *memoryFS) IsFileExists(name string) bool {
 	_, ok := m.data[name]
+
 	return ok
 }
 
 // newTestLogger creates a test logger for the given test.
 func newTestLogger(t *testing.T) logr.Logger {
 	t.Helper()
+
 	return testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 }

@@ -190,10 +190,11 @@ func TestDetectDeletion_SpawnedMonitorHasCorrectURL(t *testing.T) {
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Spawn).To(HaveLen(1))
-
+	g.Expect(result.Spawn[0]).To(BeAssignableToTypeOf(&MonitorDeletion{}))
 	// Verify the spawned monitor is configured for the correct URL
-	monitor := result.Spawn[0].(*MonitorDeletion)
-	g.Expect(monitor.baseURL).To(Equal(baseURL))
+	if m, ok := result.Spawn[0].(*MonitorDeletion); ok {
+		g.Expect(m.baseURL).To(Equal(baseURL))
+	}
 }
 
 func TestDetectDeletion_EmptyResult_WhenNoAction(t *testing.T) {

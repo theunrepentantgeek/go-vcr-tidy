@@ -20,6 +20,7 @@ func (r *vcrResponse) Header(name string) (string, bool) {
 	}
 
 	key := http.CanonicalHeaderKey(name)
+
 	values, ok := headers[key]
 	if !ok || len(values) == 0 {
 		return "", false
