@@ -21,7 +21,7 @@ func TestNewCleaner_WithNoAnalyzers_CreatesEmptyInstance(t *testing.T) {
 	c := New()
 
 	g.Expect(c).ToNot(BeNil())
-	g.Expect(c.analyzers).To(HaveLen(0))
+	g.Expect(c.analyzers).To(BeEmpty())
 }
 
 func TestNewCleaner_WithAnalyzers_AddsAllToActiveSet(t *testing.T) {

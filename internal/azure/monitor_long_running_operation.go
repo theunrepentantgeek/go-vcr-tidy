@@ -5,6 +5,7 @@ import (
 	"net/url"
 
 	"github.com/go-logr/logr"
+
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/urltool"
@@ -32,15 +33,15 @@ func NewMonitorAzureLongRunningOperation(
 // Analyze processes another interaction in the sequence.
 func (m *MonitorAzureLongRunningOperation) Analyze(
 	log logr.Logger,
-	interaction interaction.Interface,
+	i interaction.Interface,
 ) (analyzer.Result, error) {
 	// Check if the interaction is for the operation URL
-	if !urltool.SameBaseURL(*m.operationURL, interaction.Request().FullURL()) {
+	if !urltool.SameBaseURL(*m.operationURL, i.Request().FullURL()) {
 		return analyzer.Result{}, nil
 	}
 
 	// Check if the interaction is a GET
-	if interaction.Request().Method() != "GET" {
+	if i.Request().Method() != "GET" {
 		return analyzer.Result{}, nil
 	}
 
@@ -48,15 +49,18 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	var operation struct {
 		Status string `json:"status"`
 	}
-	err := json.Unmarshal(interaction.Response().Body(), &operation)
+
+	err := json.Unmarshal(i.Response().Body(), &operation)
 	if err != nil {
 		// Not a valid operation response; ignore
+		//nolint:nilerr // Just ignore invalid responses
 		return analyzer.Result{}, nil
 	}
 
 	if operation.Status == "InProgress" {
 		// Record the interaction and continue
-		m.interactions = append(m.interactions, interaction)
+		m.interactions = append(m.interactions, i)
+
 		return analyzer.Result{}, nil
 	}
 
@@ -78,5 +82,6 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	)
 
 	excluded := m.interactions[1 : len(m.interactions)-1]
+
 	return analyzer.FinishedWithExclusions(excluded...), nil
 }

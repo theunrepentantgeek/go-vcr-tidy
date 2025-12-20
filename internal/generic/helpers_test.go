@@ -4,9 +4,10 @@ import (
 	"net/url"
 	"testing"
 
+	. "github.com/onsi/gomega"
+
 	"github.com/go-logr/logr"
 	"github.com/go-logr/logr/testr"
-	. "github.com/onsi/gomega"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
@@ -30,12 +31,16 @@ func runAnalyzer(
 	t.Helper()
 	g := NewWithT(t)
 
-	var result analyzer.Result
-	var err error
+	var (
+		result analyzer.Result
+		err    error
+	)
+
 	limit := len(interactions) - 1
 	for index, inter := range interactions {
 		result, err = a.Analyze(log, inter)
 		g.Expect(err).ToNot(HaveOccurred())
+
 		if index < limit {
 			g.Expect(result.Finished).To(BeFalse(), "Analyzer finished prematurely")
 		}
@@ -57,5 +62,6 @@ func mustParseURL(rawURL string) url.URL {
 // newTestLogger creates a test logger for the given test.
 func newTestLogger(t *testing.T) logr.Logger {
 	t.Helper()
+
 	return testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 }

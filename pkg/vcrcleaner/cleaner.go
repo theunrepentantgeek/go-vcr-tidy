@@ -2,8 +2,10 @@ package vcrcleaner
 
 import (
 	"github.com/go-logr/logr"
-	"github.com/theunrepentantgeek/go-vcr-tidy/internal/cleaner"
+	"github.com/rotisserie/eris"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
+
+	"github.com/theunrepentantgeek/go-vcr-tidy/internal/cleaner"
 )
 
 // Cleaner is a tool for cleaning go-vcr recordings.
@@ -33,7 +35,7 @@ func New(
 func (c *Cleaner) Clean(cas *cassette.Cassette) error {
 	for _, i := range cas.Interactions {
 		if err := c.inspect(i); err != nil {
-			return err
+			return eris.Wrapf(err, "inspecting interaction %d", i.ID)
 		}
 	}
 
@@ -48,7 +50,13 @@ func (c *Cleaner) Clean(cas *cassette.Cassette) error {
 func (c *Cleaner) inspect(i *cassette.Interaction) error {
 	vi := newVCRInteraction(i)
 	c.mapping[i.ID] = vi
-	return c.core.Analyze(c.log, vi)
+
+	err := c.core.Analyze(c.log, vi)
+	if err != nil {
+		return eris.Wrapf(err, "analyzing interaction ID %d", i.ID)
+	}
+
+	return nil
 }
 
 // markIfExcluded marks an interaction for removal, if needed.
@@ -70,5 +78,6 @@ func (c *Cleaner) AfterCaptureHook(i *cassette.Interaction) error {
 
 func (c *Cleaner) BeforeSaveHook(i *cassette.Interaction) error {
 	c.markIfExcluded(i)
+
 	return nil
 }

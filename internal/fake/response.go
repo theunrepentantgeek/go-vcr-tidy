@@ -2,7 +2,7 @@ package fake
 
 import "net/http"
 
-// Response implementation
+// Response implementation.
 type fakeResponse struct {
 	statusCode      int
 	responseBody    string
@@ -21,6 +21,7 @@ func (r *fakeResponse) Header(name string) (string, bool) {
 	}
 
 	key := http.CanonicalHeaderKey(name)
+
 	values, ok := r.responseHeaders[key]
 	if !ok || len(values) == 0 {
 		return "", false
