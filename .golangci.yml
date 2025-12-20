@@ -109,7 +109,7 @@ linters:
           disabled: true
         - name: line-length-limit
           arguments:
-            - 100
+            - 120
         - name: unhandled-error
           disabled: true
     staticcheck:
@@ -122,6 +122,11 @@ linters:
     varnamelen:
       ignore-decls:
         - "g *github.com/onsi/gomega/internal.Gomega"
+    wrapcheck:
+      extra-ignore-sigs:
+        - eris.New(
+        - eris.Wrap(
+        - eris.Wrapf(
     wsl-v5:
       allow-cuddle-declarations: true
     custom:
