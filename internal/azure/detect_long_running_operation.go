@@ -9,6 +9,7 @@ import (
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
+	"github.com/theunrepentantgeek/go-vcr-tidy/internal/urltool"
 )
 
 // DetectAzureLongRunningOperation is an analyzer for detecting Azure long-running operations.
@@ -55,7 +56,7 @@ func (*DetectAzureLongRunningOperation) Analyze(
 
 	log.Info(
 		"Found Azure long running operation",
-		"url", operationURL)
+		"url", urltool.BaseURL(*operationURL))
 
 	monitor := NewMonitorAzureLongRunningOperation(*operationURL)
 

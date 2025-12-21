@@ -65,7 +65,7 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	}
 
 	// Operation is complete, check whether we have any interactions to exclude
-	if len(m.interactions) < 2 {
+	if len(m.interactions) <= 2 {
 		// No intermediate interactions to exclude.
 		log.Info(
 			"Long running operation finished quickly, nothing to exclude",
