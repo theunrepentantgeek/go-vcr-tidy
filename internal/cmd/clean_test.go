@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 	"path/filepath"
+	"strconv"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -171,7 +172,7 @@ version: 2
 interactions: []
 `
 	for i := 1; i <= 3; i++ {
-		cassettePath := filepath.Join(tmpDir, "test"+string(rune('0'+i))+".yaml")
+		cassettePath := filepath.Join(tmpDir, "test"+strconv.Itoa(i)+".yaml")
 		err := os.WriteFile(cassettePath, []byte(cassetteContent), 0600)
 		g.Expect(err).ToNot(HaveOccurred())
 	}
@@ -335,7 +336,7 @@ interactions: []
 `
 	var globs []string
 	for i := 1; i <= 3; i++ {
-		cassettePath := filepath.Join(tmpDir, "test"+string(rune('0'+i))+".yaml")
+		cassettePath := filepath.Join(tmpDir, "test"+strconv.Itoa(i)+".yaml")
 		err := os.WriteFile(cassettePath, []byte(cassetteContent), 0600)
 		g.Expect(err).ToNot(HaveOccurred())
 		globs = append(globs, cassettePath)
