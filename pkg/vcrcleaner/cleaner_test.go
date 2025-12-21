@@ -50,7 +50,7 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			// Clean it
 			cleaner := New(log, c.option)
 
-			err = cleaner.Clean(cas)
+			err = cleaner.CleanCassette(cas)
 			g.Expect(err).NotTo(HaveOccurred(), "cleaning cassette from %s", c.recordingPath)
 
 			// Get cleaned YAML for the cassette.
