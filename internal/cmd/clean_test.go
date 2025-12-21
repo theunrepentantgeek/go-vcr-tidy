@@ -205,7 +205,7 @@ func TestCleanGlob_WithInvalidGlobPattern_ReturnsError(t *testing.T) {
 	}
 
 	// Use an invalid glob pattern (malformed character class)
-	glob := "/tmp/test[.yaml"
+	glob := filepath.Join(t.TempDir(), "test[.yaml")
 	err := c.cleanGlob(ctx, glob)
 
 	g.Expect(err).To(HaveOccurred())
@@ -379,7 +379,7 @@ func TestRun_WithErrorInGlob_PropagatesError(t *testing.T) {
 	g := NewWithT(t)
 
 	c := &Clean{
-		Globs: []string{"/tmp/test[.yaml"}, // Invalid glob pattern
+		Globs: []string{filepath.Join(t.TempDir(), "test[.yaml")}, // Invalid glob pattern
 	}
 	deletes := true
 	c.Clean.Deletes = &deletes
