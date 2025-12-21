@@ -283,7 +283,7 @@ func TestCleanPath_WithNonexistentFile_ReturnsError(t *testing.T) {
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
 	}
 
-	err := c.cleanPath(ctx, "/nonexistent/path/to/cassette.yaml")
+	err := c.cleanPath(ctx, filepath.Join(t.TempDir(), "nonexistent", "path", "cassette.yaml"))
 
 	g.Expect(err).To(HaveOccurred())
 	g.Expect(err.Error()).To(ContainSubstring("cleaning cassette file"))
