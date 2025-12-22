@@ -59,7 +59,6 @@ tasks:
     deps:
       - build
     cmds:
-      - rm -f {{.REPORT}}
       - go test ./... -json | go-testreport -output {{.REPORT}}
     vars:
       REPORT: '{{.GITHUB_STEP_SUMMARY | default "test-report.md" }}'
