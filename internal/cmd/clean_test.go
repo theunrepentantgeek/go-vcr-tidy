@@ -13,91 +13,83 @@ import (
 
 // buildOptions Tests
 
-func TestBuildOptions_WithNoOptionsSpecified_ReturnsError(t *testing.T) {
+func TestBuildOptions(t *testing.T) {
 	t.Parallel()
-	g := NewWithT(t)
 
-	c := &Clean{}
+	cases := map[string]struct {
+		deletes                *bool
+		longRunningOperations  *bool
+		expectError            bool
+		expectedOptionsCount   int
+		expectedErrorSubstring string
+	}{
+		"WithNoOptionsSpecified_ReturnsError": {
+			deletes:                nil,
+			longRunningOperations:  nil,
+			expectError:            true,
+			expectedOptionsCount:   0,
+			expectedErrorSubstring: "no cleaning options specified",
+		},
+		"WithOnlyDeletesSet_ReturnsDeleteOption": {
+			deletes:              boolPtr(true),
+			longRunningOperations: nil,
+			expectError:          false,
+			expectedOptionsCount: 1,
+		},
+		"WithOnlyLongRunningOperationsSet_ReturnsLROOption": {
+			deletes:               nil,
+			longRunningOperations: boolPtr(true),
+			expectError:           false,
+			expectedOptionsCount:  1,
+		},
+		"WithBothOptionsSet_ReturnsBothOptions": {
+			deletes:               boolPtr(true),
+			longRunningOperations: boolPtr(true),
+			expectError:           false,
+			expectedOptionsCount:  2,
+		},
+		"WithDeletesSetToFalse_ReturnsError": {
+			deletes:                boolPtr(false),
+			longRunningOperations:  nil,
+			expectError:            true,
+			expectedOptionsCount:   0,
+			expectedErrorSubstring: "no cleaning options specified",
+		},
+		"WithLongRunningOperationsSetToFalse_ReturnsError": {
+			deletes:                nil,
+			longRunningOperations:  boolPtr(false),
+			expectError:            true,
+			expectedOptionsCount:   0,
+			expectedErrorSubstring: "no cleaning options specified",
+		},
+	}
 
-	options, err := c.buildOptions()
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			g := NewWithT(t)
 
-	g.Expect(err).To(HaveOccurred())
-	g.Expect(err.Error()).To(ContainSubstring("no cleaning options specified"))
-	g.Expect(options).To(BeNil())
+			cmd := &Clean{}
+			cmd.Clean.Deletes = c.deletes
+			cmd.Clean.LongRunningOperations = c.longRunningOperations
+
+			options, err := cmd.buildOptions()
+
+			if c.expectError {
+				g.Expect(err).To(HaveOccurred())
+				g.Expect(err.Error()).To(ContainSubstring(c.expectedErrorSubstring))
+				g.Expect(options).To(BeNil())
+			} else {
+				g.Expect(err).ToNot(HaveOccurred())
+				g.Expect(options).To(HaveLen(c.expectedOptionsCount))
+			}
+		})
+	}
 }
 
-func TestBuildOptions_WithOnlyDeletesSet_ReturnsDeleteOption(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	deletes := true
-	c := &Clean{}
-	c.Clean.Deletes = &deletes
-
-	options, err := c.buildOptions()
-
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(options).To(HaveLen(1))
-}
-
-func TestBuildOptions_WithOnlyLongRunningOperationsSet_ReturnsLROOption(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	lro := true
-	c := &Clean{}
-	c.Clean.LongRunningOperations = &lro
-
-	options, err := c.buildOptions()
-
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(options).To(HaveLen(1))
-}
-
-func TestBuildOptions_WithBothOptionsSet_ReturnsBothOptions(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	deletes := true
-	lro := true
-	c := &Clean{}
-	c.Clean.Deletes = &deletes
-	c.Clean.LongRunningOperations = &lro
-
-	options, err := c.buildOptions()
-
-	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(options).To(HaveLen(2))
-}
-
-func TestBuildOptions_WithDeletesSetToFalse_ReturnsError(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	deletes := false
-	c := &Clean{}
-	c.Clean.Deletes = &deletes
-
-	options, err := c.buildOptions()
-
-	g.Expect(err).To(HaveOccurred())
-	g.Expect(err.Error()).To(ContainSubstring("no cleaning options specified"))
-	g.Expect(options).To(BeNil())
-}
-
-func TestBuildOptions_WithLongRunningOperationsSetToFalse_ReturnsError(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	lro := false
-	c := &Clean{}
-	c.Clean.LongRunningOperations = &lro
-
-	options, err := c.buildOptions()
-
-	g.Expect(err).To(HaveOccurred())
-	g.Expect(err.Error()).To(ContainSubstring("no cleaning options specified"))
-	g.Expect(options).To(BeNil())
+// boolPtr returns a pointer to the given bool value.
+func boolPtr(b bool) *bool {
+	return &b
 }
 
 // cleanGlob Tests
