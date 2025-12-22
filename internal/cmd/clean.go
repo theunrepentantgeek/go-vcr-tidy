@@ -4,11 +4,13 @@ import (
 	"path/filepath"
 
 	"github.com/rotisserie/eris"
+
 	"github.com/theunrepentantgeek/go-vcr-tidy/pkg/vcrcleaner"
 )
 
 type Clean struct {
-	Globs []string `arg:"" type:"file" help:"Paths to go-vcr cassette files to clean. Globbing allowed."`
+	Globs []string `arg:"" help:"Paths to go-vcr cassette files to clean. Globbing allowed." type:"file"`
+	//nolint:revive // Nested struct is idomatic for kong
 	Clean struct {
 		Deletes               *bool `help:"Clean delete interactions."`
 		LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
@@ -56,6 +58,7 @@ func (c *Clean) cleanGlob(ctx *Context, glob string) error {
 	// Early exit for no matches
 	if len(paths) == 0 {
 		ctx.Log.V(1).Info("No cassettes found to clean", "glob", glob)
+
 		return nil
 	}
 

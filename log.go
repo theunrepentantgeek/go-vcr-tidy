@@ -8,9 +8,8 @@ import (
 	"github.com/rs/zerolog"
 )
 
-func CreateLogger(
-	verbose bool,
-) logr.Logger {
+// CreateLogger uses zerolog to provide logging.
+func CreateLogger() logr.Logger {
 	output := zerolog.ConsoleWriter{
 		Out:        os.Stdout,
 		TimeFormat: "15:04:05.999",
@@ -20,11 +19,7 @@ func CreateLogger(
 		With().Timestamp().
 		Logger()
 
-	if verbose {
-		zerologr.SetMaxV(1)
-	} else {
-		zerologr.SetMaxV(0)
-	}
+	zerologr.SetMaxV(0)
 
 	// Use standard interface for logging
 	zerologr.VerbosityFieldName = "" // Don't include verbosity in output

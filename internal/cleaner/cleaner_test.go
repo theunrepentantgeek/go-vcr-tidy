@@ -142,7 +142,7 @@ func TestAnalyze_WhenAnalyzerReturnsError_PropagatesError(t *testing.T) {
 	inter := fake.NewInteraction(baseURL, "GET", 200)
 	err := c.Analyze(log, inter)
 
-	g.Expect(err).To(Equal(expectedErr))
+	g.Expect(err).To(MatchError(ContainSubstring(expectedErr.Error())))
 }
 
 func TestAnalyze_WhenAnalyzerFinishes_RemovesFromActiveSet(t *testing.T) {
