@@ -16,6 +16,13 @@ func toPtr[T any](v T) *T {
 	return &v
 }
 
+// newCleanWithDeletes creates a Clean instance with the Deletes option set.
+func newCleanWithDeletes(deletes bool) *Clean {
+	c := &Clean{}
+	c.Clean.Deletes = toPtr(deletes)
+	return c
+}
+
 // createTestRecording creates a sample cassette file in the given directory.
 func createTestRecording(t *testing.T, g Gomega, tmpDir, filename string) string {
 	t.Helper()
@@ -96,15 +103,7 @@ func TestCleanGlob_WithNoMatchingFiles_LogsAndSucceeds(t *testing.T) {
 	g := NewWithT(t)
 
 	tmpDir := t.TempDir()
-
-	c := &Clean{
-		Clean: struct {
-			Deletes               *bool `help:"Clean delete interactions."`
-			LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
-		}{
-			Deletes: toPtr(true),
-		},
-	}
+	c := newCleanWithDeletes(true)
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -122,15 +121,7 @@ func TestCleanGlob_WithSingleMatchingFile_CleansFile(t *testing.T) {
 
 	tmpDir := t.TempDir()
 	cassettePath := createTestRecording(t, g, tmpDir, "test.yaml")
-
-	c := &Clean{
-		Clean: struct {
-			Deletes               *bool `help:"Clean delete interactions."`
-			LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
-		}{
-			Deletes: toPtr(true),
-		},
-	}
+	c := newCleanWithDeletes(true)
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -156,14 +147,7 @@ func TestCleanGlob_WithMultipleMatchingFiles_CleansAllFiles(t *testing.T) {
 		createTestRecording(t, g, tmpDir, "test"+strconv.Itoa(i)+".yaml")
 	}
 
-	c := &Clean{
-		Clean: struct {
-			Deletes               *bool `help:"Clean delete interactions."`
-			LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
-		}{
-			Deletes: toPtr(true),
-		},
-	}
+	c := newCleanWithDeletes(true)
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -179,14 +163,7 @@ func TestCleanGlob_WithInvalidGlobPattern_ReturnsError(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	c := &Clean{
-		Clean: struct {
-			Deletes               *bool `help:"Clean delete interactions."`
-			LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
-		}{
-			Deletes: toPtr(true),
-		},
-	}
+	c := newCleanWithDeletes(true)
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -206,15 +183,7 @@ func TestCleanPath_WithValidCassette_CleansSuccessfully(t *testing.T) {
 
 	tmpDir := t.TempDir()
 	cassettePath := createTestRecording(t, g, tmpDir, "test.yaml")
-
-	c := &Clean{
-		Clean: struct {
-			Deletes               *bool `help:"Clean delete interactions."`
-			LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
-		}{
-			Deletes: toPtr(true),
-		},
-	}
+	c := newCleanWithDeletes(true)
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -247,14 +216,7 @@ func TestCleanPath_WithNonexistentFile_ReturnsError(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	c := &Clean{
-		Clean: struct {
-			Deletes               *bool `help:"Clean delete interactions."`
-			LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
-		}{
-			Deletes: toPtr(true),
-		},
-	}
+	c := newCleanWithDeletes(true)
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -274,15 +236,8 @@ func TestRun_WithSingleGlob_ProcessesSuccessfully(t *testing.T) {
 	tmpDir := t.TempDir()
 	cassettePath := createTestRecording(t, g, tmpDir, "test.yaml")
 
-	c := &Clean{
-		Globs: []string{cassettePath},
-		Clean: struct {
-			Deletes               *bool `help:"Clean delete interactions."`
-			LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
-		}{
-			Deletes: toPtr(true),
-		},
-	}
+	c := newCleanWithDeletes(true)
+	c.Globs = []string{cassettePath}
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -305,15 +260,8 @@ func TestRun_WithMultipleGlobs_ProcessesAllSuccessfully(t *testing.T) {
 		globs = append(globs, cassettePath)
 	}
 
-	c := &Clean{
-		Globs: globs,
-		Clean: struct {
-			Deletes               *bool `help:"Clean delete interactions."`
-			LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
-		}{
-			Deletes: toPtr(true),
-		},
-	}
+	c := newCleanWithDeletes(true)
+	c.Globs = globs
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -345,15 +293,8 @@ func TestRun_WithErrorInGlob_PropagatesError(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	c := &Clean{
-		Globs: []string{filepath.Join(t.TempDir(), "test[.yaml")},
-		Clean: struct {
-			Deletes               *bool `help:"Clean delete interactions."`
-			LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
-		}{
-			Deletes: toPtr(true),
-		},
-	}
+	c := newCleanWithDeletes(true)
+	c.Globs = []string{filepath.Join(t.TempDir(), "test[.yaml")}
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
