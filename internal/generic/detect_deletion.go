@@ -33,7 +33,7 @@ func (*DetectDeletion) Analyze(
 		// Start monitoring for deletion confirmation via GET requests.
 		log.Info(
 			"Found DELETE to monitor",
-			"url", reqURL,
+			"url", reqURL.String(),
 		)
 
 		monitor := NewMonitorDeletion(reqURL)

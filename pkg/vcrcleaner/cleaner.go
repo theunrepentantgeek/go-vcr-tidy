@@ -1,8 +1,11 @@
 package vcrcleaner
 
 import (
+	"strings"
+
 	"github.com/go-logr/logr"
 	"github.com/rotisserie/eris"
+	"go.yaml.in/yaml/v3"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/cleaner"
@@ -32,7 +35,31 @@ func New(
 	return result
 }
 
-func (c *Cleaner) Clean(cas *cassette.Cassette) error {
+func (c *Cleaner) CleanFile(path string) error {
+	// Remove .yaml from the path if present, as go-vcr expects just the base name
+	path = strings.TrimSuffix(path, ".yaml")
+
+	cas, err := cassette.Load(path)
+	if err != nil {
+		return eris.Wrapf(err, "loading cassette from %s", path)
+	}
+
+	err = c.CleanCassette(cas)
+	if err != nil {
+		return eris.Wrapf(err, "cleaning cassette from %s", path)
+	}
+
+	cas.MarshalFunc = yaml.Marshal // Odd to need to do this explicitly
+
+	err = cas.Save()
+	if err != nil {
+		return eris.Wrapf(err, "saving cleaned cassette to %s", path)
+	}
+
+	return nil
+}
+
+func (c *Cleaner) CleanCassette(cas *cassette.Cassette) error {
 	for _, i := range cas.Interactions {
 		if err := c.inspect(i); err != nil {
 			return eris.Wrapf(err, "inspecting interaction %d", i.ID)

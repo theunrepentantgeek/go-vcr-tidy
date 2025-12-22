@@ -15,7 +15,7 @@ set -eu
 #   and we do not want to pollute the user’s system.
 #
 # To distinguish between these modes we will
-# have the devcontainer script pass the argument 
+# have the devcontainer script pass the argument
 # `devcontainer`
 #
 # Other available arguments
@@ -88,7 +88,7 @@ if ! command -v go > /dev/null 2>&1; then
 fi
 
 GOVER=$(go version)
-write-info "Go version: ${GOVER[*]}"
+write-info "Go version: ${GOVER}"
 
 GOVERREGEX=".*go1.([0-9]+).([0-9]+).*"
 GOVERREQUIRED="go1.24.*"
@@ -159,10 +159,10 @@ go-install() {
 }
 
 # Stricter GO formatting
-go-install gofumpt mvdan.cc/gofumpt@latest
+go-install gofumpt mvdan.cc/gofumpt@v0.9.2
 
 # Nicer reporting of test results
-go-install go-testreport github.com/becheran/go-testreport@latest
+go-install go-testreport github.com/becheran/go-testreport@v0.3.2
 
 # Mutation testing
 go-install gremlins github.com/go-gremlins/gremlins/cmd/gremlins@v0.6.0
