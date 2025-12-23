@@ -9,12 +9,13 @@ import (
 )
 
 type Clean struct {
-	Globs []string `arg:"" help:"Paths to go-vcr cassette files to clean. Globbing allowed." type:"file"`
-	//nolint:revive // Nested struct is idomatic for kong
-	Clean struct {
-		Deletes               *bool `help:"Clean delete interactions."`
-		LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
-	} `embed:"" prefix:"clean."`
+	Globs []string     `arg:""   help:"Paths to go-vcr cassette files to clean. Globbing allowed." type:"file"`
+	Clean CleanOptions `embed:"" prefix:"clean."`
+}
+
+type CleanOptions struct {
+	Deletes               *bool `help:"Clean delete interactions."`
+	LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
 }
 
 // Run executes the clean command for each provided path.
