@@ -11,32 +11,6 @@ import (
 	"github.com/go-logr/logr/testr"
 )
 
-// toPtr returns a pointer to the given value.
-func toPtr[T any](v T) *T {
-	return &v
-}
-
-// newCleanWithDeletes creates a Clean instance with the Deletes option set.
-func newCleanWithDeletes(deletes bool) *Clean {
-	c := &Clean{}
-	c.Clean.Deletes = toPtr(deletes)
-	return c
-}
-
-// createTestRecording creates a sample cassette file in the given directory.
-func createTestRecording(t *testing.T, g Gomega, tmpDir, filename string) string {
-	t.Helper()
-
-	content, err := os.ReadFile(filepath.Join("testdata", "sample.yaml"))
-	g.Expect(err).ToNot(HaveOccurred())
-
-	cassettePath := filepath.Join(tmpDir, filename)
-	err = os.WriteFile(cassettePath, content, 0600)
-	g.Expect(err).ToNot(HaveOccurred())
-
-	return cassettePath
-}
-
 // buildOptions Tests
 
 func TestBuildOptions(t *testing.T) {
@@ -103,7 +77,11 @@ func TestCleanGlob_WithNoMatchingFiles_LogsAndSucceeds(t *testing.T) {
 	g := NewWithT(t)
 
 	tmpDir := t.TempDir()
-	c := newCleanWithDeletes(true)
+	c := &Clean{
+		Clean: CleanOptions{
+			Deletes: toPtr(true),
+		},
+	}
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -121,7 +99,11 @@ func TestCleanGlob_WithSingleMatchingFile_CleansFile(t *testing.T) {
 
 	tmpDir := t.TempDir()
 	cassettePath := createTestRecording(t, g, tmpDir, "test.yaml")
-	c := newCleanWithDeletes(true)
+	c := &Clean{
+		Clean: CleanOptions{
+			Deletes: toPtr(true),
+		},
+	}
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -147,7 +129,11 @@ func TestCleanGlob_WithMultipleMatchingFiles_CleansAllFiles(t *testing.T) {
 		createTestRecording(t, g, tmpDir, "test"+strconv.Itoa(i)+".yaml")
 	}
 
-	c := newCleanWithDeletes(true)
+	c := &Clean{
+		Clean: CleanOptions{
+			Deletes: toPtr(true),
+		},
+	}
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -163,7 +149,11 @@ func TestCleanGlob_WithInvalidGlobPattern_ReturnsError(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	c := newCleanWithDeletes(true)
+	c := &Clean{
+		Clean: CleanOptions{
+			Deletes: toPtr(true),
+		},
+	}
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -183,7 +173,11 @@ func TestCleanPath_WithValidCassette_CleansSuccessfully(t *testing.T) {
 
 	tmpDir := t.TempDir()
 	cassettePath := createTestRecording(t, g, tmpDir, "test.yaml")
-	c := newCleanWithDeletes(true)
+	c := &Clean{
+		Clean: CleanOptions{
+			Deletes: toPtr(true),
+		},
+	}
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -216,7 +210,11 @@ func TestCleanPath_WithNonexistentFile_ReturnsError(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	c := newCleanWithDeletes(true)
+	c := &Clean{
+		Clean: CleanOptions{
+			Deletes: toPtr(true),
+		},
+	}
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -236,8 +234,12 @@ func TestRun_WithSingleGlob_ProcessesSuccessfully(t *testing.T) {
 	tmpDir := t.TempDir()
 	cassettePath := createTestRecording(t, g, tmpDir, "test.yaml")
 
-	c := newCleanWithDeletes(true)
-	c.Globs = []string{cassettePath}
+	c := &Clean{
+		Clean: CleanOptions{
+			Deletes: toPtr(true),
+		},
+		Globs: []string{cassettePath},
+	}
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -254,14 +256,19 @@ func TestRun_WithMultipleGlobs_ProcessesAllSuccessfully(t *testing.T) {
 
 	tmpDir := t.TempDir()
 
-	var globs []string
+	globs := make([]string, 0, 3)
+
 	for i := 1; i <= 3; i++ {
 		cassettePath := createTestRecording(t, g, tmpDir, "test"+strconv.Itoa(i)+".yaml")
 		globs = append(globs, cassettePath)
 	}
 
-	c := newCleanWithDeletes(true)
-	c.Globs = globs
+	c := &Clean{
+		Clean: CleanOptions{
+			Deletes: toPtr(true),
+		},
+		Globs: globs,
+	}
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -293,8 +300,12 @@ func TestRun_WithErrorInGlob_PropagatesError(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	c := newCleanWithDeletes(true)
-	c.Globs = []string{filepath.Join(t.TempDir(), "test[.yaml")}
+	c := &Clean{
+		Clean: CleanOptions{
+			Deletes: toPtr(true),
+		},
+		Globs: []string{filepath.Join(t.TempDir(), "test[.yaml")},
+	}
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
