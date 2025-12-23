@@ -33,3 +33,6 @@ go.work.sum
 
 # Tools directory
 tools/
+
+# Build artifacts
+build/
