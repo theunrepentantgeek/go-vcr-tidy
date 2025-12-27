@@ -26,7 +26,7 @@ func Finished() Result {
 	}
 }
 
-// Finished with Exclusions creates a Result indicating the analyzer is finished and listing interactions to exclude.
+// FinishedWithExclusions creates a Result indicating the analyzer is finished and listing interactions to exclude.
 func FinishedWithExclusions(excluded ...interaction.Interface) Result {
 	return Result{
 		Finished: true,
