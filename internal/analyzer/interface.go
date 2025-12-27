@@ -11,7 +11,7 @@ import (
 // 'Detectors' that watch for specific patterns of interactions that might indicate the start of an HTTP conversation
 // that can be abbreviated. Detectors are typically created up front and run for the entire lifetime of the analysis.
 // 'Monitors' that track a specific HTTP conversation, assessing whether it is suitable for abbreviation. Monitors are
-// typically created dynamically by Detectors when they identify a potential conversation to monitor. A Monitior will
+// typically created dynamically by Detectors when they identify a potential conversation to monitor. A Monitor will
 // terminate either when the full conversation has been analyzed, or as soon as it determines that abbreviation is not
 // possible.
 type Interface interface {
