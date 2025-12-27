@@ -28,6 +28,7 @@ tasks:
     deps:
       - build.bin
       - build.dir
+      - build.sbom
 
   build.bin:
     desc: Build the go-vcr-tidy binary
