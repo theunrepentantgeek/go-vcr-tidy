@@ -1,6 +1,7 @@
 package vcrcleaner
 
 import (
+	"net/url"
 	"path"
 	"path/filepath"
 	"strings"
@@ -57,12 +58,12 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			cleaned, err := cassetteToYaml(cas)
 			g.Expect(err).NotTo(HaveOccurred(), "getting cleaned YAML for cassette from %s", c.recordingPath)
 
-			// Generate a unified diff showing the changes
-			diffText := generateUnifiedDiff(baseline, cleaned)
+			// Generate a patch diff showing the changes
+			patchDiff := generatePatchDiff(baseline, cleaned)
 
 			// use goldie to assert the changes made
 			gold := goldie.New(t, goldie.WithTestNameForDir(true))
-			gold.Assert(t, name, []byte(diffText))
+			gold.Assert(t, name, []byte(patchDiff))
 		})
 	}
 }
@@ -106,43 +107,26 @@ type testcase struct {
 	recordingPath string
 }
 
-// generateUnifiedDiff generates a unified diff format showing changes between baseline and cleaned.
-//
-//nolint:revive // This function's complexity is acceptable for a test helper.
-func generateUnifiedDiff(baseline, cleaned string) string {
+// generatePatchDiff generates a patch format diff showing changes between baseline and cleaned.
+func generatePatchDiff(baseline, cleaned string) string {
 	dmp := diffmatchpatch.New()
+	diffs := dmp.DiffMain(baseline, cleaned, false)
+	patches := dmp.PatchMake(baseline, diffs)
 
-	// Convert to line-based diff for better readability.
-	// The diffmatchpatch library works on characters by default, which produces hard-to-read diffs.
-	// We convert lines to chars, perform the diff, then convert back to lines for a cleaner output.
-	a, b, lineArray := dmp.DiffLinesToChars(baseline, cleaned)
-	diffs := dmp.DiffMain(a, b, false)
-	diffs = dmp.DiffCharsToLines(diffs, lineArray)
-
-	// Convert diffs to unified format
-	// Pre-allocate a reasonable capacity based on input size
+	// Convert patches to readable text
+	// The patch format uses URL encoding for special characters, so we decode it
 	var result strings.Builder
-	result.Grow(len(baseline) + len(cleaned)/2)
 
-	for _, diff := range diffs {
-		lines := strings.Split(diff.Text, "\n")
-		for _, line := range lines {
-			if line == "" {
-				continue
-			}
-
-			switch diff.Type {
-			case diffmatchpatch.DiffInsert:
-				result.WriteString("+")
-			case diffmatchpatch.DiffDelete:
-				result.WriteString("-")
-			default: // DiffEqual or any other value
-				result.WriteString(" ")
-			}
-
-			result.WriteString(line)
-			result.WriteString("\n")
+	for _, patch := range patches {
+		patchStr := patch.String()
+		// Decode URL-encoded characters (like %0A for newlines)
+		decoded, err := url.QueryUnescape(patchStr)
+		if err != nil {
+			// If decoding fails, use the original string
+			decoded = patchStr
 		}
+
+		result.WriteString(decoded)
 	}
 
 	return result.String()
