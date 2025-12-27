@@ -8,8 +8,8 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"github.com/andreyvit/diff"
 	"github.com/sebdah/goldie/v2"
+	"github.com/sergi/go-diff/diffmatchpatch"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 )
 
@@ -57,12 +57,12 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			cleaned, err := cassetteToYaml(cas)
 			g.Expect(err).NotTo(HaveOccurred(), "getting cleaned YAML for cassette from %s", c.recordingPath)
 
-			// Compare it to the original yaml
-			d := diff.LineDiff(baseline, cleaned)
+			// Generate a unified diff showing the changes
+			diffText := generateUnifiedDiff(baseline, cleaned)
 
 			// use goldie to assert the changes made
 			gold := goldie.New(t, goldie.WithTestNameForDir(true))
-			gold.Assert(t, name, []byte(d))
+			gold.Assert(t, name, []byte(diffText))
 		})
 	}
 }
@@ -104,4 +104,42 @@ func fileTestRecordings(t *testing.T) map[string]string {
 type testcase struct {
 	option        Option
 	recordingPath string
+}
+
+// generateUnifiedDiff generates a unified diff format showing changes between baseline and cleaned.
+//
+//nolint:revive // This function's complexity is acceptable for a test helper.
+func generateUnifiedDiff(baseline, cleaned string) string {
+	dmp := diffmatchpatch.New()
+
+	// Convert to line-based diff for better readability
+	a, b, lineArray := dmp.DiffLinesToChars(baseline, cleaned)
+	diffs := dmp.DiffMain(a, b, false)
+	diffs = dmp.DiffCharsToLines(diffs, lineArray)
+
+	// Convert diffs to unified format
+	var result strings.Builder
+
+	for _, diff := range diffs {
+		lines := strings.Split(diff.Text, "\n")
+		for _, line := range lines {
+			if line == "" {
+				continue
+			}
+
+			switch diff.Type {
+			case diffmatchpatch.DiffInsert:
+				result.WriteString("+")
+			case diffmatchpatch.DiffDelete:
+				result.WriteString("-")
+			default: // DiffEqual or any other value
+				result.WriteString(" ")
+			}
+
+			result.WriteString(line)
+			result.WriteString("\n")
+		}
+	}
+
+	return result.String()
 }
