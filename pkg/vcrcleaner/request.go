@@ -1,6 +1,10 @@
 package vcrcleaner
 
-import "net/url"
+import (
+	"net/url"
+
+	"github.com/theunrepentantgeek/go-vcr-tidy/internal/urltool"
+)
 
 // vcrRequest represents the request portion of a VCR interaction.
 type vcrRequest struct {
@@ -20,11 +24,7 @@ func (r *vcrRequest) FullURL() url.URL {
 
 // BaseURL returns the base BaseURL of the request (without query parameters or fragment).
 func (r *vcrRequest) BaseURL() url.URL {
-	result := r.FullURL()
-	result.RawQuery = ""
-	result.Fragment = ""
-
-	return result
+	return *urltool.BaseURL(r.FullURL())
 }
 
 func (r *vcrRequest) Method() string {

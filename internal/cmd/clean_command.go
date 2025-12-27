@@ -8,18 +8,18 @@ import (
 	"github.com/theunrepentantgeek/go-vcr-tidy/pkg/vcrcleaner"
 )
 
-type Clean struct {
-	Globs []string     `arg:""   help:"Paths to go-vcr cassette files to clean. Globbing allowed." type:"file"`
-	Clean CleanOptions `embed:"" prefix:"clean."`
+type CleanCommand struct {
+	Globs []string        `arg:""   help:"Paths to go-vcr cassette files to clean. Globbing allowed." type:"file"`
+	Clean CleaningOptions `embed:"" prefix:"clean."`
 }
 
-type CleanOptions struct {
+type CleaningOptions struct {
 	Deletes               *bool `help:"Clean delete interactions."`
 	LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
 }
 
 // Run executes the clean command for each provided path.
-func (c *Clean) Run(ctx *Context) error {
+func (c *CleanCommand) Run(ctx *Context) error {
 	for _, glob := range c.Globs {
 		err := c.cleanGlob(ctx, glob)
 		if err != nil {
@@ -31,7 +31,7 @@ func (c *Clean) Run(ctx *Context) error {
 }
 
 // buildOptions builds the vcrcleaner options based on the CLI flags.
-func (c *Clean) buildOptions() ([]vcrcleaner.Option, error) {
+func (c *CleanCommand) buildOptions() ([]vcrcleaner.Option, error) {
 	var options []vcrcleaner.Option
 
 	if c.Clean.Deletes != nil && *c.Clean.Deletes {
@@ -50,7 +50,7 @@ func (c *Clean) buildOptions() ([]vcrcleaner.Option, error) {
 }
 
 // cleanGlob cleans any cassette files identified by the given glob path.
-func (c *Clean) cleanGlob(ctx *Context, glob string) error {
+func (c *CleanCommand) cleanGlob(ctx *Context, glob string) error {
 	paths, err := filepath.Glob(glob)
 	if err != nil {
 		return eris.Wrap(err, "failed to glob path")
@@ -82,7 +82,7 @@ func (c *Clean) cleanGlob(ctx *Context, glob string) error {
 }
 
 // cleanPath cleans the cassette file at the specified path.
-func (c *Clean) cleanPath(ctx *Context, path string) error {
+func (c *CleanCommand) cleanPath(ctx *Context, path string) error {
 	options, err := c.buildOptions()
 	if err != nil {
 		return eris.Wrap(err, "building cleaner options")

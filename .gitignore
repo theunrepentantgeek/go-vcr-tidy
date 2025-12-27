@@ -36,3 +36,4 @@ tools/
 
 # Build artifacts
 build/
+go-vcr-tidy

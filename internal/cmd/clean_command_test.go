@@ -53,7 +53,7 @@ func TestBuildOptions(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
 
-			cmd := &Clean{}
+			cmd := &CleanCommand{}
 			cmd.Clean.Deletes = c.deletes
 			cmd.Clean.LongRunningOperations = c.longRunningOperations
 
@@ -77,8 +77,8 @@ func TestCleanGlob_WithNoMatchingFiles_LogsAndSucceeds(t *testing.T) {
 	g := NewWithT(t)
 
 	tmpDir := t.TempDir()
-	c := &Clean{
-		Clean: CleanOptions{
+	c := &CleanCommand{
+		Clean: CleaningOptions{
 			Deletes: toPtr(true),
 		},
 	}
@@ -99,8 +99,8 @@ func TestCleanGlob_WithSingleMatchingFile_CleansFile(t *testing.T) {
 
 	tmpDir := t.TempDir()
 	cassettePath := createTestRecording(t, g, tmpDir, "test.yaml")
-	c := &Clean{
-		Clean: CleanOptions{
+	c := &CleanCommand{
+		Clean: CleaningOptions{
 			Deletes: toPtr(true),
 		},
 	}
@@ -129,8 +129,8 @@ func TestCleanGlob_WithMultipleMatchingFiles_CleansAllFiles(t *testing.T) {
 		createTestRecording(t, g, tmpDir, "test"+strconv.Itoa(i)+".yaml")
 	}
 
-	c := &Clean{
-		Clean: CleanOptions{
+	c := &CleanCommand{
+		Clean: CleaningOptions{
 			Deletes: toPtr(true),
 		},
 	}
@@ -149,8 +149,8 @@ func TestCleanGlob_WithInvalidGlobPattern_ReturnsError(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	c := &Clean{
-		Clean: CleanOptions{
+	c := &CleanCommand{
+		Clean: CleaningOptions{
 			Deletes: toPtr(true),
 		},
 	}
@@ -173,8 +173,8 @@ func TestCleanPath_WithValidCassette_CleansSuccessfully(t *testing.T) {
 
 	tmpDir := t.TempDir()
 	cassettePath := createTestRecording(t, g, tmpDir, "test.yaml")
-	c := &Clean{
-		Clean: CleanOptions{
+	c := &CleanCommand{
+		Clean: CleaningOptions{
 			Deletes: toPtr(true),
 		},
 	}
@@ -195,7 +195,7 @@ func TestCleanPath_WithNoOptionsSet_ReturnsError(t *testing.T) {
 	tmpDir := t.TempDir()
 	cassettePath := createTestRecording(t, g, tmpDir, "test.yaml")
 
-	c := &Clean{}
+	c := &CleanCommand{}
 
 	ctx := &Context{
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
@@ -210,8 +210,8 @@ func TestCleanPath_WithNonexistentFile_ReturnsError(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	c := &Clean{
-		Clean: CleanOptions{
+	c := &CleanCommand{
+		Clean: CleaningOptions{
 			Deletes: toPtr(true),
 		},
 	}
@@ -234,8 +234,8 @@ func TestRun_WithSingleGlob_ProcessesSuccessfully(t *testing.T) {
 	tmpDir := t.TempDir()
 	cassettePath := createTestRecording(t, g, tmpDir, "test.yaml")
 
-	c := &Clean{
-		Clean: CleanOptions{
+	c := &CleanCommand{
+		Clean: CleaningOptions{
 			Deletes: toPtr(true),
 		},
 		Globs: []string{cassettePath},
@@ -263,8 +263,8 @@ func TestRun_WithMultipleGlobs_ProcessesAllSuccessfully(t *testing.T) {
 		globs = append(globs, cassettePath)
 	}
 
-	c := &Clean{
-		Clean: CleanOptions{
+	c := &CleanCommand{
+		Clean: CleaningOptions{
 			Deletes: toPtr(true),
 		},
 		Globs: globs,
@@ -283,7 +283,7 @@ func TestRun_WithNoGlobs_SucceedsWithoutProcessing(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	c := &Clean{
+	c := &CleanCommand{
 		Globs: []string{},
 	}
 
@@ -300,8 +300,8 @@ func TestRun_WithErrorInGlob_PropagatesError(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	c := &Clean{
-		Clean: CleanOptions{
+	c := &CleanCommand{
+		Clean: CleaningOptions{
 			Deletes: toPtr(true),
 		},
 		Globs: []string{filepath.Join(t.TempDir(), "test[.yaml")},
