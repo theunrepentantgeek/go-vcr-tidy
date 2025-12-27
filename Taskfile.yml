@@ -27,7 +27,6 @@ tasks:
     desc: Build everything
     deps:
       - build.bin
-      - build.dir
       - build.sbom
 
   build.bin:
@@ -42,11 +41,12 @@ tasks:
     deps:
       - build.bin
     cmds:
-      - "sbom-tool generate -BuildDropPath {{.BUILD_DIR}} -BuildComponentPath {{.ROOT_DIR}} -PackageName go-vcr-tidy -PackageVersion latest -PackageSupplier https://github.com/theunrepentantgeek/go-vcr-tidy -NamespaceUriBase https://github.com/theunrepentantgeek/go-vcr-tidy"
+      - "sbom-tool generate -BuildDropPath {{.BUILD_DIR}} -BuildComponentPath {{.ROOT_DIR}} -PackageName go-vcr-tidy -PackageVersion latest -PackageSupplier https://github.com/theunrepentantgeek/go-vcr-tidy -NamespaceUriBase https://github.com/theunrepentantgeek/go-vcr-tidy -DeleteManifestDirIfPresent true -FetchLicenseInformation true -Verbosity Information"
 
   build.dir:
-    desc: Ensure our output folder exists
+    desc: Ensure our output folder exists and is empty
     cmds:
+      - rm -rf {{.BUILD_DIR}}
       - mkdir -p {{.BUILD_DIR}}
 
   test:
@@ -82,7 +82,7 @@ tasks:
       - task: tidy.lint
 
   tidy.gofumpt:
-    desc: "Run gofumpt"
+    desc: "Run gofumpt to reformat source code"
     cmds:
       - gofumpt -l -w .
 
