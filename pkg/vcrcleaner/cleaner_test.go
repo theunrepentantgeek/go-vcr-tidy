@@ -112,13 +112,17 @@ type testcase struct {
 func generateUnifiedDiff(baseline, cleaned string) string {
 	dmp := diffmatchpatch.New()
 
-	// Convert to line-based diff for better readability
+	// Convert to line-based diff for better readability.
+	// The diffmatchpatch library works on characters by default, which produces hard-to-read diffs.
+	// We convert lines to chars, perform the diff, then convert back to lines for a cleaner output.
 	a, b, lineArray := dmp.DiffLinesToChars(baseline, cleaned)
 	diffs := dmp.DiffMain(a, b, false)
 	diffs = dmp.DiffCharsToLines(diffs, lineArray)
 
 	// Convert diffs to unified format
+	// Pre-allocate a reasonable capacity based on input size
 	var result strings.Builder
+	result.Grow(len(baseline) + len(cleaned)/2)
 
 	for _, diff := range diffs {
 		lines := strings.Split(diff.Text, "\n")
