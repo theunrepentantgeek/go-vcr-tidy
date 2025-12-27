@@ -1,6 +1,7 @@
 package vcrcleaner
 
 import (
+	"net/url"
 	"path"
 	"path/filepath"
 	"strings"
@@ -8,8 +9,8 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"github.com/andreyvit/diff"
 	"github.com/sebdah/goldie/v2"
+	"github.com/sergi/go-diff/diffmatchpatch"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 )
 
@@ -57,12 +58,12 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			cleaned, err := cassetteToYaml(cas)
 			g.Expect(err).NotTo(HaveOccurred(), "getting cleaned YAML for cassette from %s", c.recordingPath)
 
-			// Compare it to the original yaml
-			d := diff.LineDiff(baseline, cleaned)
+			// Generate a patch diff showing the changes
+			patchDiff := generatePatchDiff(baseline, cleaned)
 
 			// use goldie to assert the changes made
 			gold := goldie.New(t, goldie.WithTestNameForDir(true))
-			gold.Assert(t, name, []byte(d))
+			gold.Assert(t, name, []byte(patchDiff))
 		})
 	}
 }
@@ -104,4 +105,29 @@ func fileTestRecordings(t *testing.T) map[string]string {
 type testcase struct {
 	option        Option
 	recordingPath string
+}
+
+// generatePatchDiff generates a patch format diff showing changes between baseline and cleaned.
+func generatePatchDiff(baseline, cleaned string) string {
+	dmp := diffmatchpatch.New()
+	diffs := dmp.DiffMain(baseline, cleaned, false)
+	patches := dmp.PatchMake(baseline, diffs)
+
+	// Convert patches to readable text
+	// The patch format uses URL encoding for special characters, so we decode it
+	var result strings.Builder
+
+	for _, patch := range patches {
+		patchStr := patch.String()
+		// Decode URL-encoded characters (like %0A for newlines)
+		decoded, err := url.QueryUnescape(patchStr)
+		if err != nil {
+			// If decoding fails, use the original string
+			decoded = patchStr
+		}
+
+		result.WriteString(decoded)
+	}
+
+	return result.String()
 }
