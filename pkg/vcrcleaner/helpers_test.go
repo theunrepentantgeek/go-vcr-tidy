@@ -26,14 +26,11 @@ func casssetteSummary(cas *cassette.Cassette) string {
 		}
 
 		// Write method and URL
-		builder.WriteString(
-			fmt.Sprintf(
-				"%s %d %s\n",
-				interaction.Request.Method,
-				interaction.Response.Code,
-				u,
-			),
-		)
+		fmt.Fprintf(builder,
+			"%s %d %s\n",
+			interaction.Request.Method,
+			interaction.Response.Code,
+			u)
 	}
 
 	return builder.String()
