@@ -1,10 +1,12 @@
- PUT 201 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-iuddaw
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-iuddaw
- PUT 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-iuddaw/providers/Microsoft.Compute/availabilitySets/asotest-availabilityset-nlwgaw
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-iuddaw/providers/Microsoft.Compute/availabilitySets/asotest-availabilityset-nlwgaw
- PUT 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-iuddaw/providers/Microsoft.Compute/availabilitySets/asotest-availabilityset-nlwgaw
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-iuddaw/providers/Microsoft.Compute/availabilitySets/asotest-availabilityset-nlwgaw
- DELETE 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-iuddaw/providers/Microsoft.Compute/availabilitySets/asotest-availabilityset-nlwgaw
- GET 404 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-iuddaw/providers/Microsoft.Compute/availabilitySets/asotest-availabilityset-nlwgaw
- DELETE 202 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-iuddaw
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkRJVUREQVctV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9
+ Common URL prefix: https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/
+
+ PUT 201 resourceGroups/asotest-rg-iuddaw
+ GET 200 resourceGroups/asotest-rg-iuddaw
+ PUT 200 resourceGroups/asotest-rg-iuddaw/providers/Microsoft.Compute/availabilitySets/asotest-availabilityset-nlwgaw
+ GET 200 resourceGroups/asotest-rg-iuddaw/providers/Microsoft.Compute/availabilitySets/asotest-availabilityset-nlwgaw
+ PUT 200 resourceGroups/asotest-rg-iuddaw/providers/Microsoft.Compute/availabilitySets/asotest-availabilityset-nlwgaw
+ GET 200 resourceGroups/asotest-rg-iuddaw/providers/Microsoft.Compute/availabilitySets/asotest-availabilityset-nlwgaw
+ DELETE 200 resourceGroups/asotest-rg-iuddaw/providers/Microsoft.Compute/availabilitySets/asotest-availabilityset-nlwgaw
+ GET 404 resourceGroups/asotest-rg-iuddaw/providers/Microsoft.Compute/availabilitySets/asotest-availabilityset-nlwgaw
+ DELETE 202 resourceGroups/asotest-rg-iuddaw
+ GET 200 operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkRJVUREQVctV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9
