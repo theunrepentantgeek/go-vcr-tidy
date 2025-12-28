@@ -8,8 +8,8 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"github.com/andreyvit/diff"
 	"github.com/sebdah/goldie/v2"
+	"github.com/sergi/go-diff/diffmatchpatch"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 )
 
@@ -53,8 +53,10 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			// Get cleaned summary for the cassette.
 			cleaned := casssetteSummary(cas)
 
-			// Compare it to the original yaml
-			d := diff.LineDiff(baseline, cleaned)
+			dmp := diffmatchpatch.New()
+			diffs := dmp.DiffMain(baseline, cleaned, false)
+
+			d := diffsToText(diffs)
 
 			// use goldie to assert the changes made
 			gold := goldie.New(t, goldie.WithTestNameForDir(true))

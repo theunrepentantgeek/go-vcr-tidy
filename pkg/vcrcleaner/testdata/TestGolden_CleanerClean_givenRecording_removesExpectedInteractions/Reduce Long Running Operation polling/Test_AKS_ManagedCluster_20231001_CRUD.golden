@@ -5,37 +5,33 @@
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/-providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
--PUT 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
-+GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
-+GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
-+GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
-+PUT 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/ resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
  PUT 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/-providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/ resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
+ PUT 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep-
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
  POST 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/listClusterAdminCredential
@@ -67,8 +63,8 @@
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/e913172e-757b-4250-8dd0-c0be9dd972ec
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/e913172e-757b-4250-8dd0-c0be9dd972ec
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/e913172e-757b-4250-8dd0-c0be9dd972ec
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/e913172e-757b-4250-8dd0-c0be9dd972ec
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/trustedAccessRoleBindings/tarb
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/-providers/Microsoft.ContainerService/locations/westus3/operations/e913172e-757b-4250-8dd0-c0be9dd972ec
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/ resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/trustedAccessRoleBindings/tarb
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/trustedAccessRoleBindings/tarb
  DELETE 202 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.MachineLearningServices/workspaces/asotestworktwegbz
  DELETE 202 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/trustedAccessRoleBindings/tarb
@@ -76,26 +72,24 @@
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239
  DELETE 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.KeyVault/vaults/asotest-kv-setxmk
  DELETE 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.Storage/storageAccounts/asoteststornwipxd
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.-MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft. ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239-
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578
-+GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239
-+GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.-ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft. MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578
  GET 404 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2
  PUT 201 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/-providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/ resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2
  PUT 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2
@@ -114,13 +108,12 @@
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/db56002c-369e-4df9-94ac-512ccbc71d69
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/db56002c-369e-4df9-94ac-512ccbc71d69
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/db56002c-369e-4df9-94ac-512ccbc71d69
--DELETE 202 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
+- DELETE 202 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep-
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd
-+DELETE 202 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd

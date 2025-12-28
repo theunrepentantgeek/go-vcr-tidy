@@ -4,7 +4,7 @@
  PUT 201 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/-d32824c1-87c1-437a-a0e0-1a393ae0f532
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1
@@ -30,7 +30,7 @@
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/ f230755d-3536-46d5-ad50-e8754d0d45a1
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg
@@ -53,25 +53,27 @@
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-assignmentpolicy-ytvsmq
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-assignmentpolicy-ytvsmq
  PUT 201 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/-234bed89-74ee-4e15-969f-e5aa9726976b
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/ d0bdd20a-84e8-4bc1-87b3-22682b82c803
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/-234bed89-74ee-4e15-969f-e5aa9726976b
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl
--PUT 201 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/ d0bdd20a-84e8-4bc1-87b3-22682b82c803
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl
+ PUT 201 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/-50fafa37-da0f-4f5a-83b0-dd5bf957a433
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/ 234bed89-74ee-4e15-969f-e5aa9726976b
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/-50fafa37-da0f-4f5a-83b0-dd5bf957a433
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b
@@ -80,15 +82,7 @@
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433
-+GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803
-+GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl
-+GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl
-+PUT 201 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl
-+GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433
-+GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/ 234bed89-74ee-4e15-969f-e5aa9726976b
  PUT 409 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar
  PUT 409 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar
  PUT 409 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar
@@ -116,34 +110,31 @@
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/2e2e0ad5-f5c3-423c-970d-48be40b1dc6f
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/2e2e0ad5-f5c3-423c-970d-48be40b1dc6f
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/2e2e0ad5-f5c3-423c-970d-48be40b1dc6f
- DELETE 202 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-assignmentpolicy-ytvsmq
+- DELETE 202 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-assignmentpolicy-ytvsmq
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/0edb37c0-f9b7-48f6-abe8-af337d15eb76
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/0edb37c0-f9b7-48f6-abe8-af337d15eb76
  PUT 201 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c
- PUT 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/patchSchedules/default
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c
- GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/patchSchedules/default
- PUT 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/patchSchedules/default
+- PUT 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/patchSchedules/default
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/-providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/ resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/patchSchedules/default
+ PUT 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/patchSchedules/default-
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/patchSchedules/default
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/-providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz
--GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz
--DELETE 202 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz
+-GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/ resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz
+ GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz
+ DELETE 202 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz-
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b
 -GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b
-+GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz
-+GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz
-+DELETE 202 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b
  GET 200 https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b
