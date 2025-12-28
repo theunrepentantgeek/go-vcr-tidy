@@ -41,11 +41,8 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			cas, err := cassette.Load(c.recordingPath)
 			g.Expect(err).NotTo(HaveOccurred(), "loading cassette from %s", c.recordingPath)
 
-			// Get baseline YAML for the cassette.
-			// We don't use the YAML from the file directly because we don't want our diffs to be polluted by other
-			// format changes.
-			baseline, err := cassetteToYaml(cas)
-			g.Expect(err).NotTo(HaveOccurred(), "getting baseline YAML for cassette from %s", c.recordingPath)
+			// Get baseline summary of the cassette
+			baseline := casssetteSummary(cas)
 
 			// Clean it
 			cleaner := New(log, c.option)
@@ -53,9 +50,8 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			err = cleaner.CleanCassette(cas)
 			g.Expect(err).NotTo(HaveOccurred(), "cleaning cassette from %s", c.recordingPath)
 
-			// Get cleaned YAML for the cassette.
-			cleaned, err := cassetteToYaml(cas)
-			g.Expect(err).NotTo(HaveOccurred(), "getting cleaned YAML for cassette from %s", c.recordingPath)
+			// Get cleaned summary for the cassette.
+			cleaned := casssetteSummary(cas)
 
 			// Compare it to the original yaml
 			d := diff.LineDiff(baseline, cleaned)
