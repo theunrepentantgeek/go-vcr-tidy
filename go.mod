@@ -16,7 +16,6 @@ require (
 	github.com/sebdah/goldie/v2 v2.8.0
 	go.yaml.in/yaml/v3 v3.0.4
 	gopkg.in/dnaeon/go-vcr.v4 v4.0.6
-	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
