@@ -21,3 +21,19 @@ func ReduceAzureLongRunningOperationPolling() Option {
 		c.Add(azure.NewDetectAzureLongRunningOperation())
 	}
 }
+
+// ReduceAzureResourceModificationMonitoring adds an analyzer that reduces Azure resource modification monitoring.
+// This analyzer watches for PUT and PATCH requests and monitors subsequent GET requests for Creating/Updating states.
+func ReduceAzureResourceModificationMonitoring() Option {
+	return func(c *cleaner.Cleaner) {
+		c.Add(azure.NewDetectResourceModification())
+	}
+}
+
+// ReduceAzureResourceDeletionMonitoring adds an analyzer that reduces Azure resource deletion monitoring.
+// This analyzer watches for DELETE requests and monitors subsequent GET requests for Deleting state.
+func ReduceAzureResourceDeletionMonitoring() Option {
+	return func(c *cleaner.Cleaner) {
+		c.Add(azure.NewDetectResourceDeletion())
+	}
+}

@@ -16,6 +16,8 @@ type CleanCommand struct {
 type CleaningOptions struct {
 	Deletes               *bool `help:"Clean delete interactions."`
 	LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
+	ResourceModifications *bool `help:"Clean Azure resource modification (PUT/PATCH) monitoring interactions."`
+	ResourceDeletions     *bool `help:"Clean Azure resource deletion monitoring interactions."`
 }
 
 // Run executes the clean command for each provided path.
@@ -40,6 +42,14 @@ func (c *CleanCommand) buildOptions() ([]vcrcleaner.Option, error) {
 
 	if c.Clean.LongRunningOperations != nil && *c.Clean.LongRunningOperations {
 		options = append(options, vcrcleaner.ReduceAzureLongRunningOperationPolling())
+	}
+
+	if c.Clean.ResourceModifications != nil && *c.Clean.ResourceModifications {
+		options = append(options, vcrcleaner.ReduceAzureResourceModificationMonitoring())
+	}
+
+	if c.Clean.ResourceDeletions != nil && *c.Clean.ResourceDeletions {
+		options = append(options, vcrcleaner.ReduceAzureResourceDeletionMonitoring())
 	}
 
 	if len(options) == 0 {
