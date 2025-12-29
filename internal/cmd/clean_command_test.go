@@ -13,6 +13,7 @@ import (
 
 // buildOptions Tests
 
+//nolint:funlen // Table test cases are extensive but clear
 func TestBuildOptions(t *testing.T) {
 	t.Parallel()
 

@@ -34,6 +34,19 @@ func (c *CleanCommand) Run(ctx *Context) error {
 
 // buildOptions builds the vcrcleaner options based on the CLI flags.
 func (c *CleanCommand) buildOptions() ([]vcrcleaner.Option, error) {
+	options := c.collectOptions()
+
+	if len(options) == 0 {
+		return nil, eris.New("no cleaning options specified; at least one must be set")
+	}
+
+	return options, nil
+}
+
+// collectOptions collects all enabled options from the CLI flags.
+//
+//nolint:revive // Simple sequential flag checks are acceptable
+func (c *CleanCommand) collectOptions() []vcrcleaner.Option {
 	var options []vcrcleaner.Option
 
 	if c.Clean.Deletes != nil && *c.Clean.Deletes {
@@ -52,11 +65,7 @@ func (c *CleanCommand) buildOptions() ([]vcrcleaner.Option, error) {
 		options = append(options, vcrcleaner.ReduceAzureResourceDeletionMonitoring())
 	}
 
-	if len(options) == 0 {
-		return nil, eris.New("no cleaning options specified; at least one must be set")
-	}
-
-	return options, nil
+	return options
 }
 
 // cleanGlob cleans any cassette files identified by the given glob path.

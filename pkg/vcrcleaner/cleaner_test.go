@@ -17,8 +17,10 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 
 	// Analyzers we want to test
 	analyzers := map[string]Option{
-		"reduce-delete-monitoring":              ReduceDeleteMonitoring(),
-		"reduce-long-running-operation-polling": ReduceAzureLongRunningOperationPolling(),
+		"reduce-delete-monitoring":                      ReduceDeleteMonitoring(),
+		"reduce-long-running-operation-polling":         ReduceAzureLongRunningOperationPolling(),
+		"reduce-azure-resource-modification-monitoring": ReduceAzureResourceModificationMonitoring(),
+		"reduce-azure-resource-deletion-monitoring":     ReduceAzureResourceDeletionMonitoring(),
 	}
 
 	// Find all the *.yaml files under testdata

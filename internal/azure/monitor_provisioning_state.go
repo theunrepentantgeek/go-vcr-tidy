@@ -17,9 +17,9 @@ import (
 // matches one of the target states (case-insensitive). When the provisioningState transitions to a
 // different value, the monitor finishes and excludes all but the first and last accumulated interactions.
 type MonitorProvisioningState struct {
-	baseURL              url.URL                  // Base URL of the resource to monitor
-	targetStates         []string                 // Provisioning states to monitor (e.g., "Creating", "Updating", "Deleting")
-	interactions         []interaction.Interface  // Accumulated interactions with matching provisioningState
+	baseURL      url.URL                 // Base URL of the resource to monitor
+	targetStates []string                // States to monitor (e.g., "Creating", "Updating")
+	interactions []interaction.Interface // Accumulated interactions with matching provisioningState
 }
 
 var _ analyzer.Interface = (*MonitorProvisioningState)(nil)
@@ -38,8 +38,6 @@ func NewMonitorProvisioningState(
 }
 
 // Analyze processes another interaction in the sequence.
-//
-//nolint:cyclomatic,revive,cyclop // Complexity is acceptable for this method
 func (m *MonitorProvisioningState) Analyze(
 	log logr.Logger,
 	i interaction.Interface,
@@ -85,11 +83,7 @@ func (m *MonitorProvisioningState) checkProvisioningState(
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	// Parse the response body to extract provisioningState
-	var response struct {
-		Properties struct {
-			ProvisioningState string `json:"provisioningState"`
-		} `json:"properties"`
-	}
+	var response azureResourceResponse
 
 	err := json.Unmarshal(i.Response().Body(), &response)
 	if err != nil {
