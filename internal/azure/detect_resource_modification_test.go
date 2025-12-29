@@ -205,7 +205,9 @@ func TestDetectResourceModification_SpawnsTwoMonitors(t *testing.T) {
 	g.Expect(result.Spawn).To(HaveLen(2), "Should spawn two monitors, one for Creating and one for Updating")
 
 	// Verify the spawned monitors are configured correctly
-	var creatingMonitor, updatingMonitor *MonitorProvisioningState
+	var creatingMonitor *MonitorProvisioningState
+
+	var updatingMonitor *MonitorProvisioningState
 
 	for _, a := range result.Spawn {
 		if m, ok := a.(*MonitorProvisioningState); ok {

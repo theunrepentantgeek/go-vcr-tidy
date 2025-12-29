@@ -88,12 +88,14 @@ func (m *MonitorProvisioningState) checkProvisioningState(
 	err := json.Unmarshal(i.Response().Body(), &response)
 	if err != nil {
 		// Not a valid Azure resource response; abandon monitoring
+		// This is not an error - just a condition this monitor isn't prepared to handle
 		log.Info(
 			"Abandoning provisioning state monitor, invalid JSON response",
 			"url", m.baseURL.String(),
 		)
 
-		return analyzer.Finished(), err
+		//nolint:nilerr // Invalid JSON is not an error, just a condition we can't handle
+		return analyzer.Finished(), nil
 	}
 
 	currentState := response.Properties.ProvisioningState

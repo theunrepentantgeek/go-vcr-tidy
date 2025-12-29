@@ -208,7 +208,7 @@ func TestMonitorProvisioningState_InvalidJSON_AbandonMonitoring(t *testing.T) {
 
 	result, err := monitor.Analyze(log, getInvalid)
 
-	g.Expect(err).To(HaveOccurred(), "Should return error on invalid JSON")
+	g.Expect(err).ToNot(HaveOccurred(), "Invalid JSON should not be treated as an error")
 	g.Expect(result.Finished).To(BeTrue(), "Should abandon monitoring on invalid JSON")
 	g.Expect(result.Excluded).To(BeEmpty())
 }
