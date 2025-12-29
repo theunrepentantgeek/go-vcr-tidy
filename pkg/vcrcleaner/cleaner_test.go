@@ -47,7 +47,7 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			g.Expect(err).NotTo(HaveOccurred(), "cleaning cassette from %s", c.recordingPath)
 
 			// Get summary for the cleaned cassette.
-			cleaned := casssetteSummary(cas)
+			cleaned := cassetteSummary(cas)
 
 			// use goldie to assert the changes made
 			gold := goldie.New(t, goldie.WithTestNameForDir(true))

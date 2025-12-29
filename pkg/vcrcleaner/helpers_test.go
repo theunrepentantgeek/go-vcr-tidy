@@ -1,8 +1,7 @@
 package vcrcleaner
 
 import (
-	"bytes"
-	"fmt"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -14,7 +13,7 @@ import (
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/report"
 )
 
-func casssetteSummary(cas *cassette.Cassette) string {
+func cassetteSummary(cas *cassette.Cassette) string {
 	// Build common URL prefix
 	prefix := commonURLPrefix(cas)
 
@@ -37,8 +36,8 @@ func casssetteSummary(cas *cassette.Cassette) string {
 			u = u[:i]
 		}
 
-		// Remove common prefix
-		statusCode := fmt.Sprintf("%d", interaction.Response.Code)
+		// Format status code as string
+		statusCode := strconv.Itoa(interaction.Response.Code)
 
 		// Write method and URL
 		tbl.AddRow(
@@ -50,6 +49,7 @@ func casssetteSummary(cas *cassette.Cassette) string {
 
 	var builder strings.Builder
 	tbl.WriteTo(&builder)
+
 	return builder.String()
 }
 
@@ -77,39 +77,4 @@ func newTestLogger(t *testing.T) logr.Logger {
 	t.Helper()
 
 	return testr.NewWithOptions(t, testr.Options{Verbosity: 1})
-}
-
-// DiffPrettyText converts a []Diff into a text report.
-func diffsToText(diffs []diffmatchpatch.Diff) string {
-	var buff bytes.Buffer
-	for _, diff := range diffs {
-		switch diff.Type {
-		case diffmatchpatch.DiffInsert:
-			writeDiff(&buff, diff.Text, "+")
-		case diffmatchpatch.DiffDelete:
-			writeDiff(&buff, diff.Text, "-")
-		case diffmatchpatch.DiffEqual:
-			writeDiff(&buff, diff.Text, " ")
-		}
-	}
-
-	return buff.String()
-}
-
-func writeDiff(
-	buffer *bytes.Buffer,
-	text string,
-	prefix string,
-) {
-	lines := strings.Split(text, "\n")
-	for i, line := range lines {
-		if len(strings.TrimSpace(prefix)) > 0 || len(line) > 0 {
-			_, _ = buffer.WriteString(prefix)
-			_, _ = buffer.WriteString(line)
-		}
-
-		if i < len(lines)-1 {
-			_, _ = buffer.WriteString("\n")
-		}
-	}
 }
