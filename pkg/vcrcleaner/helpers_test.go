@@ -10,41 +10,46 @@ import (
 	"github.com/go-logr/logr/testr"
 	"github.com/sergi/go-diff/diffmatchpatch"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
+
+	"github.com/theunrepentantgeek/go-vcr-tidy/internal/report"
 )
 
 func casssetteSummary(cas *cassette.Cassette) string {
-	// Build a summary of the cassette interactions
-	builder := &strings.Builder{}
-
+	// Build common URL prefix
 	prefix := commonURLPrefix(cas)
-	builder.WriteString(
-		fmt.Sprintf(
-			"Common URL prefix: %s\n\n",
-			prefix))
+
+	// Build a summary of the cassette interactions
+	tbl := report.NewMarkdownTable(
+		"",
+		"Method",
+		"Code",
+		prefix)
 
 	for _, interaction := range cas.Interactions {
-		// Skip discarded interactions
+		discard := ""
 		if interaction.DiscardOnSave {
-			continue
+			discard = "X"
 		}
 
-		// Get URL without query parameters
-		u := interaction.Request.URL
+		// Get URL without query parameters and common prefix
+		u := strings.TrimPrefix(interaction.Request.URL, prefix)
 		if i := strings.Index(u, "?"); i != -1 {
 			u = u[:i]
 		}
 
 		// Remove common prefix
-		u = strings.TrimPrefix(u, prefix)
+		statusCode := fmt.Sprintf("%d", interaction.Response.Code)
 
 		// Write method and URL
-		fmt.Fprintf(builder,
-			"%s %d %s\n",
+		tbl.AddRow(
+			discard,
 			interaction.Request.Method,
-			interaction.Response.Code,
+			statusCode,
 			u)
 	}
 
+	var builder strings.Builder
+	tbl.WriteTo(&builder)
 	return builder.String()
 }
 

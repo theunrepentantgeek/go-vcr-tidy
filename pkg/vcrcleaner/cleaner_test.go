@@ -9,7 +9,6 @@ import (
 	. "github.com/onsi/gomega"
 
 	"github.com/sebdah/goldie/v2"
-	"github.com/sergi/go-diff/diffmatchpatch"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 )
 
@@ -18,8 +17,8 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 
 	// Analyzers we want to test
 	analyzers := map[string]Option{
-		"Reduce Delete Monitoring":              ReduceDeleteMonitoring(),
-		"Reduce Long Running Operation polling": ReduceAzureLongRunningOperationPolling(),
+		"reduce-delete-monitoring":              ReduceDeleteMonitoring(),
+		"reduce-long-running-operation-polling": ReduceAzureLongRunningOperationPolling(),
 	}
 
 	// Find all the *.yaml files under testdata
@@ -41,26 +40,18 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			cas, err := cassette.Load(c.recordingPath)
 			g.Expect(err).NotTo(HaveOccurred(), "loading cassette from %s", c.recordingPath)
 
-			// Get baseline summary of the cassette
-			baseline := casssetteSummary(cas)
-
 			// Clean it
 			cleaner := New(log, c.option)
 
 			err = cleaner.CleanCassette(cas)
 			g.Expect(err).NotTo(HaveOccurred(), "cleaning cassette from %s", c.recordingPath)
 
-			// Get cleaned summary for the cassette.
+			// Get summary for the cleaned cassette.
 			cleaned := casssetteSummary(cas)
-
-			dmp := diffmatchpatch.New()
-			diffs := dmp.DiffMain(baseline, cleaned, false)
-
-			d := diffsToText(diffs)
 
 			// use goldie to assert the changes made
 			gold := goldie.New(t, goldie.WithTestNameForDir(true))
-			gold.Assert(t, name, []byte(d))
+			gold.Assert(t, name, []byte(cleaned))
 		})
 	}
 }
