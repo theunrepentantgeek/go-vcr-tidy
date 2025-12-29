@@ -185,7 +185,7 @@ func TestDetectResourceDeletion_SpawnedMonitorHasCorrectState(t *testing.T) {
 
 	// Verify the spawned monitor is configured with correct state
 	if m, ok := result.Spawn[0].(*MonitorProvisioningState); ok {
-		g.Expect(m.targetStates).To(ContainElement("Deleting"))
+		g.Expect(m.targetState).To(Equal("Deleting"))
 		g.Expect(m.baseURL).To(Equal(baseURL))
 	}
 }

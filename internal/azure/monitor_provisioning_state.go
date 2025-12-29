@@ -14,11 +14,11 @@ import (
 
 // MonitorProvisioningState is an analyzer for monitoring Azure resource provisioning states.
 // It watches for GET requests to a specific URL and tracks interactions where the provisioningState
-// matches one of the target states (case-insensitive). When the provisioningState transitions to a
+// matches the target state (case-insensitive). When the provisioningState transitions to a
 // different value, the monitor finishes and excludes all but the first and last accumulated interactions.
 type MonitorProvisioningState struct {
 	baseURL      url.URL                 // Base URL of the resource to monitor
-	targetStates []string                // States to monitor (e.g., "Creating", "Updating")
+	targetState  string                  // State to monitor (e.g., "Creating" or "Updating")
 	interactions []interaction.Interface // Accumulated interactions with matching provisioningState
 }
 
@@ -26,14 +26,14 @@ var _ analyzer.Interface = (*MonitorProvisioningState)(nil)
 
 // NewMonitorProvisioningState creates a new MonitorProvisioningState analyzer.
 // baseURL is the base URL of the resource to monitor.
-// targetStates are the provisioningState values to watch for (case-insensitive).
+// targetState is the provisioningState value to watch for (case-insensitive).
 func NewMonitorProvisioningState(
 	baseURL url.URL,
-	targetStates []string,
+	targetState string,
 ) *MonitorProvisioningState {
 	return &MonitorProvisioningState{
-		baseURL:      baseURL,
-		targetStates: targetStates,
+		baseURL:     baseURL,
+		targetState: targetState,
 	}
 }
 
@@ -87,19 +87,28 @@ func (m *MonitorProvisioningState) checkProvisioningState(
 
 	err := json.Unmarshal(i.Response().Body(), &response)
 	if err != nil {
-		// Not a valid Azure resource response; ignore
-		//nolint:nilerr // Just ignore invalid responses
-		return analyzer.Result{}, nil
+		// Not a valid Azure resource response; abandon monitoring
+		log.Info(
+			"Abandoning provisioning state monitor, invalid JSON response",
+			"url", m.baseURL.String(),
+		)
+
+		return analyzer.Finished(), err
 	}
 
 	currentState := response.Properties.ProvisioningState
 	if currentState == "" {
-		// No provisioningState field; ignore
-		return analyzer.Result{}, nil
+		// No provisioningState field; abandon monitoring
+		log.Info(
+			"Abandoning provisioning state monitor, missing provisioningState",
+			"url", m.baseURL.String(),
+		)
+
+		return analyzer.Finished(), nil
 	}
 
-	// Check if current state matches any of our target states (case-insensitive)
-	if m.isTargetState(currentState) {
+	// Check if current state matches our target state (case-insensitive)
+	if strings.EqualFold(currentState, m.targetState) {
 		// Accumulate this interaction and continue monitoring
 		m.interactions = append(m.interactions, i)
 
@@ -108,17 +117,6 @@ func (m *MonitorProvisioningState) checkProvisioningState(
 
 	// State has transitioned to a non-target state
 	return m.stateTransitioned(log)
-}
-
-// isTargetState checks if the given state matches any target state (case-insensitive).
-func (m *MonitorProvisioningState) isTargetState(state string) bool {
-	for _, target := range m.targetStates {
-		if strings.EqualFold(state, target) {
-			return true
-		}
-	}
-
-	return false
 }
 
 // stateTransitioned handles the case where provisioningState has moved to a final state.

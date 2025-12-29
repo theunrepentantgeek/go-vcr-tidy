@@ -58,7 +58,8 @@ func (*DetectResourceModification) Analyze(
 		"provisioningState", response.Properties.ProvisioningState,
 	)
 
-	monitor := NewMonitorProvisioningState(reqURL, []string{"Creating", "Updating"})
+	monitorCreating := NewMonitorProvisioningState(reqURL, "Creating")
+	monitorUpdating := NewMonitorProvisioningState(reqURL, "Updating")
 
-	return analyzer.Spawn(monitor), nil
+	return analyzer.Spawn(monitorCreating, monitorUpdating), nil
 }

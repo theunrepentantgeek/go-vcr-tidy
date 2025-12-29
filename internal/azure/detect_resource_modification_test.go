@@ -22,8 +22,9 @@ func TestDetectResourceModification_SuccessfulPUT_SpawnsMonitor(t *testing.T) {
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeFalse())
-	g.Expect(result.Spawn).To(HaveLen(1))
+	g.Expect(result.Spawn).To(HaveLen(2), "Should spawn two monitors")
 	g.Expect(result.Spawn[0]).To(BeAssignableToTypeOf(&MonitorProvisioningState{}))
+	g.Expect(result.Spawn[1]).To(BeAssignableToTypeOf(&MonitorProvisioningState{}))
 	g.Expect(result.Excluded).To(BeEmpty())
 }
 
@@ -40,8 +41,9 @@ func TestDetectResourceModification_SuccessfulPATCH_SpawnsMonitor(t *testing.T) 
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(result.Finished).To(BeFalse())
-	g.Expect(result.Spawn).To(HaveLen(1))
+	g.Expect(result.Spawn).To(HaveLen(2), "Should spawn two monitors")
 	g.Expect(result.Spawn[0]).To(BeAssignableToTypeOf(&MonitorProvisioningState{}))
+	g.Expect(result.Spawn[1]).To(BeAssignableToTypeOf(&MonitorProvisioningState{}))
 }
 
 func TestDetectResourceModification_Various2xxStatusCodes_SpawnsMonitor(t *testing.T) {
@@ -69,7 +71,7 @@ func TestDetectResourceModification_Various2xxStatusCodes_SpawnsMonitor(t *testi
 			result, err := detector.Analyze(log, putInteraction)
 
 			g.Expect(err).ToNot(HaveOccurred())
-			g.Expect(result.Spawn).To(HaveLen(1))
+			g.Expect(result.Spawn).To(HaveLen(2), "Should spawn two monitors")
 		})
 	}
 }
@@ -188,7 +190,7 @@ func TestDetectResourceModification_NeverFinishes(t *testing.T) {
 	}
 }
 
-func TestDetectResourceModification_SpawnedMonitorHasCorrectStates(t *testing.T) {
+func TestDetectResourceModification_SpawnsTwoMonitors(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
@@ -200,13 +202,28 @@ func TestDetectResourceModification_SpawnedMonitorHasCorrectStates(t *testing.T)
 	result, err := detector.Analyze(log, putInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result.Spawn).To(HaveLen(1))
+	g.Expect(result.Spawn).To(HaveLen(2), "Should spawn two monitors, one for Creating and one for Updating")
 
-	// Verify the spawned monitor is configured with correct states
-	if m, ok := result.Spawn[0].(*MonitorProvisioningState); ok {
-		g.Expect(m.targetStates).To(ContainElements("Creating", "Updating"))
-		g.Expect(m.baseURL).To(Equal(baseURL))
+	// Verify the spawned monitors are configured correctly
+	var creatingMonitor, updatingMonitor *MonitorProvisioningState
+
+	for _, a := range result.Spawn {
+		if m, ok := a.(*MonitorProvisioningState); ok {
+			switch m.targetState {
+			case "Creating":
+				creatingMonitor = m
+			case "Updating":
+				updatingMonitor = m
+			default:
+				// Other states are not expected in this test
+			}
+		}
 	}
+
+	g.Expect(creatingMonitor).ToNot(BeNil(), "Should have a Creating monitor")
+	g.Expect(updatingMonitor).ToNot(BeNil(), "Should have an Updating monitor")
+	g.Expect(creatingMonitor.baseURL).To(Equal(baseURL))
+	g.Expect(updatingMonitor.baseURL).To(Equal(baseURL))
 }
 
 func TestDetectResourceModification_MultipleRequests_SpawnsMultipleMonitors(t *testing.T) {
@@ -224,14 +241,15 @@ func TestDetectResourceModification_MultipleRequests_SpawnsMultipleMonitors(t *t
 
 	result1, err := detector.Analyze(log, put1)
 	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result1.Spawn).To(HaveLen(1))
+	g.Expect(result1.Spawn).To(HaveLen(2), "Should spawn two monitors")
 
 	result2, err := detector.Analyze(log, put2)
 	g.Expect(err).ToNot(HaveOccurred())
-	g.Expect(result2.Spawn).To(HaveLen(1))
+	g.Expect(result2.Spawn).To(HaveLen(2), "Should spawn two monitors")
 
-	// Each spawned monitor should be independent
+	// Each spawned set should be independent
 	g.Expect(result1.Spawn[0]).ToNot(Equal(result2.Spawn[0]))
+	g.Expect(result1.Spawn[1]).ToNot(Equal(result2.Spawn[1]))
 }
 
 func TestDetectResourceModification_EmptyResult_WhenNoAction(t *testing.T) {

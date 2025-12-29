@@ -57,7 +57,7 @@ func (*DetectResourceDeletion) Analyze(
 		"provisioningState", response.Properties.ProvisioningState,
 	)
 
-	monitor := NewMonitorProvisioningState(reqURL, []string{"Deleting"})
+	monitor := NewMonitorProvisioningState(reqURL, "Deleting")
 
 	return analyzer.Spawn(monitor), nil
 }
