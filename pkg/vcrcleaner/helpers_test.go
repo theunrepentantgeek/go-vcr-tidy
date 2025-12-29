@@ -1,64 +1,75 @@
 package vcrcleaner
 
 import (
-	"os"
+	"strconv"
+	"strings"
 	"testing"
 
 	"github.com/go-logr/logr"
 	"github.com/go-logr/logr/testr"
-	"github.com/rotisserie/eris"
+	"github.com/sergi/go-diff/diffmatchpatch"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
-	"gopkg.in/yaml.v3"
+
+	"github.com/theunrepentantgeek/go-vcr-tidy/internal/report"
 )
 
-func cassetteToYaml(cas *cassette.Cassette) (string, error) {
-	cas.MarshalFunc = yaml.Marshal // Odd to need to do this explicitly
+func cassetteSummary(cas *cassette.Cassette) string {
+	// Build common URL prefix
+	prefix := commonURLPrefix(cas)
 
-	fs := newMemoryFS()
+	// Build a summary of the cassette interactions
+	tbl := report.NewMarkdownTable(
+		"",
+		"Method",
+		"Code",
+		prefix)
 
-	err := cas.SaveWithFS(fs)
-	if err != nil {
-		return "", eris.Wrap(err, "failed to convert cassette to YAML")
+	for _, interaction := range cas.Interactions {
+		discard := ""
+		if interaction.DiscardOnSave {
+			discard = "X"
+		}
+
+		// Get URL without query parameters and common prefix
+		u := strings.TrimPrefix(interaction.Request.URL, prefix)
+		if i := strings.Index(u, "?"); i != -1 {
+			u = u[:i]
+		}
+
+		// Format status code as string
+		statusCode := strconv.Itoa(interaction.Response.Code)
+
+		// Write method and URL
+		tbl.AddRow(
+			discard,
+			interaction.Request.Method,
+			statusCode,
+			u)
 	}
 
-	// Get the saved data from the in-memory filesystem
-	cleanedBytes, ok := fs.data[cas.Name+".yaml"]
-	if !ok {
-		return "", eris.New("failed to find saved cassette in memory filesystem")
+	var builder strings.Builder
+	tbl.WriteTo(&builder)
+
+	return builder.String()
+}
+
+// commonURLPrefix returns the common URL prefix for all interactions in the cassette.
+// This is used to reduce the level of "noise" in golden files.
+func commonURLPrefix(cas *cassette.Cassette) string {
+	if len(cas.Interactions) == 0 {
+		return ""
 	}
 
-	return string(cleanedBytes), nil
-}
+	dmp := diffmatchpatch.New()
 
-// memoryFS is an in-memory filesystem for testing.
-type memoryFS struct {
-	data map[string][]byte
-}
-
-func newMemoryFS() *memoryFS {
-	return &memoryFS{
-		data: make(map[string][]byte),
-	}
-}
-
-func (m *memoryFS) ReadFile(name string) ([]byte, error) {
-	if data, ok := m.data[name]; ok {
-		return data, nil
+	prefix := cas.Interactions[0].Request.URL
+	for _, interaction := range cas.Interactions[1:] {
+		u := interaction.Request.URL
+		l := dmp.DiffCommonPrefix(prefix, u)
+		prefix = prefix[:l]
 	}
 
-	return nil, os.ErrNotExist
-}
-
-func (m *memoryFS) WriteFile(name string, data []byte) error {
-	m.data[name] = data
-
-	return nil
-}
-
-func (m *memoryFS) IsFileExists(name string) bool {
-	_, ok := m.data[name]
-
-	return ok
+	return prefix
 }
 
 // newTestLogger creates a test logger for the given test.

@@ -8,7 +8,6 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"github.com/andreyvit/diff"
 	"github.com/sebdah/goldie/v2"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 )
@@ -18,8 +17,8 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 
 	// Analyzers we want to test
 	analyzers := map[string]Option{
-		"Reduce Delete Monitoring":              ReduceDeleteMonitoring(),
-		"Reduce Long Running Operation polling": ReduceAzureLongRunningOperationPolling(),
+		"reduce-delete-monitoring":              ReduceDeleteMonitoring(),
+		"reduce-long-running-operation-polling": ReduceAzureLongRunningOperationPolling(),
 	}
 
 	// Find all the *.yaml files under testdata
@@ -41,28 +40,18 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			cas, err := cassette.Load(c.recordingPath)
 			g.Expect(err).NotTo(HaveOccurred(), "loading cassette from %s", c.recordingPath)
 
-			// Get baseline YAML for the cassette.
-			// We don't use the YAML from the file directly because we don't want our diffs to be polluted by other
-			// format changes.
-			baseline, err := cassetteToYaml(cas)
-			g.Expect(err).NotTo(HaveOccurred(), "getting baseline YAML for cassette from %s", c.recordingPath)
-
 			// Clean it
 			cleaner := New(log, c.option)
 
 			err = cleaner.CleanCassette(cas)
 			g.Expect(err).NotTo(HaveOccurred(), "cleaning cassette from %s", c.recordingPath)
 
-			// Get cleaned YAML for the cassette.
-			cleaned, err := cassetteToYaml(cas)
-			g.Expect(err).NotTo(HaveOccurred(), "getting cleaned YAML for cassette from %s", c.recordingPath)
-
-			// Compare it to the original yaml
-			d := diff.LineDiff(baseline, cleaned)
+			// Get summary for the cleaned cassette.
+			cleaned := cassetteSummary(cas)
 
 			// use goldie to assert the changes made
 			gold := goldie.New(t, goldie.WithTestNameForDir(true))
-			gold.Assert(t, name, []byte(d))
+			gold.Assert(t, name, []byte(cleaned))
 		})
 	}
 }

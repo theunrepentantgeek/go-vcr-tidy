@@ -1,0 +1,181 @@
+|   | Method | Code | https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/                                                             |
+|---|--------|------|----------------------------------------------------------------------------------------------------------------------------------------------|
+|   | PUT    | 201  | resourceGroups/asotest-rg-zrdhjm                                                                                                             |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm                                                                                                             |
+|   | PUT    | 201  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis2-oyoviz                                                       |
+|   | PUT    | 201  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg                                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/f230755d-3536-46d5-ad50-e8754d0d45a1                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg                                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg                                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d32824c1-87c1-437a-a0e0-1a393ae0f532                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis2-oyoviz                                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis2-oyoviz                                                       |
+|   | PUT    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg                                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg                                                       |
+|   | PUT    | 201  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/firewallRules/asotestfwrulemyqomj                     |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/firewallRules/asotestfwrulemyqomj                     |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/firewallRules/asotestfwrulemyqomj                     |
+|   | PUT    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/firewallRules/asotestfwrulemyqomj                     |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/firewallRules/asotestfwrulemyqomj                     |
+|   | DELETE | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/firewallRules/asotestfwrulemyqomj                     |
+|   | PUT    | 201  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-assignmentpolicy-ytvsmq        |
+|   | PUT    | 201  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/bb6121f6-c1e0-425b-8b77-91f6d9f3b344                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-assignmentpolicy-ytvsmq        |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-assignmentpolicy-ytvsmq        |
+|   | PUT    | 201  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/d0bdd20a-84e8-4bc1-87b3-22682b82c803                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl |
+|   | PUT    | 201  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/234bed89-74ee-4e15-969f-e5aa9726976b                                       |
+|   | PUT    | 409  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | PUT    | 409  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | PUT    | 409  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | PUT    | 409  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433                                       |
+|   | PUT    | 409  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | PUT    | 201  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/9ae8012e-42b9-4f63-aebb-aeab54628f40                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | PUT    | 201  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/debaab0d-7bca-4c53-ba5f-e2c8dc53203b                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | DELETE | 202  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-testpolicy-ezzoar              |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/e4a3414c-62ed-4ad8-98ef-f6bc193fae99                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/50fafa37-da0f-4f5a-83b0-dd5bf957a433                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl |
+|   | DELETE | 202  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicyAssignments/asotest-testassignment-kkvnrl |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/2e2e0ad5-f5c3-423c-970d-48be40b1dc6f                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/2e2e0ad5-f5c3-423c-970d-48be40b1dc6f                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/2e2e0ad5-f5c3-423c-970d-48be40b1dc6f                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/2e2e0ad5-f5c3-423c-970d-48be40b1dc6f                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/2e2e0ad5-f5c3-423c-970d-48be40b1dc6f                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/2e2e0ad5-f5c3-423c-970d-48be40b1dc6f                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/2e2e0ad5-f5c3-423c-970d-48be40b1dc6f                                       |
+|   | DELETE | 202  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/accessPolicies/asotest-assignmentpolicy-ytvsmq        |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/0edb37c0-f9b7-48f6-abe8-af337d15eb76                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/0edb37c0-f9b7-48f6-abe8-af337d15eb76                                       |
+|   | PUT    | 201  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz                   |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c                                       |
+|   | PUT    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/patchSchedules/default                                |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/patchSchedules/default                                |
+|   | PUT    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/patchSchedules/default                                |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/patchSchedules/default                                |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8e3f777-dc2e-463e-ab64-a58a06eb636c                                       |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz                   |
+|   | GET    | 200  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz                   |
+|   | DELETE | 202  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/linkedServers/asotest-redis2-oyoviz                   |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b                                       |
+| X | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b                                       |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/asyncOperations/b8573066-636a-48ce-b68a-2357666f7a3b                                       |
+|   | DELETE | 202  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg                                                       |
+|   | DELETE | 202  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis2-oyoviz                                                       |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 202  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/3e8fe703-5fdd-41f3-aa1b-8facc51ea9e5                                      |
+|   | GET    | 200  | providers/Microsoft.Cache/locations/West%20US%202/operationresults/ff28b95a-ad01-47f6-882b-c3de7f5cc13c                                      |
+|   | GET    | 404  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/Redis/asotest-redis1-jmrayg                                                       |
+|   | DELETE | 202  | resourceGroups/asotest-rg-zrdhjm                                                                                                             |
+|   | GET    | 200  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkRaUkRISk0tV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9    |
+|   | DELETE | 404  | resourceGroups/asotest-rg-zrdhjm/providers/Microsoft.Cache/redis/asotest-redis1-jmrayg/patchSchedules/default                                |

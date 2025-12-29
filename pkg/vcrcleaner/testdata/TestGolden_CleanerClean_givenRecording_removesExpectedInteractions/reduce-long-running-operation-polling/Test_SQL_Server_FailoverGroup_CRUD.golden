@@ -1,0 +1,56 @@
+|   | Method | Code | https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/                                                             |
+|---|--------|------|----------------------------------------------------------------------------------------------------------------------------------------------|
+|   | PUT    | 201  | resourceGroups/asotest-rg-sdcgzl                                                                                                             |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl                                                                                                             |
+|   | PUT    | 202  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp                                             |
+|   | PUT    | 202  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserversecondary-rhzabj                                           |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/westus2/serverAzureAsyncOperation/93d56bad-5af9-4ce6-b087-f96e51764c20    |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/eastus2/serverAzureAsyncOperation/f110eed0-44db-44a5-9264-728fed424d4e    |
+| X | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/westus2/serverAzureAsyncOperation/93d56bad-5af9-4ce6-b087-f96e51764c20    |
+| X | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/westus2/serverAzureAsyncOperation/93d56bad-5af9-4ce6-b087-f96e51764c20    |
+| X | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/eastus2/serverAzureAsyncOperation/f110eed0-44db-44a5-9264-728fed424d4e    |
+| X | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/eastus2/serverAzureAsyncOperation/f110eed0-44db-44a5-9264-728fed424d4e    |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/westus2/serverAzureAsyncOperation/93d56bad-5af9-4ce6-b087-f96e51764c20    |
+| X | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/eastus2/serverAzureAsyncOperation/f110eed0-44db-44a5-9264-728fed424d4e    |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/westus2/serverAzureAsyncOperation/93d56bad-5af9-4ce6-b087-f96e51764c20    |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp                                             |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp                                             |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/eastus2/serverAzureAsyncOperation/f110eed0-44db-44a5-9264-728fed424d4e    |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/eastus2/serverAzureAsyncOperation/f110eed0-44db-44a5-9264-728fed424d4e    |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserversecondary-rhzabj                                           |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserversecondary-rhzabj                                           |
+|   | PUT    | 202  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp/databases/asotest-db-tojrwh                 |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/westus2/databaseAzureAsyncOperation/7ddcc8f7-b85b-4eb0-a3b7-5564bffb9bfb  |
+| X | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/westus2/databaseAzureAsyncOperation/7ddcc8f7-b85b-4eb0-a3b7-5564bffb9bfb  |
+| X | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/westus2/databaseAzureAsyncOperation/7ddcc8f7-b85b-4eb0-a3b7-5564bffb9bfb  |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/westus2/databaseAzureAsyncOperation/7ddcc8f7-b85b-4eb0-a3b7-5564bffb9bfb  |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/locations/westus2/databaseAzureAsyncOperation/7ddcc8f7-b85b-4eb0-a3b7-5564bffb9bfb  |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp/databases/asotest-db-tojrwh                 |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp/databases/asotest-db-tojrwh                 |
+|   | PUT    | 202  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp/failoverGroups/asotest-failovergroup-szgfyc |
+|   | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+| X | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+| X | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+| X | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+| X | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+| X | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+| X | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+| X | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+| X | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+| X | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+| X | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+|   | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+|   | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/269a17fd-c141-462d-88d9-7caddd195efb                              |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp/failoverGroups/asotest-failovergroup-szgfyc |
+|   | GET    | 200  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp/failoverGroups/asotest-failovergroup-szgfyc |
+|   | DELETE | 202  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp/failoverGroups/asotest-failovergroup-szgfyc |
+|   | GET    | 200  | providers/Microsoft.Sql/locations/westus2/failoverGroupAzureAsyncOperation/d084217d-b2ef-436d-b717-034c383f6fe9                              |
+|   | GET    | 404  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp/failoverGroups/asotest-failovergroup-szgfyc |
+|   | DELETE | 202  | resourceGroups/asotest-rg-sdcgzl                                                                                                             |
+|   | GET    | 202  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkRTRENHWkwtV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9    |
+|   | GET    | 202  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkRTRENHWkwtV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9    |
+|   | GET    | 202  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkRTRENHWkwtV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9    |
+|   | GET    | 200  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkRTRENHWkwtV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9    |
+|   | DELETE | 404  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserversecondary-rhzabj                                           |
+|   | DELETE | 404  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp                                             |
+|   | DELETE | 404  | resourceGroups/asotest-rg-sdcgzl/providers/Microsoft.Sql/servers/asotest-sqlserverprimary-ytkbsp/databases/asotest-db-tojrwh                 |
