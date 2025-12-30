@@ -39,6 +39,9 @@ func (c *Cleaner) CleanFile(path string) error {
 	// Remove .yaml from the path if present, as go-vcr expects just the base name
 	path = strings.TrimSuffix(path, ".yaml")
 
+	// Load the cassette
+	c.log.Info("Cleaning cassette", "path", path)
+
 	cas, err := cassette.Load(path)
 	if err != nil {
 		return eris.Wrapf(err, "loading cassette from %s", path)
@@ -58,7 +61,11 @@ func (c *Cleaner) CleanFile(path string) error {
 		if err != nil {
 			return eris.Wrapf(err, "saving cleaned cassette to %s", path)
 		}
+
+		c.log.Info("Saved cleaned cassette", "path", path)
 	}
+
+	c.log.Info("No change to cassette", "path", path)
 
 	return nil
 }

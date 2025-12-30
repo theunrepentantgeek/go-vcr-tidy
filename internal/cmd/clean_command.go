@@ -112,14 +112,10 @@ func (c *CleanCommand) cleanPath(ctx *Context, path string) error {
 		options...,
 	)
 
-	ctx.Log.Info("Cleaning cassette", "path", path)
-
 	err = cleaner.CleanFile(path)
 	if err != nil {
 		return eris.Wrapf(err, "cleaning cassette file at path %s", path)
 	}
-
-	ctx.Log.Info("Finished cleaning cassette", "path", path)
 
 	return nil
 }
