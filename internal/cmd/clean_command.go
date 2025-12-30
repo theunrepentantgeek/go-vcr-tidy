@@ -23,7 +23,7 @@ type CleaningOptions struct {
 // Run executes the clean command for each provided path.
 func (c *CleanCommand) Run(ctx *Context) error {
 	for _, glob := range c.Globs {
-		err := c.cleanGlob(ctx, glob)
+		err := c.cleanFilesByGlob(ctx, glob)
 		if err != nil {
 			return err
 		}
@@ -68,8 +68,8 @@ func (c *CleanCommand) collectOptions() []vcrcleaner.Option {
 	return options
 }
 
-// cleanGlob cleans any cassette files identified by the given glob path.
-func (c *CleanCommand) cleanGlob(ctx *Context, glob string) error {
+// cleanFilesByGlob cleans any cassette files identified by the given glob path.
+func (c *CleanCommand) cleanFilesByGlob(ctx *Context, glob string) error {
 	paths, err := filepath.Glob(glob)
 	if err != nil {
 		return eris.Wrap(err, "failed to glob path")
@@ -91,7 +91,7 @@ func (c *CleanCommand) cleanGlob(ctx *Context, glob string) error {
 	}
 
 	for _, path := range paths {
-		err := c.cleanPath(ctx, path)
+		err := c.cleanFile(ctx, path)
 		if err != nil {
 			return err
 		}
@@ -100,8 +100,8 @@ func (c *CleanCommand) cleanGlob(ctx *Context, glob string) error {
 	return nil
 }
 
-// cleanPath cleans the cassette file at the specified path.
-func (c *CleanCommand) cleanPath(ctx *Context, path string) error {
+// cleanFile cleans the cassette file at the specified path.
+func (c *CleanCommand) cleanFile(ctx *Context, path string) error {
 	options, err := c.buildOptions()
 	if err != nil {
 		return eris.Wrap(err, "building cleaner options")

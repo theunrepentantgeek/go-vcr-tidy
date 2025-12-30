@@ -116,7 +116,7 @@ func TestCleanGlob_WithNoMatchingFiles_LogsAndSucceeds(t *testing.T) {
 	}
 
 	glob := filepath.Join(tmpDir, "nonexistent-*.yaml")
-	err := c.cleanGlob(ctx, glob)
+	err := c.cleanFilesByGlob(ctx, glob)
 
 	g.Expect(err).ToNot(HaveOccurred())
 }
@@ -138,7 +138,7 @@ func TestCleanGlob_WithSingleMatchingFile_CleansFile(t *testing.T) {
 	}
 
 	glob := filepath.Join(tmpDir, "test.yaml")
-	err := c.cleanGlob(ctx, glob)
+	err := c.cleanFilesByGlob(ctx, glob)
 
 	g.Expect(err).ToNot(HaveOccurred())
 
@@ -168,7 +168,7 @@ func TestCleanGlob_WithMultipleMatchingFiles_CleansAllFiles(t *testing.T) {
 	}
 
 	glob := filepath.Join(tmpDir, "test*.yaml")
-	err := c.cleanGlob(ctx, glob)
+	err := c.cleanFilesByGlob(ctx, glob)
 
 	g.Expect(err).ToNot(HaveOccurred())
 }
@@ -188,7 +188,7 @@ func TestCleanGlob_WithInvalidGlobPattern_ReturnsError(t *testing.T) {
 	}
 
 	glob := filepath.Join(t.TempDir(), "test[.yaml")
-	err := c.cleanGlob(ctx, glob)
+	err := c.cleanFilesByGlob(ctx, glob)
 
 	g.Expect(err).To(MatchError(ContainSubstring("failed to glob path")))
 }
@@ -211,7 +211,7 @@ func TestCleanPath_WithValidCassette_CleansSuccessfully(t *testing.T) {
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
 	}
 
-	err := c.cleanPath(ctx, cassettePath)
+	err := c.cleanFile(ctx, cassettePath)
 
 	g.Expect(err).ToNot(HaveOccurred())
 }
@@ -229,7 +229,7 @@ func TestCleanPath_WithNoOptionsSet_ReturnsError(t *testing.T) {
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
 	}
 
-	err := c.cleanPath(ctx, cassettePath)
+	err := c.cleanFile(ctx, cassettePath)
 
 	g.Expect(err).To(MatchError(ContainSubstring("building cleaner options")))
 }
@@ -248,7 +248,7 @@ func TestCleanPath_WithNonexistentFile_ReturnsError(t *testing.T) {
 		Log: testr.NewWithOptions(t, testr.Options{Verbosity: 1}),
 	}
 
-	err := c.cleanPath(ctx, filepath.Join(t.TempDir(), "nonexistent", "path", "cassette.yaml"))
+	err := c.cleanFile(ctx, filepath.Join(t.TempDir(), "nonexistent", "path", "cassette.yaml"))
 
 	g.Expect(err).To(MatchError(ContainSubstring("cleaning cassette file")))
 }

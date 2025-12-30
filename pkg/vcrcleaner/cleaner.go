@@ -119,10 +119,12 @@ func (c *Cleaner) markIfExcluded(i *cassette.Interaction) {
 	}
 }
 
+// AfterCaptureHook is the hook to be called after an interaction is captured.
 func (c *Cleaner) AfterCaptureHook(i *cassette.Interaction) error {
 	return c.inspect(i)
 }
 
+// BeforeSaveHook is the hook to be called before an interaction is saved.
 func (c *Cleaner) BeforeSaveHook(i *cassette.Interaction) error {
 	c.markIfExcluded(i)
 
