@@ -72,3 +72,8 @@ func (i *TestInteraction) String() string {
 		i.response.statusCode,
 		i.request.baseURL.String())
 }
+
+// SetResponseBody sets the response body for the fake interaction.
+func (i *TestInteraction) SetResponseBody(body string) {
+	i.response.responseBody = body
+}

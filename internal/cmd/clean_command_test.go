@@ -13,12 +13,15 @@ import (
 
 // buildOptions Tests
 
+//nolint:funlen // Table test cases are extensive but clear
 func TestBuildOptions(t *testing.T) {
 	t.Parallel()
 
 	cases := map[string]struct {
 		deletes                *bool
 		longRunningOperations  *bool
+		resourceModifications  *bool
+		resourceDeletions      *bool
 		expectedOptionsCount   int
 		expectedErrorSubstring string
 	}{
@@ -33,10 +36,25 @@ func TestBuildOptions(t *testing.T) {
 			longRunningOperations: toPtr(true),
 			expectedOptionsCount:  1,
 		},
+		"WithOnlyResourceModificationsSet_ReturnsResourceModificationOption": {
+			resourceModifications: toPtr(true),
+			expectedOptionsCount:  1,
+		},
+		"WithOnlyResourceDeletionsSet_ReturnsResourceDeletionOption": {
+			resourceDeletions:    toPtr(true),
+			expectedOptionsCount: 1,
+		},
 		"WithBothOptionsSet_ReturnsBothOptions": {
 			deletes:               toPtr(true),
 			longRunningOperations: toPtr(true),
 			expectedOptionsCount:  2,
+		},
+		"WithAllOptionsSet_ReturnsAllOptions": {
+			deletes:               toPtr(true),
+			longRunningOperations: toPtr(true),
+			resourceModifications: toPtr(true),
+			resourceDeletions:     toPtr(true),
+			expectedOptionsCount:  4,
 		},
 		"WithDeletesSetToFalse_ReturnsError": {
 			deletes:                toPtr(false),
@@ -44,6 +62,14 @@ func TestBuildOptions(t *testing.T) {
 		},
 		"WithLongRunningOperationsSetToFalse_ReturnsError": {
 			longRunningOperations:  toPtr(false),
+			expectedErrorSubstring: "no cleaning options specified",
+		},
+		"WithResourceModificationsSetToFalse_ReturnsError": {
+			resourceModifications:  toPtr(false),
+			expectedErrorSubstring: "no cleaning options specified",
+		},
+		"WithResourceDeletionsSetToFalse_ReturnsError": {
+			resourceDeletions:      toPtr(false),
 			expectedErrorSubstring: "no cleaning options specified",
 		},
 	}
@@ -56,6 +82,8 @@ func TestBuildOptions(t *testing.T) {
 			cmd := &CleanCommand{}
 			cmd.Clean.Deletes = c.deletes
 			cmd.Clean.LongRunningOperations = c.longRunningOperations
+			cmd.Clean.ResourceModifications = c.resourceModifications
+			cmd.Clean.ResourceDeletions = c.resourceDeletions
 
 			options, err := cmd.buildOptions()
 

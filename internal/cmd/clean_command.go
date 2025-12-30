@@ -16,6 +16,8 @@ type CleanCommand struct {
 type CleaningOptions struct {
 	Deletes               *bool `help:"Clean delete interactions."`
 	LongRunningOperations *bool `help:"Clean Azure long-running operation interactions."`
+	ResourceModifications *bool `help:"Clean Azure resource modification (PUT/PATCH) monitoring interactions."`
+	ResourceDeletions     *bool `help:"Clean Azure resource deletion monitoring interactions."`
 }
 
 // Run executes the clean command for each provided path.
@@ -32,6 +34,19 @@ func (c *CleanCommand) Run(ctx *Context) error {
 
 // buildOptions builds the vcrcleaner options based on the CLI flags.
 func (c *CleanCommand) buildOptions() ([]vcrcleaner.Option, error) {
+	options := c.collectOptions()
+
+	if len(options) == 0 {
+		return nil, eris.New("no cleaning options specified; at least one must be set")
+	}
+
+	return options, nil
+}
+
+// collectOptions collects all enabled options from the CLI flags.
+//
+//nolint:revive // Simple sequential flag checks are acceptable
+func (c *CleanCommand) collectOptions() []vcrcleaner.Option {
 	var options []vcrcleaner.Option
 
 	if c.Clean.Deletes != nil && *c.Clean.Deletes {
@@ -42,11 +57,15 @@ func (c *CleanCommand) buildOptions() ([]vcrcleaner.Option, error) {
 		options = append(options, vcrcleaner.ReduceAzureLongRunningOperationPolling())
 	}
 
-	if len(options) == 0 {
-		return nil, eris.New("no cleaning options specified; at least one must be set")
+	if c.Clean.ResourceModifications != nil && *c.Clean.ResourceModifications {
+		options = append(options, vcrcleaner.ReduceAzureResourceModificationMonitoring())
 	}
 
-	return options, nil
+	if c.Clean.ResourceDeletions != nil && *c.Clean.ResourceDeletions {
+		options = append(options, vcrcleaner.ReduceAzureResourceDeletionMonitoring())
+	}
+
+	return options
 }
 
 // cleanGlob cleans any cassette files identified by the given glob path.
