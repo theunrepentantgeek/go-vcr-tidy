@@ -46,7 +46,6 @@ func (c *Cleaner) CleanFile(path string) error {
 		return eris.Errorf("Skipping non-cassette file %s", path)
 	}
 
-	// Load the cassette
 	c.log.Info("Cleaning cassette", "path", path)
 
 	// Clean the cassette
