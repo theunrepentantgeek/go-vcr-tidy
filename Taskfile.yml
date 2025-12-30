@@ -20,14 +20,13 @@ tasks:
   default:
     desc: Run all tasks
     deps:
-      - ci
-      - docs
+      - build
+      - test
 
   build:
     desc: Build everything
     deps:
       - build.bin
-      - build.sbom
 
   build.bin:
     desc: Build the go-vcr-tidy binary
@@ -72,7 +71,9 @@ tasks:
   ci:
     desc: Run continuous integration tasks
     deps:
+      - build
       - test
+      - build.sbom
 
   tidy:
     desc: "Tidy up source"

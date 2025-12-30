@@ -102,3 +102,11 @@ func (c *Cleaner) ShouldRemove(i interaction.Interface) bool {
 
 	return ok
 }
+
+// InteractionsToRemove returns the number of interactions marked for removal.
+func (c *Cleaner) InteractionsToRemove() int {
+	c.padlock.Lock()
+	defer c.padlock.Unlock()
+
+	return len(c.interactionsToRemove)
+}

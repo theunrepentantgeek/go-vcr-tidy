@@ -39,38 +39,59 @@ func (c *Cleaner) CleanFile(path string) error {
 	// Remove .yaml from the path if present, as go-vcr expects just the base name
 	path = strings.TrimSuffix(path, ".yaml")
 
+	// Attempt to load a cassette from the specified path
+	// This might fail if we are given a different kind of YAML file, so we need to handle that gracefully
 	cas, err := cassette.Load(path)
 	if err != nil {
-		return eris.Wrapf(err, "loading cassette from %s", path)
+		return eris.Errorf("Skipping non-cassette file %s", path)
 	}
 
-	err = c.CleanCassette(cas)
+	c.log.Info("Cleaning cassette", "path", path)
+
+	// Clean the cassette
+	modified, err := c.CleanCassette(cas)
 	if err != nil {
 		return eris.Wrapf(err, "cleaning cassette from %s", path)
 	}
 
-	cas.MarshalFunc = yaml.Marshal // Odd to need to do this explicitly
+	// If modified, save the cassette back
+	if modified {
+		cas.MarshalFunc = yaml.Marshal // Odd to need to do this explicitly
 
-	err = cas.Save()
-	if err != nil {
-		return eris.Wrapf(err, "saving cleaned cassette to %s", path)
+		err = cas.Save()
+		if err != nil {
+			return eris.Wrapf(err, "saving cleaned cassette to %s", path)
+		}
+
+		c.log.Info("Saved cleaned cassette", "path", path)
+	} else {
+		c.log.Info("No change to cassette", "path", path)
 	}
 
 	return nil
 }
 
-func (c *Cleaner) CleanCassette(cas *cassette.Cassette) error {
+// CleanCassette processes a cassette, marking interactions for removal as needed.
+// Returns true if any interactions were marked for removal, false otherwise, along with any error encountered.
+func (c *Cleaner) CleanCassette(cas *cassette.Cassette) (bool, error) {
+	// Scan all interactions
 	for _, i := range cas.Interactions {
 		if err := c.inspect(i); err != nil {
-			return eris.Wrapf(err, "inspecting interaction %d", i.ID)
+			return false, eris.Wrapf(err, "inspecting interaction %d", i.ID)
 		}
 	}
 
-	for _, i := range cas.Interactions {
-		c.markIfExcluded(i)
+	// If any interactions are to be marked for removal, mark them now
+	if c.core.InteractionsToRemove() > 0 {
+		for _, i := range cas.Interactions {
+			c.markIfExcluded(i)
+		}
+
+		return true, nil
 	}
 
-	return nil
+	// No interactions were marked for removal
+	return false, nil
 }
 
 // inspect processes a single interaction through the cleaner.
@@ -99,10 +120,12 @@ func (c *Cleaner) markIfExcluded(i *cassette.Interaction) {
 	}
 }
 
+// AfterCaptureHook is the hook to be called after an interaction is captured.
 func (c *Cleaner) AfterCaptureHook(i *cassette.Interaction) error {
 	return c.inspect(i)
 }
 
+// BeforeSaveHook is the hook to be called before an interaction is saved.
 func (c *Cleaner) BeforeSaveHook(i *cassette.Interaction) error {
 	c.markIfExcluded(i)
 
