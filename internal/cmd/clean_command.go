@@ -1,9 +1,8 @@
 package cmd
 
 import (
+	"errors"
 	"path/filepath"
-
-	kerrors "k8s.io/apimachinery/pkg/util/errors"
 
 	"github.com/rotisserie/eris"
 
@@ -104,7 +103,7 @@ func (c *CleanCommand) cleanFilesByGlob(ctx *Context, glob string) error {
 
 	if len(errs) > 0 {
 		return eris.Wrap(
-			kerrors.NewAggregate(errs),
+			errors.Join(errs...),
 			"one or more errors occurred while cleaning cassette files")
 	}
 
