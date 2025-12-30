@@ -65,9 +65,9 @@ func (c *Cleaner) CleanFile(path string) error {
 		}
 
 		c.log.Info("Saved cleaned cassette", "path", path)
+	} else {
+		c.log.Info("No change to cassette", "path", path)
 	}
-
-	c.log.Info("No change to cassette", "path", path)
 
 	return nil
 }
