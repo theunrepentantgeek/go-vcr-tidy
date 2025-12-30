@@ -3,6 +3,8 @@ package cmd
 import (
 	"path/filepath"
 
+	kerrors "k8s.io/apimachinery/pkg/util/errors"
+
 	"github.com/rotisserie/eris"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/pkg/vcrcleaner"
@@ -77,7 +79,7 @@ func (c *CleanCommand) cleanFilesByGlob(ctx *Context, glob string) error {
 
 	// Early exit for no matches
 	if len(paths) == 0 {
-		ctx.Log.V(1).Info("No cassettes found to clean", "glob", glob)
+		ctx.Log.Info("No cassettes found to clean", "glob", glob)
 
 		return nil
 	}
@@ -90,11 +92,20 @@ func (c *CleanCommand) cleanFilesByGlob(ctx *Context, glob string) error {
 			"glob", glob)
 	}
 
+	// Collect errors, allowing us to attempt processing of all files
+	var errs []error
+
 	for _, path := range paths {
 		err := c.cleanFile(ctx, path)
 		if err != nil {
-			return err
+			errs = append(errs, err)
 		}
+	}
+
+	if len(errs) > 0 {
+		return eris.Wrap(
+			kerrors.NewAggregate(errs),
+			"one or more errors occurred while cleaning cassette files")
 	}
 
 	return nil
