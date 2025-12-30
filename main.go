@@ -13,14 +13,16 @@ func main() {
 
 	ctx := kong.Parse(&cli)
 
-	err := ctx.Run(&cmd.Context{
+	cmdCtx := &cmd.Context{
 		Verbose: cli.Verbose,
 		Log:     CreateLogger(),
-	})
+	}
 
 	if cli.Verbose {
-		zerologr.SetMaxV(1)
+		zerologr.SetMaxV(4)
 	}
+
+	err := ctx.Run(cmdCtx)
 
 	ctx.FatalIfErrorf(err)
 }

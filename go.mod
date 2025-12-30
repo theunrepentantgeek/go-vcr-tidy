@@ -1,8 +1,6 @@
 module github.com/theunrepentantgeek/go-vcr-tidy
 
-go 1.24
-
-toolchain go1.24.11
+go 1.25.0
 
 require (
 	github.com/alecthomas/kong v1.13.0
@@ -24,7 +22,8 @@ require (
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	go.yaml.in/yaml/v4 v4.0.0-rc.3 // indirect
-	golang.org/x/net v0.43.0 // indirect
-	golang.org/x/sys v0.35.0 // indirect
-	golang.org/x/text v0.28.0 // indirect
+	golang.org/x/net v0.47.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
+	k8s.io/apimachinery v0.35.0 // indirect
 )
