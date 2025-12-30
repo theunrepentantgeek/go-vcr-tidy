@@ -44,33 +44,46 @@ func (c *Cleaner) CleanFile(path string) error {
 		return eris.Wrapf(err, "loading cassette from %s", path)
 	}
 
-	err = c.CleanCassette(cas)
+	// Clean the cassette
+	modified, err := c.CleanCassette(cas)
 	if err != nil {
 		return eris.Wrapf(err, "cleaning cassette from %s", path)
 	}
 
-	cas.MarshalFunc = yaml.Marshal // Odd to need to do this explicitly
+	// If modified, save the cassette back
+	if modified {
+		cas.MarshalFunc = yaml.Marshal // Odd to need to do this explicitly
 
-	err = cas.Save()
-	if err != nil {
-		return eris.Wrapf(err, "saving cleaned cassette to %s", path)
+		err = cas.Save()
+		if err != nil {
+			return eris.Wrapf(err, "saving cleaned cassette to %s", path)
+		}
 	}
 
 	return nil
 }
 
-func (c *Cleaner) CleanCassette(cas *cassette.Cassette) error {
+// CleanCassette processes a cassette, marking interactions for removal as needed.
+// Returns true if any interactions were marked for removal, false otherwise, along with any error encountered.
+func (c *Cleaner) CleanCassette(cas *cassette.Cassette) (bool, error) {
+	// Scan all interactions
 	for _, i := range cas.Interactions {
 		if err := c.inspect(i); err != nil {
-			return eris.Wrapf(err, "inspecting interaction %d", i.ID)
+			return false, eris.Wrapf(err, "inspecting interaction %d", i.ID)
 		}
 	}
 
-	for _, i := range cas.Interactions {
-		c.markIfExcluded(i)
+	// If any interactions are to be marked for removal, mark them now
+	if c.core.InteractionsToRemove() > 0 {
+		for _, i := range cas.Interactions {
+			c.markIfExcluded(i)
+		}
+
+		return true, nil
 	}
 
-	return nil
+	// No interactions were marked for removal
+	return false, nil
 }
 
 // inspect processes a single interaction through the cleaner.

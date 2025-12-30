@@ -45,7 +45,7 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			// Clean it
 			cleaner := New(log, c.option)
 
-			err = cleaner.CleanCassette(cas)
+			_, err = cleaner.CleanCassette(cas)
 			g.Expect(err).NotTo(HaveOccurred(), "cleaning cassette from %s", c.recordingPath)
 
 			// Get summary for the cleaned cassette.
