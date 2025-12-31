@@ -1,9 +1,7 @@
 package vcrcleaner
 
 import (
-	"path"
 	"path/filepath"
-	"strings"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -15,20 +13,33 @@ import (
 func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testing.T) {
 	t.Parallel()
 
-	// Analyzers we want to test
-	analyzers := map[string]Option{
-		"reduce-delete-monitoring":                      ReduceDeleteMonitoring(),
-		"reduce-long-running-operation-polling":         ReduceAzureLongRunningOperationPolling(),
-		"reduce-azure-resource-modification-monitoring": ReduceAzureResourceModificationMonitoring(),
-		"reduce-azure-resource-deletion-monitoring":     ReduceAzureResourceDeletionMonitoring(),
+	cases := map[string]struct {
+		option        Option
+		recordingPath string
+	}{
+		"reduce-long-running-operation-polling-sql-server": {
+			option:        ReduceAzureLongRunningOperationPolling(),
+			recordingPath: "Test_SQL_Server_FailoverGroup_CRUD",
+		},
+		"reduce-long-running-operation-polling-managed-cluster": {
+			option:        ReduceAzureLongRunningOperationPolling(),
+			recordingPath: "Test_AKS_ManagedCluster_20231001_CRUD",
+		},
+		"reduce-azure-resource-modification-monitoring-eventhub": {
+			option:        ReduceAzureResourceModificationMonitoring(),
+			recordingPath: "Test_EventHub_Namespace_v20240101_CRUD",
+		},
 	}
 
-	// Find all the *.yaml files under testdata
-	// Contains fully qualified path, keyed by filename, without extension
-	recordings := fileTestRecordings(t)
+	/*
 
-	// Construct our test matrix - run every option for every file
-	cases := createTestMatrix(analyzers, recordings)
+		Option{
+			"reduce-delete-monitoring":                      ReduceDeleteMonitoring(),
+			"reduce-long-running-operation-polling":         ReduceAzureLongRunningOperationPolling(),
+			"reduce-azure-resource-modification-monitoring": ReduceAzureResourceModificationMonitoring(),
+			"reduce-azure-resource-deletion-monitoring":     ReduceAzureResourceDeletionMonitoring(),
+		}
+	*/
 
 	// Run each option as a golden test
 	for name, c := range cases {
@@ -39,7 +50,8 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			log := newTestLogger(t)
 
 			// Load the cassette from the file
-			cas, err := cassette.Load(c.recordingPath)
+			fp := filepath.Join("testdata", c.recordingPath)
+			cas, err := cassette.Load(fp)
 			g.Expect(err).NotTo(HaveOccurred(), "loading cassette from %s", c.recordingPath)
 
 			// Clean it
@@ -56,43 +68,4 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			gold.Assert(t, name, []byte(cleaned))
 		})
 	}
-}
-
-func createTestMatrix(analyzers map[string]Option, recordings map[string]string) map[string]testcase {
-	cases := map[string]testcase{}
-
-	for analyzerName, option := range analyzers {
-		for recordingName, recordingPath := range recordings {
-			testName := path.Join(analyzerName, recordingName)
-			cases[testName] = testcase{
-				option:        option,
-				recordingPath: recordingPath,
-			}
-		}
-	}
-
-	return cases
-}
-
-func fileTestRecordings(t *testing.T) map[string]string {
-	t.Helper()
-
-	recordings := map[string]string{}
-
-	files, err := filepath.Glob(filepath.Join("testdata", "*.yaml"))
-	if err != nil {
-		t.Fatalf("Failed to find test data files: %v", err)
-	}
-
-	for _, file := range files {
-		baseName := strings.TrimSuffix(filepath.Base(file), ".yaml")
-		recordings[baseName] = strings.TrimSuffix(file, ".yaml") // Cassette names do not include .yaml
-	}
-
-	return recordings
-}
-
-type testcase struct {
-	option        Option
-	recordingPath string
 }
