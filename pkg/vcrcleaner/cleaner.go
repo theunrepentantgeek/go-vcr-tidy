@@ -2,6 +2,7 @@ package vcrcleaner
 
 import (
 	"strings"
+	"sync"
 
 	"github.com/go-logr/logr"
 	"github.com/rotisserie/eris"
@@ -16,6 +17,7 @@ type Cleaner struct {
 	core    *cleaner.Cleaner
 	mapping map[int]*vcrInteraction
 	log     logr.Logger
+	padlock sync.Mutex
 }
 
 func New(
@@ -122,11 +124,17 @@ func (c *Cleaner) markIfExcluded(i *cassette.Interaction) {
 
 // AfterCaptureHook is the hook to be called after an interaction is captured.
 func (c *Cleaner) AfterCaptureHook(i *cassette.Interaction) error {
+	c.padlock.Lock()
+	defer c.padlock.Unlock()
+
 	return c.inspect(i)
 }
 
 // BeforeSaveHook is the hook to be called before an interaction is saved.
 func (c *Cleaner) BeforeSaveHook(i *cassette.Interaction) error {
+	c.padlock.Lock()
+	defer c.padlock.Unlock()
+
 	c.markIfExcluded(i)
 
 	return nil
