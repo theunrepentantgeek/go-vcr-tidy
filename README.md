@@ -59,7 +59,7 @@ After a client issuing a DELETE, a client issues repeated GET requests to the sa
 
 **Status**: Implemented, pending testing
 
-### Post creation and upate monitoring in Azure
+### Post creation and update monitoring in Azure
 
 After issuing a PUT to an Azure service, a client issues repeated GET requests, waiting for the `provisioningState` of the resoruce to change from `Creating` to something else (hopefully `Succeeded`).
 
