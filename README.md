@@ -1,28 +1,72 @@
 # go-vcr-tidy
 
-Extensions for go-vcr to reduce the size of cassettes
+Extensions for the popular library [go-vcr](https://github.com/dnaeon/go-vcr) to reduce the size of cassettes. 
 
-The popular library [go-vcr](https://github.com/dnaeon/go-vcr) enables reliable testing by recording the HTTP interactions of the system-under-test to a cassette file which can be replayed on demand.
+The goal is to improve test replay times by providing a set of tools that can be used to reduce the size of recordings by eliding specific interactions from the recording. The initial focus will be on tools that work with Azure interactions (because that's my need), but pull requests for other patterns will be welcomed.
 
-For large and/or complex systems, these recordings are often large, resulting in tests that can take a long time to run.
+## Project Status
 
-This library aims to improve replay times by providing a set of tools that can be used to reduce the size of recordings by eliding selected interactions from the recording. The initial focus will be on tools that work with Azure interactions (because that's my need), but pull requests for other patterns will be welcomed.
+Proof-of-concept status, still working on testing the effects of cassette reduction.
 
-Planned tools include:
+## Evaluation
 
-## Monitoring for creation in Azure
+The `go-vcr-tidy` CLI provides a way to apply selected reductions to existing cassette files, allowing you to test the effectiveness of `go-vcr-tidy` for your testing needs.
 
-After issuing a PUT to an Azure service, a client might GET repeatedly, waiting for its `provisioningState` to change from `Creating` to something else (hopefully `Succeeded`).
+Install `go-vcr-tidy` from source:
 
-## Monitoring for deletion
+``` bash
+go install github.com/theunrepentantgeek/go-vcr-tidy@latest
+```
 
-After a client issues a DELETE, it might wait for the deletion to complete by issuing a series of GETs to the same URL, waiting for a final GET to return a 404 indicating deletion of the resource has completed. 
+``` bash
+$ go-vcr-tidy clean --help
+Usage: go-vcr-tidy clean <globs> ... [flags]
 
-We can elide most of those GET requests from the recording, reducing the sequence to DELETE, GET (2xx), Get (404).
+Clean go-vcr cassette files.
+
+Arguments:
+  <globs> ...    Paths to go-vcr cassette files to clean. Globbing allowed.
+
+Flags:
+  -h, --help                             Show context-sensitive help.
+  -v, --verbose                          Enable verbose logging.
+
+      --clean.deletes                    Clean delete interactions.
+      --clean.long-running-operations    Clean Azure long-running operation interactions.
+      --clean.resource-modifications     Clean Azure resource modification (PUT/PATCH) monitoring interactions.
+      --clean.resource-deletions         Clean Azure resource deletion monitoring interactions.
+```
+
+## Quick Start
+
+Add the `go-vcr-tidy` package to your project
+
+``` bash
+go get github.com/theunrepentantgeek/go-vcr-tidy
+```
+
+When creating your `go-vcr` `recorder`, create create a `Cleaner` and hook that into your `recorder`:
+
+``` go
+TBC
+```
+
+## Supported Tools
+
+### Monitoring for deletion
+
+After a client issuing a DELETE, a client issues repeated GET requests to the same URL, waiting for a final GET to return a 404 indicating deletion of the resource has completed. 
+
+**Status**: Implemented, pending testing
+
+### Post creation and upate monitoring in Azure
+
+After issuing a PUT to an Azure service, a client issues repeated GET requests, waiting for the `provisioningState` of the resoruce to change from `Creating` to something else (hopefully `Succeeded`).
+
+**Status**: Implemented, pending testing
 
 ## Azure long running operations
 
-If a PUT to an Azure service returns a long-running-operation (LRO), the client will poll that operation until it has completed. 
+If a PUT to an Azure service returns a long-running-operation (LRO), the client will poll that operation until it has completed.  We can shorten the runtime of the LRO - effectively turning it into a short-running-operation (SRO) - by eliding most of the waiting time.
 
-We can shorten the runtime of the LRO - effectively turning it into a short-running-operation (SRO) - by eliding most of the waiting time.
-
+**Status**: Implemented, pending testing
