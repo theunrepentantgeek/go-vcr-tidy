@@ -34,7 +34,7 @@ func New(analyzers ...analyzer.Interface) *Cleaner {
 	return result
 }
 
-// AddAnalyzers one or more analyzers to the cleaner's active set.
+// AddAnalyzers adds one or more analyzers to the cleaner's active set.
 func (c *Cleaner) AddAnalyzers(analyzers ...analyzer.Interface) {
 	c.padlock.Lock()
 	defer c.padlock.Unlock()
