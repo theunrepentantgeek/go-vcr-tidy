@@ -45,7 +45,7 @@ Add the `go-vcr-tidy` package to your project
 go get github.com/theunrepentantgeek/go-vcr-tidy
 ```
 
-When creating your `go-vcr` `recorder`, create create a `Cleaner` and hook that into your `recorder`:
+When creating your `go-vcr` `recorder`, create a `Cleaner` and hook that into your `recorder`:
 
 ``` go
 TBC
