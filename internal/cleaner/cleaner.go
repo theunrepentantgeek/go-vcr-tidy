@@ -28,13 +28,13 @@ func New(analyzers ...analyzer.Interface) *Cleaner {
 		interactionsToRemove: make(map[uuid.UUID]bool),
 	}
 
-	result.Add(analyzers...)
+	result.AddAnalyzers(analyzers...)
 
 	return result
 }
 
-// Add one or more analyzers to the cleaner's active set.
-func (c *Cleaner) Add(analyzers ...analyzer.Interface) {
+// AddAnalyzers one or more analyzers to the cleaner's active set.
+func (c *Cleaner) AddAnalyzers(analyzers ...analyzer.Interface) {
 	c.padlock.Lock()
 	defer c.padlock.Unlock()
 

@@ -48,7 +48,7 @@ func TestAdd_WithSingleAnalyzer_AddsToActiveSet(t *testing.T) {
 	c := New()
 	a := newFakeAnalyzer("analyzer1")
 
-	c.Add(a)
+	c.AddAnalyzers(a)
 
 	g.Expect(c.analyzers).To(ContainElement(a))
 }
@@ -62,7 +62,7 @@ func TestAdd_WithMultipleAnalyzers_AddsAllToActiveSet(t *testing.T) {
 	a2 := newFakeAnalyzer("analyzer2")
 	a3 := newFakeAnalyzer("analyzer3")
 
-	c.Add(a1, a2, a3)
+	c.AddAnalyzers(a1, a2, a3)
 
 	g.Expect(c.analyzers).To(ContainElement(a1))
 	g.Expect(c.analyzers).To(ContainElement(a2))
@@ -78,9 +78,9 @@ func TestAdd_WhenCalledMultipleTimes_AccumulatesAnalyzers(t *testing.T) {
 	a2 := newFakeAnalyzer("analyzer2")
 	a3 := newFakeAnalyzer("analyzer3")
 
-	c.Add(a1)
-	c.Add(a2)
-	c.Add(a3)
+	c.AddAnalyzers(a1)
+	c.AddAnalyzers(a2)
+	c.AddAnalyzers(a3)
 
 	g.Expect(c.analyzers).To(ContainElement(a1))
 	g.Expect(c.analyzers).To(ContainElement(a2))
