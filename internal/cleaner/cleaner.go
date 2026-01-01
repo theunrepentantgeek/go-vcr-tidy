@@ -110,7 +110,7 @@ func (c *Cleaner) add(analyzers ...analyzer.Interface) {
 	}
 }
 
-// Remove one or more analyzers from the cleaner's active set.
+// remove one or more analyzers from the cleaner's active set.
 func (c *Cleaner) remove(ids ...uuid.UUID) {
 	for _, id := range ids {
 		delete(c.analyzers, id)
