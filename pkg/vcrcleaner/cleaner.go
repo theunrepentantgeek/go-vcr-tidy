@@ -76,6 +76,9 @@ func (c *Cleaner) CleanFile(path string) error {
 // CleanCassette processes a cassette, marking interactions for removal as needed.
 // Returns true if any interactions were marked for removal, false otherwise, along with any error encountered.
 func (c *Cleaner) CleanCassette(cas *cassette.Cassette) (bool, error) {
+	c.padlock.Lock()
+	defer c.padlock.Unlock()
+
 	// Scan all interactions
 	for _, i := range cas.Interactions {
 		if err := c.inspect(i); err != nil {
