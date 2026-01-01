@@ -1,6 +1,7 @@
 package cleaner
 
 import (
+	"maps"
 	"sync"
 
 	"github.com/go-logr/logr"
@@ -28,37 +29,17 @@ func New(analyzers ...analyzer.Interface) *Cleaner {
 		interactionsToRemove: make(map[uuid.UUID]bool),
 	}
 
-	result.Add(analyzers...)
+	result.AddAnalyzers(analyzers...)
 
 	return result
 }
 
-// Add one or more analyzers to the cleaner's active set.
-func (c *Cleaner) Add(analyzers ...analyzer.Interface) {
+// AddAnalyzers adds one or more analyzers to the cleaner's active set.
+func (c *Cleaner) AddAnalyzers(analyzers ...analyzer.Interface) {
 	c.padlock.Lock()
 	defer c.padlock.Unlock()
 
-	for _, a := range analyzers {
-		// We give each analyzer a unique identifier to make it easy to track them when finished
-		c.analyzers[uuid.New()] = a
-	}
-}
-
-// Remove one or more analyzers from the cleaner's active set.
-func (c *Cleaner) remove(ids ...uuid.UUID) {
-	for _, id := range ids {
-		delete(c.analyzers, id)
-	}
-}
-
-// exclude adds the specified interactions to the set of interactions to be removed.
-func (c *Cleaner) exclude(interactions ...interaction.Interface) {
-	c.padlock.Lock()
-	defer c.padlock.Unlock()
-
-	for _, inter := range interactions {
-		c.interactionsToRemove[inter.ID()] = true
-	}
+	c.add(analyzers...)
 }
 
 // Analyze processes an interaction through all active analyzers, handling spawning and finishing as needed.
@@ -67,11 +48,17 @@ func (c *Cleaner) Analyze(
 	i interaction.Interface,
 ) error {
 	var (
-		toRemove []uuid.UUID
-		toAdd    []analyzer.Interface
+		toRemove  []uuid.UUID
+		toAdd     []analyzer.Interface
+		toExclude []interaction.Interface
 	)
 
-	for id, a := range c.analyzers {
+	// Get all active analyzers
+	c.padlock.Lock()
+	analyzers := maps.Clone(c.analyzers)
+	c.padlock.Unlock()
+
+	for id, a := range analyzers {
 		result, err := a.Analyze(log, i)
 		if err != nil {
 			return eris.Wrapf(err, "analyzing interaction ID %s", i.ID())
@@ -85,11 +72,15 @@ func (c *Cleaner) Analyze(
 		toAdd = append(toAdd, result.Spawn...)
 
 		// Exclude any interactions marked for exclusion (if any)
-		c.exclude(result.Excluded...)
+		toExclude = append(toExclude, result.Excluded...)
 	}
 
+	c.padlock.Lock()
+	defer c.padlock.Unlock()
+
 	c.remove(toRemove...)
-	c.Add(toAdd...)
+	c.add(toAdd...)
+	c.exclude(toExclude...)
 
 	return nil
 }
@@ -109,4 +100,26 @@ func (c *Cleaner) InteractionsToRemove() int {
 	defer c.padlock.Unlock()
 
 	return len(c.interactionsToRemove)
+}
+
+// add one or more analyzers to the cleaner's active set.
+func (c *Cleaner) add(analyzers ...analyzer.Interface) {
+	for _, a := range analyzers {
+		// We give each analyzer a unique identifier to make it easy to track them when finished
+		c.analyzers[uuid.New()] = a
+	}
+}
+
+// remove one or more analyzers from the cleaner's active set.
+func (c *Cleaner) remove(ids ...uuid.UUID) {
+	for _, id := range ids {
+		delete(c.analyzers, id)
+	}
+}
+
+// exclude adds the specified interactions to the set of interactions to be removed.
+func (c *Cleaner) exclude(interactions ...interaction.Interface) {
+	for _, inter := range interactions {
+		c.interactionsToRemove[inter.ID()] = true
+	}
 }

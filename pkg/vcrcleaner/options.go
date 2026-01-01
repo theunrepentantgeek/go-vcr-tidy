@@ -12,13 +12,13 @@ type Option func(*cleaner.Cleaner)
 // ReduceDeleteMonitoring adds an analyzer that reduces delete monitoring noise.
 func ReduceDeleteMonitoring() Option {
 	return func(c *cleaner.Cleaner) {
-		c.Add(generic.NewDetectDeletion())
+		c.AddAnalyzers(generic.NewDetectDeletion())
 	}
 }
 
 func ReduceAzureLongRunningOperationPolling() Option {
 	return func(c *cleaner.Cleaner) {
-		c.Add(azure.NewDetectAzureLongRunningOperation())
+		c.AddAnalyzers(azure.NewDetectAzureLongRunningOperation())
 	}
 }
 
@@ -26,7 +26,7 @@ func ReduceAzureLongRunningOperationPolling() Option {
 // This analyzer watches for PUT and PATCH requests and monitors subsequent GET requests for Creating/Updating states.
 func ReduceAzureResourceModificationMonitoring() Option {
 	return func(c *cleaner.Cleaner) {
-		c.Add(azure.NewDetectResourceModification())
+		c.AddAnalyzers(azure.NewDetectResourceModification())
 	}
 }
 
@@ -34,6 +34,6 @@ func ReduceAzureResourceModificationMonitoring() Option {
 // This analyzer watches for DELETE requests and monitors subsequent GET requests for Deleting state.
 func ReduceAzureResourceDeletionMonitoring() Option {
 	return func(c *cleaner.Cleaner) {
-		c.Add(azure.NewDetectResourceDeletion())
+		c.AddAnalyzers(azure.NewDetectResourceDeletion())
 	}
 }
