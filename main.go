@@ -11,7 +11,8 @@ func main() {
 	// Entry point for the application.
 	var cli cmd.CLI
 
-	ctx := kong.Parse(&cli)
+	ctx := kong.Parse(&cli,
+		kong.UsageOnError())
 
 	if cli.Verbose {
 		zerologr.SetMaxV(4)
