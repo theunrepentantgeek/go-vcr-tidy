@@ -25,6 +25,14 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			option:        ReduceAzureLongRunningOperationPolling(),
 			recordingPath: "Test_AKS_ManagedCluster_20231001_CRUD",
 		},
+		"reduce-long-running-operation-polling-api-management": {
+			option:        ReduceAzureLongRunningOperationPolling(),
+			recordingPath: "Test_Apimanagement_v1api20220801_CreationAndDeletion",
+		},
+		"reduce-asynchronous-operation-polling-api-management": {
+			option:        ReduceAzureAsynchronousOperationPolling(),
+			recordingPath: "Test_Apimanagement_v1api20220801_CreationAndDeletion",
+		},
 		"reduce-azure-resource-modification-monitoring-eventhub": {
 			option:        ReduceAzureResourceModificationMonitoring(),
 			recordingPath: "Test_EventHub_Namespace_v20240101_CRUD",
