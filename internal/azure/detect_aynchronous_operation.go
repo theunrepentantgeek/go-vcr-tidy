@@ -5,7 +5,6 @@ import (
 	"net/url"
 
 	"github.com/go-logr/logr"
-	"github.com/rotisserie/eris"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
@@ -53,7 +52,8 @@ func (*DetectAzureAsynchronousOperation) Analyze(
 
 	operationURL, err := url.Parse(locationHeader)
 	if err != nil {
-		return analyzer.Result{}, eris.Wrapf(err, "parsing Location URL: %s", locationHeader)
+		//nolint:nilerr // Invalid Location URL means this isn't an interaction we're interested in.
+		return analyzer.Result{}, nil
 	}
 
 	log.Info(
