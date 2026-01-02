@@ -16,6 +16,8 @@ import (
 // It watches for successful PUT, POST or DELETE requests where the response includes a `Azure-Asyncoperation` header.
 type DetectAzureLongRunningOperation struct{}
 
+const azureLROHeader = "Azure-Asyncoperation"
+
 var _ analyzer.Interface = &DetectAzureLongRunningOperation{}
 
 // NewDetectAzureLongRunningOperation creates a new DetectAzureLongRunningOperation analyzer.
@@ -40,7 +42,7 @@ func (*DetectAzureLongRunningOperation) Analyze(
 	}
 
 	// Check for the Azure-Asyncoperation header
-	asyncHeader, ok := i.Response().Header("Azure-Asyncoperation")
+	asyncHeader, ok := i.Response().Header(azureLROHeader)
 	if !ok || asyncHeader == "" {
 		return analyzer.Result{}, nil
 	}
