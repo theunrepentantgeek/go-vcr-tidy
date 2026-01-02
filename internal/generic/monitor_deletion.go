@@ -20,7 +20,7 @@ import (
 // If any other requests to that URL are seen (e.g. a POST or PUT), or if a GET returns a non-2xx and non-404 status
 // code, the analyzer abandons monitoring and marks itself as Finished.
 type MonitorDeletion struct {
-	baseURL      url.URL
+	baseURL      *url.URL
 	interactions []interaction.Interface
 }
 
@@ -28,7 +28,7 @@ var _ analyzer.Interface = (*MonitorDeletion)(nil)
 
 // NewMonitorDeletion creates a new MonitorDeletion analyzer for the specified URL.
 func NewMonitorDeletion(
-	baseURL url.URL,
+	baseURL *url.URL,
 ) *MonitorDeletion {
 	return &MonitorDeletion{
 		baseURL: baseURL,

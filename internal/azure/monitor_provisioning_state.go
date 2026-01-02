@@ -18,7 +18,7 @@ import (
 // matches the target state (case-insensitive). When the provisioningState transitions to a
 // different value, the monitor finishes and excludes all but the first and last accumulated interactions.
 type MonitorProvisioningState struct {
-	baseURL      url.URL                 // Base URL of the resource to monitor
+	baseURL      *url.URL                // Base URL of the resource to monitor
 	targetState  string                  // State to monitor (e.g., "Creating" or "Updating")
 	interactions []interaction.Interface // Accumulated interactions with matching provisioningState
 }
@@ -29,7 +29,7 @@ var _ analyzer.Interface = (*MonitorProvisioningState)(nil)
 // baseURL is the base URL of the resource to monitor.
 // targetState is the provisioningState value to watch for (case-insensitive).
 func NewMonitorProvisioningState(
-	baseURL url.URL,
+	baseURL *url.URL,
 	targetState string,
 ) *MonitorProvisioningState {
 	return &MonitorProvisioningState{

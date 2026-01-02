@@ -58,7 +58,7 @@ func mustParseURL(t *testing.T, raw string) url.URL {
 		t.Fatalf("failed to parse URL: %v", err)
 	}
 
-	return *parsed
+	return parsed
 }
 
 // newTestLogger creates a test logger for the given test.

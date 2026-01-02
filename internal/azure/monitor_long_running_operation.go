@@ -24,7 +24,7 @@ type MonitorAzureLongRunningOperation struct {
 var _ analyzer.Interface = &MonitorAzureLongRunningOperation{}
 
 func NewMonitorAzureLongRunningOperation(
-	operationURL url.URL,
+	operationURL *url.URL,
 ) *MonitorAzureLongRunningOperation {
 	return &MonitorAzureLongRunningOperation{
 		operationURL: urltool.BaseURL(operationURL),
@@ -37,7 +37,7 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	// Check if the interaction is for the operation URL
-	if !urltool.SameBaseURL(*m.operationURL, i.Request().FullURL()) {
+	if !urltool.SameBaseURL(m.operationURL, i.Request().FullURL()) {
 		return analyzer.Result{}, nil
 	}
 

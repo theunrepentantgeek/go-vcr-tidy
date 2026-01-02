@@ -27,7 +27,7 @@ var (
 // method is the HTTP method of the request.
 // statusCode is the HTTP status code of the response.
 func Interaction(
-	fullURL url.URL,
+	fullURL *url.URL,
 	method string,
 	statusCode int,
 ) *TestInteraction {
@@ -41,7 +41,7 @@ func Interaction(
 
 	i.request = testRequest{
 		fullURL: fullURL,
-		baseURL: *baseURL,
+		baseURL: baseURL,
 		method:  method,
 	}
 

@@ -60,7 +60,7 @@ func mustParseURL(t *testing.T, raw string) url.URL {
 		t.Fatalf("failed to parse URL: %v", err)
 	}
 
-	return *parsed
+	return parsed
 }
 
 // newTestLogger creates a test logger for the given test.
@@ -73,7 +73,7 @@ func newTestLogger(t *testing.T) logr.Logger {
 // createAzureResourceInteraction creates a fake interaction with Azure resource JSON.
 // The response body will contain the specified provisioningState.
 func createAzureResourceInteraction(
-	fullURL url.URL,
+	fullURL *url.URL,
 	method string,
 	statusCode int,
 	provisioningState string,
@@ -88,7 +88,7 @@ func createAzureResourceInteraction(
 
 // createInteractionWithJSON creates a fake interaction with the specified JSON body.
 func createInteractionWithJSON(
-	fullURL url.URL,
+	fullURL *url.URL,
 	method string,
 	statusCode int,
 	jsonBody string,

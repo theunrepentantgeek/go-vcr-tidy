@@ -4,18 +4,18 @@ import "net/url"
 
 // Request implementation.
 type testRequest struct {
-	fullURL url.URL
-	baseURL url.URL
+	fullURL *url.URL
+	baseURL *url.URL
 	method  string
 }
 
 // FullURL returns the full URL of the request.
-func (r *testRequest) FullURL() url.URL {
+func (r *testRequest) FullURL() *url.URL {
 	return r.fullURL
 }
 
 // BaseURL returns the BaseURL of the request without any parameters.
-func (r *testRequest) BaseURL() url.URL {
+func (r *testRequest) BaseURL() *url.URL {
 	return r.baseURL
 }
 

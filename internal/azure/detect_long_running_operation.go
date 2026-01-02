@@ -52,9 +52,9 @@ func (*DetectAzureLongRunningOperation) Analyze(
 
 	log.Info(
 		"Found Azure long running operation",
-		"url", urltool.BaseURL(*operationURL).String())
+		"url", urltool.BaseURL(operationURL).String())
 
-	monitor := NewMonitorAzureLongRunningOperation(*operationURL)
+	monitor := NewMonitorAzureLongRunningOperation(operationURL)
 
 	return analyzer.Spawn(monitor), nil
 }
