@@ -27,11 +27,10 @@ func (*DetectResourceModification) Analyze(
 	log logr.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
-	method := i.Request().Method()
 	statusCode := i.Response().StatusCode()
 
 	// Check if it's a PUT or PATCH with successful status
-	if (method != http.MethodPut && method != http.MethodPatch) || statusCode < 200 || statusCode >= 300 {
+	if !interaction.HasAnyMethod(i, http.MethodPut, http.MethodPatch) || statusCode < 200 || statusCode >= 300 {
 		return analyzer.Result{}, nil
 	}
 
@@ -55,7 +54,7 @@ func (*DetectResourceModification) Analyze(
 	log.Info(
 		"Found resource modification to monitor",
 		"url", reqURL.String(),
-		"method", method,
+		"method", i.Request().Method(),
 		"provisioningState", response.Properties.ProvisioningState,
 	)
 

@@ -11,3 +11,11 @@ func HasMethod(
 ) bool {
 	return i.Request().Method() == method
 }
+
+// HasAnyMethod checks if the interaction uses any of the specified HTTP methods.
+func HasAnyMethod(
+	i Interface,
+	methods ...string,
+) bool {
+	return slices.Contains(methods, i.Request().Method())
+}

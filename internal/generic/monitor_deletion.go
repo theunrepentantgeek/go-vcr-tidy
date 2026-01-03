@@ -44,7 +44,6 @@ func (m *MonitorDeletion) Analyze(
 ) (analyzer.Result, error) {
 	reqURL := i.Request().BaseURL()
 
-	method := i.Request().Method()
 	statusCode := i.Response().StatusCode()
 
 	switch {
@@ -61,12 +60,12 @@ func (m *MonitorDeletion) Analyze(
 
 		return analyzer.Result{}, nil
 
-	case method == http.MethodPost || method == http.MethodPut || method == http.MethodDelete:
+	case interaction.HasAnyMethod(i, http.MethodPost, http.MethodPut, http.MethodDelete):
 		// Resource has changed, abandon monitoring.
 		log.Info(
 			"Abandoning DELETE monitor, resource changed",
 			"url", m.baseURL.String(),
-			"method", method,
+			"method", i.Request().Method(),
 		)
 
 		return analyzer.Finished(), nil
@@ -76,7 +75,7 @@ func (m *MonitorDeletion) Analyze(
 		log.Info(
 			"Abandoning DELETE monitor due to unexpected request",
 			"url", m.baseURL.String(),
-			"method", method,
+			"method", i.Request().Method(),
 			"statusCode", statusCode,
 		)
 
