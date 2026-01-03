@@ -1,6 +1,7 @@
 package azure
 
 import (
+	"net/http"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -17,7 +18,7 @@ func TestDetectResourceDeletion_SuccessfulDELETE_SpawnsMonitor(t *testing.T) {
 	detector := NewDetectResourceDeletion()
 	log := newTestLogger(t)
 
-	deleteInteraction := createAzureResourceInteraction(baseURL, "DELETE", 200, "Deleting")
+	deleteInteraction := createAzureResourceInteraction(baseURL, http.MethodDelete, 200, "Deleting")
 	result, err := detector.Analyze(log, deleteInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -47,7 +48,7 @@ func TestDetectResourceDeletion_Various2xxStatusCodes_SpawnsMonitor(t *testing.T
 			detector := NewDetectResourceDeletion()
 			log := newTestLogger(t)
 
-			deleteInteraction := createAzureResourceInteraction(baseURL, "DELETE", c.statusCode, "Deleting")
+			deleteInteraction := createAzureResourceInteraction(baseURL, http.MethodDelete, c.statusCode, "Deleting")
 			result, err := detector.Analyze(log, deleteInteraction)
 
 			g.Expect(err).ToNot(HaveOccurred())
@@ -76,7 +77,7 @@ func TestDetectResourceDeletion_FailedDELETE_DoesNotSpawn(t *testing.T) {
 			detector := NewDetectResourceDeletion()
 			log := newTestLogger(t)
 
-			deleteInteraction := createAzureResourceInteraction(baseURL, "DELETE", c.statusCode, "Deleting")
+			deleteInteraction := createAzureResourceInteraction(baseURL, http.MethodDelete, c.statusCode, "Deleting")
 			result, err := detector.Analyze(log, deleteInteraction)
 
 			g.Expect(err).ToNot(HaveOccurred())
@@ -91,10 +92,10 @@ func TestDetectResourceDeletion_OtherMethods_DoesNotSpawn(t *testing.T) {
 	cases := map[string]struct {
 		method string
 	}{
-		"GET":   {method: "GET"},
-		"POST":  {method: "POST"},
-		"PUT":   {method: "PUT"},
-		"PATCH": {method: "PATCH"},
+		"GET":   {method: http.MethodGet},
+		"POST":  {method: http.MethodPost},
+		"PUT":   {method: http.MethodPut},
+		"PATCH": {method: http.MethodPatch},
 	}
 
 	for name, c := range cases {
@@ -123,7 +124,7 @@ func TestDetectResourceDeletion_InvalidJSON_DoesNotSpawn(t *testing.T) {
 	detector := NewDetectResourceDeletion()
 	log := newTestLogger(t)
 
-	deleteInteraction := fake.Interaction(baseURL, "DELETE", 200)
+	deleteInteraction := fake.Interaction(baseURL, http.MethodDelete, 200)
 
 	result, err := detector.Analyze(log, deleteInteraction)
 
@@ -139,7 +140,7 @@ func TestDetectResourceDeletion_MissingProvisioningState_DoesNotSpawn(t *testing
 	detector := NewDetectResourceDeletion()
 	log := newTestLogger(t)
 
-	deleteInteraction := createInteractionWithJSON(baseURL, "DELETE", 200, `{"properties": {}}`)
+	deleteInteraction := createInteractionWithJSON(baseURL, http.MethodDelete, 200, `{"properties": {}}`)
 
 	result, err := detector.Analyze(log, deleteInteraction)
 
@@ -157,9 +158,9 @@ func TestDetectResourceDeletion_NeverFinishes(t *testing.T) {
 
 	// Process various interactions
 	interactions := []*fake.TestInteraction{
-		createAzureResourceInteraction(baseURL, "DELETE", 200, "Deleting"),
-		createAzureResourceInteraction(baseURL, "DELETE", 202, "Deleting"),
-		createAzureResourceInteraction(baseURL, "GET", 200, "Succeeded"),
+		createAzureResourceInteraction(baseURL, http.MethodDelete, 200, "Deleting"),
+		createAzureResourceInteraction(baseURL, http.MethodDelete, 202, "Deleting"),
+		createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Succeeded"),
 	}
 
 	for _, inter := range interactions {
@@ -177,7 +178,7 @@ func TestDetectResourceDeletion_SpawnedMonitorHasCorrectState(t *testing.T) {
 	detector := NewDetectResourceDeletion()
 	log := newTestLogger(t)
 
-	deleteInteraction := createAzureResourceInteraction(baseURL, "DELETE", 200, "Deleting")
+	deleteInteraction := createAzureResourceInteraction(baseURL, http.MethodDelete, 200, "Deleting")
 	result, err := detector.Analyze(log, deleteInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -200,8 +201,8 @@ func TestDetectResourceDeletion_MultipleDELETEs_SpawnsMultipleMonitors(t *testin
 	url1 := mustParseURL("https://management.azure.com/resource/123")
 	url2 := mustParseURL("https://management.azure.com/resource/456")
 
-	delete1 := createAzureResourceInteraction(url1, "DELETE", 200, "Deleting")
-	delete2 := createAzureResourceInteraction(url2, "DELETE", 202, "Deleting")
+	delete1 := createAzureResourceInteraction(url1, http.MethodDelete, 200, "Deleting")
+	delete2 := createAzureResourceInteraction(url2, http.MethodDelete, 202, "Deleting")
 
 	result1, err := detector.Analyze(log, delete1)
 	g.Expect(err).ToNot(HaveOccurred())
@@ -223,7 +224,7 @@ func TestDetectResourceDeletion_EmptyResult_WhenNoAction(t *testing.T) {
 	detector := NewDetectResourceDeletion()
 	log := newTestLogger(t)
 
-	getInteraction := createAzureResourceInteraction(baseURL, "GET", 200, "Succeeded")
+	getInteraction := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Succeeded")
 	result, err := detector.Analyze(log, getInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())

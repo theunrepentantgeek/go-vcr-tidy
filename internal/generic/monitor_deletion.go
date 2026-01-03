@@ -52,16 +52,16 @@ func (m *MonitorDeletion) Analyze(
 		// Not the URL we're monitoring, ignore.
 		return analyzer.Result{}, nil
 
-	case method == "GET" && statusCode == http.StatusNotFound:
+	case method == http.MethodGet && statusCode == http.StatusNotFound:
 		return m.deletionConfirmed(log)
 
-	case method == "GET" && statusCode >= 200 && statusCode < 300:
+	case method == http.MethodGet && statusCode >= 200 && statusCode < 300:
 		// Accumulate this successful GET request.
 		m.interactions = append(m.interactions, i)
 
 		return analyzer.Result{}, nil
 
-	case method == "POST" || method == "PUT" || method == "DELETE":
+	case method == http.MethodPost || method == http.MethodPut || method == http.MethodDelete:
 		// Resource has changed, abandon monitoring.
 		log.Info(
 			"Abandoning DELETE monitor, resource changed",

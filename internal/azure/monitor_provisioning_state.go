@@ -2,6 +2,7 @@ package azure
 
 import (
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"strings"
 
@@ -51,7 +52,7 @@ func (m *MonitorProvisioningState) Analyze(
 		// Not the URL we're monitoring, ignore.
 		return analyzer.Result{}, nil
 
-	case method != "GET":
+	case method != http.MethodGet:
 		// Resource changed via non-GET method, abandon monitoring.
 		log.Info(
 			"Abandoning provisioning state monitor, resource changed",

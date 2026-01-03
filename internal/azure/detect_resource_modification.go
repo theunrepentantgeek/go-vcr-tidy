@@ -2,6 +2,7 @@ package azure
 
 import (
 	"encoding/json"
+	"net/http"
 
 	"github.com/go-logr/logr"
 
@@ -30,7 +31,7 @@ func (*DetectResourceModification) Analyze(
 	statusCode := i.Response().StatusCode()
 
 	// Check if it's a PUT or PATCH with successful status
-	if (method != "PUT" && method != "PATCH") || statusCode < 200 || statusCode >= 300 {
+	if (method != http.MethodPut && method != http.MethodPatch) || statusCode < 200 || statusCode >= 300 {
 		return analyzer.Result{}, nil
 	}
 

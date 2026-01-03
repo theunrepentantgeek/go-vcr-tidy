@@ -1,6 +1,7 @@
 package generic
 
 import (
+	"net/http"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -17,7 +18,7 @@ func TestDetectDeletion_SuccessfulDELETE_SpawnsMonitor(t *testing.T) {
 	log := newTestLogger(t)
 
 	// Successful DELETE should spawn a MonitorDeletion analyzer
-	deleteInteraction := fake.Interaction(baseURL, "DELETE", 200)
+	deleteInteraction := fake.Interaction(baseURL, http.MethodDelete, 200)
 	result, err := detector.Analyze(log, deleteInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -47,7 +48,7 @@ func TestDetectDeletion_Various2xxDELETEStatusCodes_SpawnsMonitor(t *testing.T) 
 			detector := NewDetectDeletion()
 			log := newTestLogger(t)
 
-			deleteInteraction := fake.Interaction(baseURL, "DELETE", c.statusCode)
+			deleteInteraction := fake.Interaction(baseURL, http.MethodDelete, c.statusCode)
 			result, err := detector.Analyze(log, deleteInteraction)
 
 			g.Expect(err).ToNot(HaveOccurred())
@@ -80,7 +81,7 @@ func TestDetectDeletion_FailedDELETE_DoesNotSpawn(t *testing.T) {
 			detector := NewDetectDeletion()
 			log := newTestLogger(t)
 
-			deleteInteraction := fake.Interaction(baseURL, "DELETE", c.statusCode)
+			deleteInteraction := fake.Interaction(baseURL, http.MethodDelete, c.statusCode)
 			result, err := detector.Analyze(log, deleteInteraction)
 
 			g.Expect(err).ToNot(HaveOccurred())
@@ -96,12 +97,12 @@ func TestDetectDeletion_NonDELETEMethods_DoesNotSpawn(t *testing.T) {
 		method     string
 		statusCode int
 	}{
-		"GET":     {method: "GET", statusCode: 200},
-		"POST":    {method: "POST", statusCode: 201},
-		"PUT":     {method: "PUT", statusCode: 200},
-		"PATCH":   {method: "PATCH", statusCode: 200},
-		"HEAD":    {method: "HEAD", statusCode: 200},
-		"OPTIONS": {method: "OPTIONS", statusCode: 200},
+		"GET":     {method: http.MethodGet, statusCode: 200},
+		"POST":    {method: http.MethodPost, statusCode: 201},
+		"PUT":     {method: http.MethodPut, statusCode: 200},
+		"PATCH":   {method: http.MethodPatch, statusCode: 200},
+		"HEAD":    {method: http.MethodHead, statusCode: 200},
+		"OPTIONS": {method: http.MethodOptions, statusCode: 200},
 	}
 
 	for name, c := range cases {
@@ -132,9 +133,9 @@ func TestDetectDeletion_MultipleDELETEs_SpawnsMultipleMonitors(t *testing.T) {
 	url2 := mustParseURL("https://api.example.com/resource/456")
 	url3 := mustParseURL("https://api.example.com/other/789")
 
-	delete1 := fake.Interaction(url1, "DELETE", 200)
-	delete2 := fake.Interaction(url2, "DELETE", 204)
-	delete3 := fake.Interaction(url3, "DELETE", 202)
+	delete1 := fake.Interaction(url1, http.MethodDelete, 200)
+	delete2 := fake.Interaction(url2, http.MethodDelete, 204)
+	delete3 := fake.Interaction(url3, http.MethodDelete, 202)
 
 	result1, err := detector.Analyze(log, delete1)
 	g.Expect(err).ToNot(HaveOccurred())
@@ -163,12 +164,12 @@ func TestDetectDeletion_NeverFinishes(t *testing.T) {
 
 	// Process various interactions
 	interactions := []*fake.TestInteraction{
-		fake.Interaction(baseURL, "GET", 200),
-		fake.Interaction(baseURL, "POST", 201),
-		fake.Interaction(baseURL, "DELETE", 200),
-		fake.Interaction(baseURL, "PUT", 200),
-		fake.Interaction(baseURL, "DELETE", 404),
-		fake.Interaction(baseURL, "GET", 404),
+		fake.Interaction(baseURL, http.MethodGet, 200),
+		fake.Interaction(baseURL, http.MethodPost, 201),
+		fake.Interaction(baseURL, http.MethodDelete, 200),
+		fake.Interaction(baseURL, http.MethodPut, 200),
+		fake.Interaction(baseURL, http.MethodDelete, 404),
+		fake.Interaction(baseURL, http.MethodGet, 404),
 	}
 
 	for _, inter := range interactions {
@@ -185,7 +186,7 @@ func TestDetectDeletion_SpawnedMonitorHasCorrectURL(t *testing.T) {
 	detector := NewDetectDeletion()
 	log := newTestLogger(t)
 
-	deleteInteraction := fake.Interaction(baseURL, "DELETE", 200)
+	deleteInteraction := fake.Interaction(baseURL, http.MethodDelete, 200)
 	result, err := detector.Analyze(log, deleteInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -205,7 +206,7 @@ func TestDetectDeletion_EmptyResult_WhenNoAction(t *testing.T) {
 	log := newTestLogger(t)
 
 	// Non-DELETE interaction
-	getInteraction := fake.Interaction(baseURL, "GET", 200)
+	getInteraction := fake.Interaction(baseURL, http.MethodGet, 200)
 	result, err := detector.Analyze(log, getInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())

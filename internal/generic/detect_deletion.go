@@ -1,6 +1,8 @@
 package generic
 
 import (
+	"net/http"
+
 	"github.com/go-logr/logr"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -29,7 +31,7 @@ func (*DetectDeletion) Analyze(
 	method := i.Request().Method()
 	statusCode := i.Response().StatusCode()
 
-	if method == "DELETE" && statusCode >= 200 && statusCode < 300 {
+	if method == http.MethodDelete && statusCode >= 200 && statusCode < 300 {
 		// Start monitoring for deletion confirmation via GET requests.
 		log.Info(
 			"Found DELETE to monitor",

@@ -1,6 +1,7 @@
 package generic
 
 import (
+	"net/http"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -19,7 +20,7 @@ func TestMonitorDeletion_SingleGETReturning404_MarksFinished(t *testing.T) {
 	log := newTestLogger(t)
 
 	// Single GET returning 404 should finish immediately
-	i := fake.Interaction(baseURL, "GET", 404)
+	i := fake.Interaction(baseURL, http.MethodGet, 404)
 
 	result, err := monitor.Analyze(log, i)
 
@@ -37,9 +38,9 @@ func TestMonitorDeletion_TwoGETsThenConfirmation_NothingIsRemoved(t *testing.T) 
 	log := newTestLogger(t)
 
 	// Two successful GETs followed by 404
-	get1 := fake.Interaction(baseURL, "GET", 200)
-	get2 := fake.Interaction(baseURL, "GET", 200)
-	get404 := fake.Interaction(baseURL, "GET", 404)
+	get1 := fake.Interaction(baseURL, http.MethodGet, 200)
+	get2 := fake.Interaction(baseURL, http.MethodGet, 200)
+	get404 := fake.Interaction(baseURL, http.MethodGet, 404)
 
 	result := runAnalyzer(t, log, monitor, get1, get2, get404)
 	g.Expect(result.Finished).To(BeTrue())
@@ -57,10 +58,10 @@ func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T)
 	log := newTestLogger(t)
 
 	// Three successful GETs followed by 404
-	get1 := fake.Interaction(baseURL, "GET", 200)
-	get2 := fake.Interaction(baseURL, "GET", 200)
-	get3 := fake.Interaction(baseURL, "GET", 200)
-	get404 := fake.Interaction(baseURL, "GET", 404)
+	get1 := fake.Interaction(baseURL, http.MethodGet, 200)
+	get2 := fake.Interaction(baseURL, http.MethodGet, 200)
+	get3 := fake.Interaction(baseURL, http.MethodGet, 200)
+	get404 := fake.Interaction(baseURL, http.MethodGet, 404)
 
 	result := runAnalyzer(t, log, monitor, get1, get2, get3, get404)
 	g.Expect(result.Finished).To(BeTrue())
@@ -82,11 +83,11 @@ func TestMonitorDeletion_MultipleMiddleGETs_AllMiddleAreRemoved(t *testing.T) {
 	interactions := make([]interaction.Interface, 0, 10)
 
 	for range 9 {
-		get := fake.Interaction(baseURL, "GET", 200)
+		get := fake.Interaction(baseURL, http.MethodGet, 200)
 		interactions = append(interactions, get)
 	}
 
-	get404 := fake.Interaction(baseURL, "GET", 404)
+	get404 := fake.Interaction(baseURL, http.MethodGet, 404)
 	interactions = append(interactions, get404)
 
 	result := runAnalyzer(t, log, monitor, interactions...)
@@ -109,7 +110,7 @@ func TestMonitorDeletion_DifferentURL_Ignored(t *testing.T) {
 	monitor := NewMonitorDeletion(monitoredURL)
 	log := newTestLogger(t)
 
-	i := fake.Interaction(differentURL, "GET", 200)
+	i := fake.Interaction(differentURL, http.MethodGet, 200)
 
 	result, err := monitor.Analyze(log, i)
 
@@ -125,10 +126,10 @@ func TestMonitorDeletion_AbandonsMonitoring(t *testing.T) {
 		method     string
 		statusCode int
 	}{
-		"POST":   {method: "POST", statusCode: 201},
-		"PUT":    {method: "PUT", statusCode: 200},
-		"GET500": {method: "GET", statusCode: 500},
-		"GET301": {method: "GET", statusCode: 301},
+		"POST":   {method: http.MethodPost, statusCode: 201},
+		"PUT":    {method: http.MethodPut, statusCode: 200},
+		"GET500": {method: http.MethodGet, statusCode: 500},
+		"GET301": {method: http.MethodGet, statusCode: 301},
 	}
 
 	for name, c := range cases {
@@ -142,7 +143,7 @@ func TestMonitorDeletion_AbandonsMonitoring(t *testing.T) {
 
 			// Start with some successful GETs
 			// Then a request that should abandon monitoring
-			get1 := fake.Interaction(baseURL, "GET", 200)
+			get1 := fake.Interaction(baseURL, http.MethodGet, 200)
 			abandoningRequest := fake.Interaction(baseURL, c.method, c.statusCode)
 
 			result := runAnalyzer(t, log, monitor, get1, abandoningRequest)
@@ -165,11 +166,11 @@ func TestMonitorDeletion_Various2xxStatusCodes_Accumulated(t *testing.T) {
 	interactions := make([]interaction.Interface, 0, len(statusCodes))
 
 	for _, code := range statusCodes {
-		get := fake.Interaction(baseURL, "GET", code)
+		get := fake.Interaction(baseURL, http.MethodGet, code)
 		interactions = append(interactions, get)
 	}
 
-	get404 := fake.Interaction(baseURL, "GET", 404)
+	get404 := fake.Interaction(baseURL, http.MethodGet, 404)
 	interactions = append(interactions, get404)
 
 	result := runAnalyzer(t, log, monitor, interactions...)
@@ -192,7 +193,7 @@ func TestMonitorDeletion_URLWithQueryParameters_MonitorsBaseURL(t *testing.T) {
 	log := newTestLogger(t)
 
 	// Interaction with query parameters should match base URL
-	i := fake.Interaction(urlWithParams, "GET", 200)
+	i := fake.Interaction(urlWithParams, http.MethodGet, 200)
 	result, err := monitor.Analyze(log, i)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -208,7 +209,7 @@ func TestMonitorDeletion_EmptyResult_WhenIgnoringInteraction(t *testing.T) {
 	monitor := NewMonitorDeletion(monitoredURL)
 	log := newTestLogger(t)
 
-	i := fake.Interaction(differentURL, "GET", 200)
+	i := fake.Interaction(differentURL, http.MethodGet, 200)
 	result, err := monitor.Analyze(log, i)
 
 	g.Expect(err).ToNot(HaveOccurred())
