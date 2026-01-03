@@ -19,3 +19,8 @@ case iteration uses `for name, c := range cases`.
 * All tests are marked with `t.Parallel()` unless the test cannot run in parallel.
 * Helper methods are always marked with `t.Helper()`.
 * Only use a test package (e.g. with the suffix _test) if needed to avoid circular imports.
+* Whenever you have a set of tests with similar structure, prefer to create a table test to avoid duplication of code.
+
+## Linting
+
+**Always use `task lint` to run the linter.** Never run `golangci-lint` directly, as the project uses a custom build with `nilaway` integration that requires special configuration.
