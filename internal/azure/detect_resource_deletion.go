@@ -27,10 +27,8 @@ func (*DetectResourceDeletion) Analyze(
 	log logr.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
-	statusCode := i.Response().StatusCode()
-
 	// Check if it's a DELETE with successful status
-	if !interaction.HasMethod(i, http.MethodDelete) || statusCode < 200 || statusCode >= 300 {
+	if !interaction.HasMethod(i, http.MethodDelete) || !interaction.WasSuccessful(i) {
 		return analyzer.Result{}, nil
 	}
 

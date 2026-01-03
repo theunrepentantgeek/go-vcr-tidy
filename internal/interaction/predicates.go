@@ -19,3 +19,12 @@ func HasAnyMethod(
 ) bool {
 	return slices.Contains(methods, i.Request().Method())
 }
+
+// WasSuccessful checks if the interaction's response status code indicates success (2xx).
+func WasSuccessful(
+	i Interface,
+) bool {
+	statusCode := i.Response().StatusCode()
+
+	return statusCode >= 200 && statusCode < 300
+}

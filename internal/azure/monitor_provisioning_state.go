@@ -61,7 +61,7 @@ func (m *MonitorProvisioningState) Analyze(
 
 		return analyzer.Finished(), nil
 
-	case statusCode < 200 || statusCode >= 300:
+	case !interaction.WasSuccessful(i):
 		// Unexpected status code, abandon monitoring.
 		log.Info(
 			"Abandoning provisioning state monitor due to unexpected status",

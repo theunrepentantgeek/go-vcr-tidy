@@ -35,8 +35,7 @@ func (*DetectAzureLongRunningOperation) Analyze(
 	}
 
 	// Check if the response is successful
-	statusCode := i.Response().StatusCode()
-	if statusCode < 200 || statusCode >= 300 {
+	if !interaction.WasSuccessful(i) {
 		return analyzer.Result{}, nil
 	}
 

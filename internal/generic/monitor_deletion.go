@@ -54,7 +54,7 @@ func (m *MonitorDeletion) Analyze(
 	case interaction.HasMethod(i, http.MethodGet) && statusCode == http.StatusNotFound:
 		return m.deletionConfirmed(log)
 
-	case interaction.HasMethod(i, http.MethodGet) && statusCode >= 200 && statusCode < 300:
+	case interaction.HasMethod(i, http.MethodGet) && interaction.WasSuccessful(i):
 		// Accumulate this successful GET request.
 		m.interactions = append(m.interactions, i)
 

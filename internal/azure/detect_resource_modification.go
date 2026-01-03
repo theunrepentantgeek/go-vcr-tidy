@@ -27,10 +27,8 @@ func (*DetectResourceModification) Analyze(
 	log logr.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
-	statusCode := i.Response().StatusCode()
-
 	// Check if it's a PUT or PATCH with successful status
-	if !interaction.HasAnyMethod(i, http.MethodPut, http.MethodPatch) || statusCode < 200 || statusCode >= 300 {
+	if !interaction.HasAnyMethod(i, http.MethodPut, http.MethodPatch) || !interaction.WasSuccessful(i) {
 		return analyzer.Result{}, nil
 	}
 
