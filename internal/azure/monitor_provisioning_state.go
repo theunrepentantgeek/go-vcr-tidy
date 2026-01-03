@@ -44,7 +44,6 @@ func (m *MonitorProvisioningState) Analyze(
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	reqURL := i.Request().BaseURL()
-	method := i.Request().Method()
 	statusCode := i.Response().StatusCode()
 
 	switch {
@@ -52,12 +51,12 @@ func (m *MonitorProvisioningState) Analyze(
 		// Not the URL we're monitoring, ignore.
 		return analyzer.Result{}, nil
 
-	case method != http.MethodGet:
+	case !interaction.HasMethod(i, http.MethodGet):
 		// Resource changed via non-GET method, abandon monitoring.
 		log.Info(
 			"Abandoning provisioning state monitor, resource changed",
 			"url", m.baseURL.String(),
-			"method", method,
+			"method", i.Request().Method(),
 		)
 
 		return analyzer.Finished(), nil

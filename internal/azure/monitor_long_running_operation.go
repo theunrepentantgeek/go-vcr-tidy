@@ -42,7 +42,7 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	}
 
 	// Check if the interaction is a GET
-	if i.Request().Method() != http.MethodGet {
+	if !interaction.HasMethod(i, http.MethodGet) {
 		return analyzer.Result{}, nil
 	}
 

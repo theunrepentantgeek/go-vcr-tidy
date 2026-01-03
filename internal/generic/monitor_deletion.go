@@ -52,10 +52,10 @@ func (m *MonitorDeletion) Analyze(
 		// Not the URL we're monitoring, ignore.
 		return analyzer.Result{}, nil
 
-	case method == http.MethodGet && statusCode == http.StatusNotFound:
+	case interaction.HasMethod(i, http.MethodGet) && statusCode == http.StatusNotFound:
 		return m.deletionConfirmed(log)
 
-	case method == http.MethodGet && statusCode >= 200 && statusCode < 300:
+	case interaction.HasMethod(i, http.MethodGet) && statusCode >= 200 && statusCode < 300:
 		// Accumulate this successful GET request.
 		m.interactions = append(m.interactions, i)
 
