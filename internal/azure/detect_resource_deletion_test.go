@@ -14,7 +14,7 @@ func TestDetectResourceDeletion_SuccessfulDELETE_SpawnsMonitor(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceDeletion()
 	log := newTestLogger(t)
 
@@ -44,7 +44,7 @@ func TestDetectResourceDeletion_Various2xxStatusCodes_SpawnsMonitor(t *testing.T
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL("https://management.azure.com/resource")
+			baseURL := mustParseURL(t, "https://management.azure.com/resource")
 			detector := NewDetectResourceDeletion()
 			log := newTestLogger(t)
 
@@ -73,7 +73,7 @@ func TestDetectResourceDeletion_FailedDELETE_DoesNotSpawn(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL("https://management.azure.com/resource")
+			baseURL := mustParseURL(t, "https://management.azure.com/resource")
 			detector := NewDetectResourceDeletion()
 			log := newTestLogger(t)
 
@@ -103,7 +103,7 @@ func TestDetectResourceDeletion_OtherMethods_DoesNotSpawn(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL("https://management.azure.com/resource")
+			baseURL := mustParseURL(t, "https://management.azure.com/resource")
 			detector := NewDetectResourceDeletion()
 			log := newTestLogger(t)
 
@@ -120,7 +120,7 @@ func TestDetectResourceDeletion_InvalidJSON_DoesNotSpawn(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceDeletion()
 	log := newTestLogger(t)
 
@@ -136,7 +136,7 @@ func TestDetectResourceDeletion_MissingProvisioningState_DoesNotSpawn(t *testing
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceDeletion()
 	log := newTestLogger(t)
 
@@ -152,7 +152,7 @@ func TestDetectResourceDeletion_NeverFinishes(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceDeletion()
 	log := newTestLogger(t)
 
@@ -174,7 +174,7 @@ func TestDetectResourceDeletion_SpawnedMonitorHasCorrectState(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceDeletion()
 	log := newTestLogger(t)
 
@@ -198,8 +198,8 @@ func TestDetectResourceDeletion_MultipleDELETEs_SpawnsMultipleMonitors(t *testin
 	detector := NewDetectResourceDeletion()
 	log := newTestLogger(t)
 
-	url1 := mustParseURL("https://management.azure.com/resource/123")
-	url2 := mustParseURL("https://management.azure.com/resource/456")
+	url1 := mustParseURL(t, "https://management.azure.com/resource/123")
+	url2 := mustParseURL(t, "https://management.azure.com/resource/456")
 
 	delete1 := createAzureResourceInteraction(url1, http.MethodDelete, 200, "Deleting")
 	delete2 := createAzureResourceInteraction(url2, http.MethodDelete, 202, "Deleting")
@@ -220,7 +220,7 @@ func TestDetectResourceDeletion_EmptyResult_WhenNoAction(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceDeletion()
 	log := newTestLogger(t)
 

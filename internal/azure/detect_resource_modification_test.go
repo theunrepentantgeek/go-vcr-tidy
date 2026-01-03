@@ -14,7 +14,7 @@ func TestDetectResourceModification_SuccessfulPUT_SpawnsMonitor(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
@@ -33,7 +33,7 @@ func TestDetectResourceModification_SuccessfulPATCH_SpawnsMonitor(t *testing.T) 
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
@@ -64,7 +64,7 @@ func TestDetectResourceModification_Various2xxStatusCodes_SpawnsMonitor(t *testi
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL("https://management.azure.com/resource")
+			baseURL := mustParseURL(t, "https://management.azure.com/resource")
 			detector := NewDetectResourceModification()
 			log := newTestLogger(t)
 
@@ -93,7 +93,7 @@ func TestDetectResourceModification_FailedRequest_DoesNotSpawn(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL("https://management.azure.com/resource")
+			baseURL := mustParseURL(t, "https://management.azure.com/resource")
 			detector := NewDetectResourceModification()
 			log := newTestLogger(t)
 
@@ -123,7 +123,7 @@ func TestDetectResourceModification_OtherMethods_DoesNotSpawn(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL("https://management.azure.com/resource")
+			baseURL := mustParseURL(t, "https://management.azure.com/resource")
 			detector := NewDetectResourceModification()
 			log := newTestLogger(t)
 
@@ -140,7 +140,7 @@ func TestDetectResourceModification_InvalidJSON_DoesNotSpawn(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
@@ -156,7 +156,7 @@ func TestDetectResourceModification_MissingProvisioningState_DoesNotSpawn(t *tes
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
@@ -172,7 +172,7 @@ func TestDetectResourceModification_NeverFinishes(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
@@ -195,7 +195,7 @@ func TestDetectResourceModification_SpawnsTwoMonitors(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
@@ -236,8 +236,8 @@ func TestDetectResourceModification_MultipleRequests_SpawnsMultipleMonitors(t *t
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
-	url1 := mustParseURL("https://management.azure.com/resource/123")
-	url2 := mustParseURL("https://management.azure.com/resource/456")
+	url1 := mustParseURL(t, "https://management.azure.com/resource/123")
+	url2 := mustParseURL(t, "https://management.azure.com/resource/456")
 
 	put1 := createAzureResourceInteraction(url1, http.MethodPut, 200, "Creating")
 	put2 := createAzureResourceInteraction(url2, http.MethodPut, 201, "Creating")
@@ -259,7 +259,7 @@ func TestDetectResourceModification_EmptyResult_WhenNoAction(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://management.azure.com/resource")
+	baseURL := mustParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 

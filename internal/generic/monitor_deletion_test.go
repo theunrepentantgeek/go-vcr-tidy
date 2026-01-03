@@ -15,7 +15,7 @@ func TestMonitorDeletion_SingleGETReturning404_MarksFinished(t *testing.T) {
 	t.Parallel()
 
 	g := NewWithT(t)
-	baseURL := mustParseURL("https://api.example.com/resource/123")
+	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
 	log := newTestLogger(t)
 
@@ -33,7 +33,7 @@ func TestMonitorDeletion_TwoGETsThenConfirmation_NothingIsRemoved(t *testing.T) 
 	t.Parallel()
 
 	g := NewWithT(t)
-	baseURL := mustParseURL("https://api.example.com/resource/123")
+	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
 	log := newTestLogger(t)
 
@@ -53,7 +53,7 @@ func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T)
 	t.Parallel()
 
 	g := NewWithT(t)
-	baseURL := mustParseURL("https://api.example.com/resource/123")
+	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
 	log := newTestLogger(t)
 
@@ -75,7 +75,7 @@ func TestMonitorDeletion_MultipleMiddleGETs_AllMiddleAreRemoved(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://api.example.com/resource/123")
+	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
 	log := newTestLogger(t)
 
@@ -105,8 +105,8 @@ func TestMonitorDeletion_DifferentURL_Ignored(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	monitoredURL := mustParseURL("https://api.example.com/resource/123")
-	differentURL := mustParseURL("https://api.example.com/resource/456")
+	monitoredURL := mustParseURL(t, "https://api.example.com/resource/123")
+	differentURL := mustParseURL(t, "https://api.example.com/resource/456")
 	monitor := NewMonitorDeletion(monitoredURL)
 	log := newTestLogger(t)
 
@@ -137,7 +137,7 @@ func TestMonitorDeletion_AbandonsMonitoring(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL("https://api.example.com/resource/123")
+			baseURL := mustParseURL(t, "https://api.example.com/resource/123")
 			monitor := NewMonitorDeletion(baseURL)
 			log := newTestLogger(t)
 
@@ -157,7 +157,7 @@ func TestMonitorDeletion_Various2xxStatusCodes_Accumulated(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://api.example.com/resource/123")
+	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
 	log := newTestLogger(t)
 
@@ -187,8 +187,8 @@ func TestMonitorDeletion_URLWithQueryParameters_MonitorsBaseURL(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://api.example.com/resource/123")
-	urlWithParams := mustParseURL("https://api.example.com/resource/123?param=value")
+	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	urlWithParams := mustParseURL(t, "https://api.example.com/resource/123?param=value")
 	monitor := NewMonitorDeletion(baseURL)
 	log := newTestLogger(t)
 
@@ -204,8 +204,8 @@ func TestMonitorDeletion_EmptyResult_WhenIgnoringInteraction(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	monitoredURL := mustParseURL("https://api.example.com/resource/123")
-	differentURL := mustParseURL("https://api.example.com/other")
+	monitoredURL := mustParseURL(t, "https://api.example.com/resource/123")
+	differentURL := mustParseURL(t, "https://api.example.com/other")
 	monitor := NewMonitorDeletion(monitoredURL)
 	log := newTestLogger(t)
 

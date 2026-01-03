@@ -16,7 +16,7 @@ func TestHasMethod_WithMatchingMethod_ReturnsTrue(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://example.com/resource")
+	baseURL := mustParseURL(t, "https://example.com/resource")
 	i := fake.Interaction(baseURL, http.MethodGet, 200)
 
 	result := interaction.HasMethod(i, http.MethodGet)
@@ -28,7 +28,7 @@ func TestHasMethod_WithNonMatchingMethod_ReturnsFalse(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://example.com/resource")
+	baseURL := mustParseURL(t, "https://example.com/resource")
 	i := fake.Interaction(baseURL, http.MethodGet, 200)
 
 	result := interaction.HasMethod(i, http.MethodPost)
@@ -90,7 +90,7 @@ func TestHasAnyMethod(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL("https://example.com/resource")
+			baseURL := mustParseURL(t, "https://example.com/resource")
 			i := fake.Interaction(baseURL, c.method, c.statusCode)
 
 			result := interaction.HasAnyMethod(i, c.methodsToCheck...)
@@ -148,7 +148,7 @@ func TestWasSuccessful(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL("https://example.com/resource")
+			baseURL := mustParseURL(t, "https://example.com/resource")
 			i := fake.Interaction(baseURL, http.MethodGet, c.statusCode)
 
 			result := interaction.WasSuccessful(i)
