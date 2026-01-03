@@ -37,7 +37,7 @@ func NewMonitorDeletion(
 
 // Analyze processes another interaction in the sequence.
 //
-//nolint:cyclomatic,revive,cyclop // Complexity is acceptable for this method
+//nolint:cyclomatic // Complexity is acceptable for this method
 func (m *MonitorDeletion) Analyze(
 	log logr.Logger,
 	i interaction.Interface,
