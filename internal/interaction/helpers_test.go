@@ -1,4 +1,4 @@
-package cleaner
+package interaction_test
 
 import (
 	"net/url"

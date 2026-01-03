@@ -49,11 +49,13 @@ func runAnalyzer(
 	return result
 }
 
-// mustParseURL parses a raw URL string and panics on error.
-func mustParseURL(rawURL string) url.URL {
-	parsed, err := url.Parse(rawURL)
+// mustParseURL parses a raw URL string and fails the test on error.
+func mustParseURL(t *testing.T, raw string) url.URL {
+	t.Helper()
+
+	parsed, err := url.Parse(raw)
 	if err != nil {
-		panic(err)
+		t.Fatalf("failed to parse URL: %v", err)
 	}
 
 	return *parsed
