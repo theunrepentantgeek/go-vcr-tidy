@@ -1,6 +1,8 @@
 package generic
 
 import (
+	"net/http"
+
 	"github.com/go-logr/logr"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -26,10 +28,8 @@ func (*DetectDeletion) Analyze(
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	reqURL := i.Request().BaseURL()
-	method := i.Request().Method()
-	statusCode := i.Response().StatusCode()
 
-	if method == "DELETE" && statusCode >= 200 && statusCode < 300 {
+	if interaction.HasMethod(i, http.MethodDelete) && interaction.WasSuccessful(i) {
 		// Start monitoring for deletion confirmation via GET requests.
 		log.Info(
 			"Found DELETE to monitor",

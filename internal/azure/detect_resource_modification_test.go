@@ -1,6 +1,7 @@
 package azure
 
 import (
+	"net/http"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -17,7 +18,7 @@ func TestDetectResourceModification_SuccessfulPUT_SpawnsMonitor(t *testing.T) {
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
-	putInteraction := createAzureResourceInteraction(baseURL, "PUT", 200, "Creating")
+	putInteraction := createAzureResourceInteraction(baseURL, http.MethodPut, 200, "Creating")
 	result, err := detector.Analyze(log, putInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -36,7 +37,7 @@ func TestDetectResourceModification_SuccessfulPATCH_SpawnsMonitor(t *testing.T) 
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
-	patchInteraction := createAzureResourceInteraction(baseURL, "PATCH", 200, "Updating")
+	patchInteraction := createAzureResourceInteraction(baseURL, http.MethodPatch, 200, "Updating")
 	result, err := detector.Analyze(log, patchInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -67,7 +68,7 @@ func TestDetectResourceModification_Various2xxStatusCodes_SpawnsMonitor(t *testi
 			detector := NewDetectResourceModification()
 			log := newTestLogger(t)
 
-			putInteraction := createAzureResourceInteraction(baseURL, "PUT", c.statusCode, "Creating")
+			putInteraction := createAzureResourceInteraction(baseURL, http.MethodPut, c.statusCode, "Creating")
 			result, err := detector.Analyze(log, putInteraction)
 
 			g.Expect(err).ToNot(HaveOccurred())
@@ -96,7 +97,7 @@ func TestDetectResourceModification_FailedRequest_DoesNotSpawn(t *testing.T) {
 			detector := NewDetectResourceModification()
 			log := newTestLogger(t)
 
-			putInteraction := createAzureResourceInteraction(baseURL, "PUT", c.statusCode, "Creating")
+			putInteraction := createAzureResourceInteraction(baseURL, http.MethodPut, c.statusCode, "Creating")
 			result, err := detector.Analyze(log, putInteraction)
 
 			g.Expect(err).ToNot(HaveOccurred())
@@ -111,10 +112,10 @@ func TestDetectResourceModification_OtherMethods_DoesNotSpawn(t *testing.T) {
 	cases := map[string]struct {
 		method string
 	}{
-		"GET":    {method: "GET"},
-		"POST":   {method: "POST"},
-		"DELETE": {method: "DELETE"},
-		"HEAD":   {method: "HEAD"},
+		"GET":    {method: http.MethodGet},
+		"POST":   {method: http.MethodPost},
+		"DELETE": {method: http.MethodDelete},
+		"HEAD":   {method: http.MethodHead},
 	}
 
 	for name, c := range cases {
@@ -143,7 +144,7 @@ func TestDetectResourceModification_InvalidJSON_DoesNotSpawn(t *testing.T) {
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
-	putInteraction := fake.Interaction(baseURL, "PUT", 200)
+	putInteraction := fake.Interaction(baseURL, http.MethodPut, 200)
 
 	result, err := detector.Analyze(log, putInteraction)
 
@@ -159,7 +160,7 @@ func TestDetectResourceModification_MissingProvisioningState_DoesNotSpawn(t *tes
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
-	putInteraction := createInteractionWithJSON(baseURL, "PUT", 200, `{"properties": {}}`)
+	putInteraction := createInteractionWithJSON(baseURL, http.MethodPut, 200, `{"properties": {}}`)
 
 	result, err := detector.Analyze(log, putInteraction)
 
@@ -177,10 +178,10 @@ func TestDetectResourceModification_NeverFinishes(t *testing.T) {
 
 	// Process various interactions
 	interactions := []*fake.TestInteraction{
-		createAzureResourceInteraction(baseURL, "GET", 200, "Succeeded"),
-		createAzureResourceInteraction(baseURL, "PUT", 200, "Creating"),
-		createAzureResourceInteraction(baseURL, "PATCH", 200, "Updating"),
-		createAzureResourceInteraction(baseURL, "DELETE", 200, "Deleting"),
+		createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Succeeded"),
+		createAzureResourceInteraction(baseURL, http.MethodPut, 200, "Creating"),
+		createAzureResourceInteraction(baseURL, http.MethodPatch, 200, "Updating"),
+		createAzureResourceInteraction(baseURL, http.MethodDelete, 200, "Deleting"),
 	}
 
 	for _, inter := range interactions {
@@ -198,7 +199,7 @@ func TestDetectResourceModification_SpawnsTwoMonitors(t *testing.T) {
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
-	putInteraction := createAzureResourceInteraction(baseURL, "PUT", 200, "Creating")
+	putInteraction := createAzureResourceInteraction(baseURL, http.MethodPut, 200, "Creating")
 	result, err := detector.Analyze(log, putInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -238,8 +239,8 @@ func TestDetectResourceModification_MultipleRequests_SpawnsMultipleMonitors(t *t
 	url1 := mustParseURL("https://management.azure.com/resource/123")
 	url2 := mustParseURL("https://management.azure.com/resource/456")
 
-	put1 := createAzureResourceInteraction(url1, "PUT", 200, "Creating")
-	put2 := createAzureResourceInteraction(url2, "PUT", 201, "Creating")
+	put1 := createAzureResourceInteraction(url1, http.MethodPut, 200, "Creating")
+	put2 := createAzureResourceInteraction(url2, http.MethodPut, 201, "Creating")
 
 	result1, err := detector.Analyze(log, put1)
 	g.Expect(err).ToNot(HaveOccurred())
@@ -262,7 +263,7 @@ func TestDetectResourceModification_EmptyResult_WhenNoAction(t *testing.T) {
 	detector := NewDetectResourceModification()
 	log := newTestLogger(t)
 
-	getInteraction := createAzureResourceInteraction(baseURL, "GET", 200, "Succeeded")
+	getInteraction := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Succeeded")
 	result, err := detector.Analyze(log, getInteraction)
 
 	g.Expect(err).ToNot(HaveOccurred())

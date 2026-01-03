@@ -30,16 +30,12 @@ func (*DetectAzureLongRunningOperation) Analyze(
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	// Check if the interaction is a PUT, POST, or DELETE
-	method := i.Request().Method()
-	if method != http.MethodPut &&
-		method != http.MethodPost &&
-		method != http.MethodDelete {
+	if !interaction.HasAnyMethod(i, http.MethodPut, http.MethodPost, http.MethodDelete) {
 		return analyzer.Result{}, nil
 	}
 
 	// Check if the response is successful
-	statusCode := i.Response().StatusCode()
-	if statusCode < 200 || statusCode >= 300 {
+	if !interaction.WasSuccessful(i) {
 		return analyzer.Result{}, nil
 	}
 

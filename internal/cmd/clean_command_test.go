@@ -81,9 +81,9 @@ func TestBuildOptions(t *testing.T) {
 
 			cmd := &CleanCommand{}
 			cmd.Clean.Deletes = c.deletes
-			cmd.Clean.LongRunningOperations = c.longRunningOperations
-			cmd.Clean.ResourceModifications = c.resourceModifications
-			cmd.Clean.ResourceDeletions = c.resourceDeletions
+			cmd.Clean.Azure.LongRunningOperations = c.longRunningOperations
+			cmd.Clean.Azure.ResourceModifications = c.resourceModifications
+			cmd.Clean.Azure.ResourceDeletions = c.resourceDeletions
 
 			options, err := cmd.buildOptions()
 

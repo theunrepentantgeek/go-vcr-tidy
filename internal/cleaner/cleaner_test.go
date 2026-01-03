@@ -2,6 +2,7 @@ package cleaner
 
 import (
 	"errors"
+	"net/http"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -98,7 +99,7 @@ func TestAnalyze_SingleAnalyzer_ProcessesInteraction(t *testing.T) {
 	c := New(a)
 
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	inter := fake.Interaction(baseURL, "GET", 200)
+	inter := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -117,7 +118,7 @@ func TestAnalyze_MultipleAnalyzers_AllProcessInteraction(t *testing.T) {
 	c := New(a1, a2, a3)
 
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	inter := fake.Interaction(baseURL, "GET", 200)
+	inter := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -139,7 +140,7 @@ func TestAnalyze_WhenAnalyzerReturnsError_PropagatesError(t *testing.T) {
 	c := New(a)
 
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	inter := fake.Interaction(baseURL, "GET", 200)
+	inter := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter)
 
 	g.Expect(err).To(MatchError(ContainSubstring(expectedErr.Error())))
@@ -154,7 +155,7 @@ func TestAnalyze_WhenAnalyzerFinishes_RemovesFromActiveSet(t *testing.T) {
 	c := New(a)
 
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	inter1 := fake.Interaction(baseURL, "GET", 200)
+	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter1)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -163,7 +164,7 @@ func TestAnalyze_WhenAnalyzerFinishes_RemovesFromActiveSet(t *testing.T) {
 	g.Expect(c.analyzers).NotTo(ContainElement(a))
 
 	// Second interaction should not be processed by the finished analyzer
-	inter2 := fake.Interaction(baseURL, "GET", 200)
+	inter2 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err = c.Analyze(log, inter2)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -180,7 +181,7 @@ func TestAnalyze_AnalyzerSpawns_AddsNewAnalyzersToActiveSet(t *testing.T) {
 	c := New(a)
 
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	inter1 := fake.Interaction(baseURL, "GET", 200)
+	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter1)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -193,14 +194,14 @@ func TestAnalyze_AnalyzerExcludesInteractions_TracksExclusions(t *testing.T) {
 	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	inter1 := fake.Interaction(baseURL, "GET", 200)
-	inter2 := fake.Interaction(baseURL, "GET", 200)
+	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
+	inter2 := fake.Interaction(baseURL, http.MethodGet, 200)
 
 	a := newFakeAnalyzer("analyzer1").
 		withResult(analyzer.FinishedWithExclusions(inter1, inter2))
 	c := New(a)
 
-	inter3 := fake.Interaction(baseURL, "DELETE", 200)
+	inter3 := fake.Interaction(baseURL, http.MethodDelete, 200)
 	err := c.Analyze(log, inter3)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -222,14 +223,14 @@ func TestAnalyze_AnalyzerFinishesAndSpawns_HandlesBoth(t *testing.T) {
 	c := New(a)
 
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	inter1 := fake.Interaction(baseURL, "GET", 200)
+	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter1)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(a.callCount).To(Equal(1))
 
 	// Second interaction should only be processed by spawned analyzer
-	inter2 := fake.Interaction(baseURL, "POST", 201)
+	inter2 := fake.Interaction(baseURL, http.MethodPost, 201)
 	err = c.Analyze(log, inter2)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -248,7 +249,7 @@ func TestAnalyze_MultipleAnalyzersFinish_RemovesAll(t *testing.T) {
 	c := New(a1, a2, a3)
 
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	inter1 := fake.Interaction(baseURL, "GET", 200)
+	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 
 	g.Expect(c.Analyze(log, inter1)).To(Succeed())
 
@@ -279,13 +280,13 @@ func TestAnalyze_SpawnedAnalyzerProcessesNextInteraction_Works(t *testing.T) {
 	baseURL := mustParseURL("https://api.example.com/resource/123")
 
 	// First interaction: a spawns spawned1
-	inter1 := fake.Interaction(baseURL, "GET", 200)
+	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter1)
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(c.analyzers).To(ContainElement(spawned1))
 
 	// Second interaction: both a and spawned1 process, a finishes and spawns spawned2
-	inter2 := fake.Interaction(baseURL, "POST", 201)
+	inter2 := fake.Interaction(baseURL, http.MethodPost, 201)
 	err = c.Analyze(log, inter2)
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(c.analyzers).NotTo(ContainElement(a))
@@ -299,16 +300,16 @@ func TestAnalyze_ExclusionFromMultipleAnalyzers_AccumulatesAll(t *testing.T) {
 	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	inter1 := fake.Interaction(baseURL, "GET", 200)
-	inter2 := fake.Interaction(baseURL, "GET", 201)
-	inter3 := fake.Interaction(baseURL, "GET", 202)
+	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
+	inter2 := fake.Interaction(baseURL, http.MethodGet, 201)
+	inter3 := fake.Interaction(baseURL, http.MethodGet, 202)
 
 	a1 := newFakeAnalyzer("analyzer1").withResult(analyzer.FinishedWithExclusions(inter1))
 	a2 := newFakeAnalyzer("analyzer2").withResult(analyzer.FinishedWithExclusions(inter2))
 	a3 := newFakeAnalyzer("analyzer3").withResult(analyzer.FinishedWithExclusions(inter3))
 	c := New(a1, a2, a3)
 
-	inter4 := fake.Interaction(baseURL, "DELETE", 200)
+	inter4 := fake.Interaction(baseURL, http.MethodDelete, 200)
 	err := c.Analyze(log, inter4)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -326,14 +327,14 @@ func TestAnalyze_EmptyResult_NoSideEffects(t *testing.T) {
 	c := New(a)
 
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	inter1 := fake.Interaction(baseURL, "GET", 200)
+	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter1)
 
 	g.Expect(err).ToNot(HaveOccurred())
 	g.Expect(a.callCount).To(Equal(1))
 
 	// Second interaction should still be processed
-	inter2 := fake.Interaction(baseURL, "GET", 200)
+	inter2 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err = c.Analyze(log, inter2)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -350,7 +351,7 @@ func TestAnalyze_NoAnalyzers_NoError(t *testing.T) {
 	c := New()
 
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	inter := fake.Interaction(baseURL, "GET", 200)
+	inter := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -366,7 +367,7 @@ func TestAnalyze_AllAnalyzersFinish_LeavesEmptySet(t *testing.T) {
 	c := New(a1, a2)
 
 	baseURL := mustParseURL("https://api.example.com/resource/123")
-	inter1 := fake.Interaction(baseURL, "GET", 200)
+	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter1)
 
 	g.Expect(err).ToNot(HaveOccurred())
@@ -374,7 +375,7 @@ func TestAnalyze_AllAnalyzersFinish_LeavesEmptySet(t *testing.T) {
 	g.Expect(a2.callCount).To(Equal(1))
 
 	// After all analyzers finish, subsequent interactions should work but do nothing
-	inter2 := fake.Interaction(baseURL, "GET", 200)
+	inter2 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err = c.Analyze(log, inter2)
 
 	g.Expect(err).ToNot(HaveOccurred())

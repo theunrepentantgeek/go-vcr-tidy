@@ -2,6 +2,7 @@ package azure
 
 import (
 	"encoding/json"
+	"net/http"
 	"net/url"
 	"strings"
 
@@ -43,7 +44,6 @@ func (m *MonitorProvisioningState) Analyze(
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	reqURL := i.Request().BaseURL()
-	method := i.Request().Method()
 	statusCode := i.Response().StatusCode()
 
 	switch {
@@ -51,17 +51,17 @@ func (m *MonitorProvisioningState) Analyze(
 		// Not the URL we're monitoring, ignore.
 		return analyzer.Result{}, nil
 
-	case method != "GET":
+	case !interaction.HasMethod(i, http.MethodGet):
 		// Resource changed via non-GET method, abandon monitoring.
 		log.Info(
 			"Abandoning provisioning state monitor, resource changed",
 			"url", m.baseURL.String(),
-			"method", method,
+			"method", i.Request().Method(),
 		)
 
 		return analyzer.Finished(), nil
 
-	case statusCode < 200 || statusCode >= 300:
+	case !interaction.WasSuccessful(i):
 		// Unexpected status code, abandon monitoring.
 		log.Info(
 			"Abandoning provisioning state monitor due to unexpected status",

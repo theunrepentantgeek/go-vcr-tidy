@@ -37,14 +37,13 @@ func NewMonitorDeletion(
 
 // Analyze processes another interaction in the sequence.
 //
-//nolint:cyclomatic,revive,cyclop // Complexity is acceptable for this method
+//nolint:cyclomatic // Complexity is acceptable for this method
 func (m *MonitorDeletion) Analyze(
 	log logr.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	reqURL := i.Request().BaseURL()
 
-	method := i.Request().Method()
 	statusCode := i.Response().StatusCode()
 
 	switch {
@@ -52,21 +51,21 @@ func (m *MonitorDeletion) Analyze(
 		// Not the URL we're monitoring, ignore.
 		return analyzer.Result{}, nil
 
-	case method == "GET" && statusCode == http.StatusNotFound:
+	case interaction.HasMethod(i, http.MethodGet) && statusCode == http.StatusNotFound:
 		return m.deletionConfirmed(log)
 
-	case method == "GET" && statusCode >= 200 && statusCode < 300:
+	case interaction.HasMethod(i, http.MethodGet) && interaction.WasSuccessful(i):
 		// Accumulate this successful GET request.
 		m.interactions = append(m.interactions, i)
 
 		return analyzer.Result{}, nil
 
-	case method == "POST" || method == "PUT" || method == "DELETE":
+	case interaction.HasAnyMethod(i, http.MethodPost, http.MethodPut, http.MethodDelete):
 		// Resource has changed, abandon monitoring.
 		log.Info(
 			"Abandoning DELETE monitor, resource changed",
 			"url", m.baseURL.String(),
-			"method", method,
+			"method", i.Request().Method(),
 		)
 
 		return analyzer.Finished(), nil
@@ -76,7 +75,7 @@ func (m *MonitorDeletion) Analyze(
 		log.Info(
 			"Abandoning DELETE monitor due to unexpected request",
 			"url", m.baseURL.String(),
-			"method", method,
+			"method", i.Request().Method(),
 			"statusCode", statusCode,
 		)
 

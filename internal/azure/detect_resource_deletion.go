@@ -2,6 +2,7 @@ package azure
 
 import (
 	"encoding/json"
+	"net/http"
 
 	"github.com/go-logr/logr"
 
@@ -26,11 +27,8 @@ func (*DetectResourceDeletion) Analyze(
 	log logr.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
-	method := i.Request().Method()
-	statusCode := i.Response().StatusCode()
-
 	// Check if it's a DELETE with successful status
-	if method != "DELETE" || statusCode < 200 || statusCode >= 300 {
+	if !interaction.HasMethod(i, http.MethodDelete) || !interaction.WasSuccessful(i) {
 		return analyzer.Result{}, nil
 	}
 

@@ -1,6 +1,7 @@
 package azure
 
 import (
+	"net/http"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -19,10 +20,10 @@ func TestMonitorProvisioningState_SingleState_AccumulatesAndExcludes(t *testing.
 	log := newTestLogger(t)
 
 	// Create interactions with provisioningState in response
-	get1 := createAzureResourceInteraction(baseURL, "GET", 200, "Creating")
-	get2 := createAzureResourceInteraction(baseURL, "GET", 200, "Creating")
-	get3 := createAzureResourceInteraction(baseURL, "GET", 200, "Creating")
-	getFinal := createAzureResourceInteraction(baseURL, "GET", 200, "Succeeded")
+	get1 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Creating")
+	get2 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Creating")
+	get3 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Creating")
+	getFinal := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Succeeded")
 
 	result := runAnalyzer(t, log, monitor, get1, get2, get3, getFinal)
 
@@ -40,8 +41,8 @@ func TestMonitorProvisioningState_OnlyMatchesSpecificState(t *testing.T) {
 	log := newTestLogger(t)
 
 	// Monitor should only accumulate "Creating" states, not "Updating"
-	get1 := createAzureResourceInteraction(baseURL, "GET", 200, "Creating")
-	get2 := createAzureResourceInteraction(baseURL, "GET", 200, "Updating")
+	get1 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Creating")
+	get2 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Updating")
 
 	result1, err := monitor.Analyze(log, get1)
 	g.Expect(err).ToNot(HaveOccurred())
@@ -65,10 +66,10 @@ func TestMonitorProvisioningState_CaseInsensitive_MatchesState(t *testing.T) {
 	log := newTestLogger(t)
 
 	// Various case combinations
-	get1 := createAzureResourceInteraction(baseURL, "GET", 200, "creating")
-	get2 := createAzureResourceInteraction(baseURL, "GET", 200, "CREATING")
-	get3 := createAzureResourceInteraction(baseURL, "GET", 200, "CrEaTiNg")
-	getFinal := createAzureResourceInteraction(baseURL, "GET", 200, "Succeeded")
+	get1 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "creating")
+	get2 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "CREATING")
+	get3 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "CrEaTiNg")
+	getFinal := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Succeeded")
 
 	result := runAnalyzer(t, log, monitor, get1, get2, get3, getFinal)
 
@@ -86,8 +87,8 @@ func TestMonitorProvisioningState_ShortSequence_NothingExcluded(t *testing.T) {
 	log := newTestLogger(t)
 
 	// Only one Creating state before transition
-	get1 := createAzureResourceInteraction(baseURL, "GET", 200, "Creating")
-	getFinal := createAzureResourceInteraction(baseURL, "GET", 200, "Succeeded")
+	get1 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Creating")
+	getFinal := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Succeeded")
 
 	result := runAnalyzer(t, log, monitor, get1, getFinal)
 
@@ -104,7 +105,7 @@ func TestMonitorProvisioningState_ImmediateTransition_NothingExcluded(t *testing
 	log := newTestLogger(t)
 
 	// Immediate transition without any Creating states
-	getFinal := createAzureResourceInteraction(baseURL, "GET", 200, "Succeeded")
+	getFinal := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Succeeded")
 
 	result, err := monitor.Analyze(log, getFinal)
 
@@ -122,7 +123,7 @@ func TestMonitorProvisioningState_DifferentURL_Ignored(t *testing.T) {
 	monitor := NewMonitorProvisioningState(monitoredURL, "Creating")
 	log := newTestLogger(t)
 
-	i := createAzureResourceInteraction(differentURL, "GET", 200, "Creating")
+	i := createAzureResourceInteraction(differentURL, http.MethodGet, 200, "Creating")
 
 	result, err := monitor.Analyze(log, i)
 
@@ -137,10 +138,10 @@ func TestMonitorProvisioningState_NonGETMethod_AbandonsMonitoring(t *testing.T) 
 	cases := map[string]struct {
 		method string
 	}{
-		"POST":   {method: "POST"},
-		"PUT":    {method: "PUT"},
-		"PATCH":  {method: "PATCH"},
-		"DELETE": {method: "DELETE"},
+		"POST":   {method: http.MethodPost},
+		"PUT":    {method: http.MethodPut},
+		"PATCH":  {method: http.MethodPatch},
+		"DELETE": {method: http.MethodDelete},
 	}
 
 	for name, c := range cases {
@@ -153,7 +154,7 @@ func TestMonitorProvisioningState_NonGETMethod_AbandonsMonitoring(t *testing.T) 
 			log := newTestLogger(t)
 
 			// Accumulate some interactions first
-			get1 := createAzureResourceInteraction(baseURL, "GET", 200, "Creating")
+			get1 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Creating")
 			modifyRequest := createAzureResourceInteraction(baseURL, c.method, 200, "Creating")
 
 			result := runAnalyzer(t, log, monitor, get1, modifyRequest)
@@ -184,8 +185,8 @@ func TestMonitorProvisioningState_UnexpectedStatusCode_AbandonsMonitoring(t *tes
 			monitor := NewMonitorProvisioningState(baseURL, "Creating")
 			log := newTestLogger(t)
 
-			get1 := createAzureResourceInteraction(baseURL, "GET", 200, "Creating")
-			getError := fake.Interaction(baseURL, "GET", c.statusCode)
+			get1 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Creating")
+			getError := fake.Interaction(baseURL, http.MethodGet, c.statusCode)
 
 			result := runAnalyzer(t, log, monitor, get1, getError)
 
@@ -204,7 +205,7 @@ func TestMonitorProvisioningState_InvalidJSON_AbandonMonitoring(t *testing.T) {
 	log := newTestLogger(t)
 
 	// Create interaction with invalid JSON
-	getInvalid := fake.Interaction(baseURL, "GET", 200)
+	getInvalid := fake.Interaction(baseURL, http.MethodGet, 200)
 
 	result, err := monitor.Analyze(log, getInvalid)
 
@@ -222,7 +223,7 @@ func TestMonitorProvisioningState_MissingProvisioningState_AbandonMonitoring(t *
 	log := newTestLogger(t)
 
 	// Create interaction with valid JSON but no provisioningState
-	getNoState := createInteractionWithJSON(baseURL, "GET", 200, `{"properties": {}}`)
+	getNoState := createInteractionWithJSON(baseURL, http.MethodGet, 200, `{"properties": {}}`)
 
 	result, err := monitor.Analyze(log, getNoState)
 
@@ -241,7 +242,7 @@ func TestMonitorProvisioningState_URLWithQueryParameters_MonitorsBaseURL(t *test
 	log := newTestLogger(t)
 
 	// Interaction with query parameters should match base URL
-	get1 := createAzureResourceInteraction(urlWithParams, "GET", 200, "Creating")
+	get1 := createAzureResourceInteraction(urlWithParams, http.MethodGet, 200, "Creating")
 
 	result, err := monitor.Analyze(log, get1)
 
@@ -263,11 +264,11 @@ func TestMonitorProvisioningState_ManyMiddleInteractions_AllExcluded(t *testing.
 	interactions := make([]interaction.Interface, 0, 10)
 
 	for range 9 {
-		get := createAzureResourceInteraction(baseURL, "GET", 200, "Creating")
+		get := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Creating")
 		interactions = append(interactions, get)
 	}
 
-	getFinal := createAzureResourceInteraction(baseURL, "GET", 200, "Succeeded")
+	getFinal := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Succeeded")
 	interactions = append(interactions, getFinal)
 
 	result := runAnalyzer(t, log, monitor, interactions...)
@@ -289,10 +290,10 @@ func TestMonitorProvisioningState_DeletingState_Works(t *testing.T) {
 	monitor := NewMonitorProvisioningState(baseURL, "Deleting")
 	log := newTestLogger(t)
 
-	get1 := createAzureResourceInteraction(baseURL, "GET", 200, "Deleting")
-	get2 := createAzureResourceInteraction(baseURL, "GET", 200, "Deleting")
-	get3 := createAzureResourceInteraction(baseURL, "GET", 200, "Deleting")
-	getFinal := createAzureResourceInteraction(baseURL, "GET", 200, "Deleted")
+	get1 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Deleting")
+	get2 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Deleting")
+	get3 := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Deleting")
+	getFinal := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Deleted")
 
 	result := runAnalyzer(t, log, monitor, get1, get2, get3, getFinal)
 
@@ -310,7 +311,7 @@ func TestMonitorProvisioningState_EmptyResult_WhenIgnoringInteraction(t *testing
 	monitor := NewMonitorProvisioningState(monitoredURL, "Creating")
 	log := newTestLogger(t)
 
-	i := createAzureResourceInteraction(differentURL, "GET", 200, "Creating")
+	i := createAzureResourceInteraction(differentURL, http.MethodGet, 200, "Creating")
 	result, err := monitor.Analyze(log, i)
 
 	g.Expect(err).ToNot(HaveOccurred())
