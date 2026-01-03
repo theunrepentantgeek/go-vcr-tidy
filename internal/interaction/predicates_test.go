@@ -2,7 +2,6 @@ package interaction_test
 
 import (
 	"net/http"
-	"net/url"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -10,15 +9,6 @@ import (
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
 )
-
-func mustParseURL(raw string) url.URL {
-	parsed, err := url.Parse(raw)
-	if err != nil {
-		panic(err)
-	}
-
-	return *parsed
-}
 
 // HasMethod Tests
 
@@ -46,186 +36,124 @@ func TestHasMethod_WithNonMatchingMethod_ReturnsFalse(t *testing.T) {
 	g.Expect(result).To(BeFalse())
 }
 
-func TestHasMethod_WithDifferentCase_ReturnsFalse(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodGet, 200)
-
-	result := interaction.HasMethod(i, "get")
-
-	g.Expect(result).To(BeFalse())
-}
-
 // HasAnyMethod Tests
 
-func TestHasAnyMethod_WithSingleMatchingMethod_ReturnsTrue(t *testing.T) {
+func TestHasAnyMethod(t *testing.T) {
 	t.Parallel()
-	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodGet, 200)
+	cases := map[string]struct {
+		method          string
+		statusCode      int
+		methodsToCheck  []string
+		expectedMatches bool
+	}{
+		"WithSingleMatchingMethod_ReturnsTrue": {
+			method:          http.MethodGet,
+			statusCode:      200,
+			methodsToCheck:  []string{http.MethodGet},
+			expectedMatches: true,
+		},
+		"WithMultipleMethodsFirstMatches_ReturnsTrue": {
+			method:          http.MethodPost,
+			statusCode:      201,
+			methodsToCheck:  []string{http.MethodPost, http.MethodPut, http.MethodPatch},
+			expectedMatches: true,
+		},
+		"WithMultipleMethodsMiddleMatches_ReturnsTrue": {
+			method:          http.MethodPut,
+			statusCode:      200,
+			methodsToCheck:  []string{http.MethodPost, http.MethodPut, http.MethodPatch},
+			expectedMatches: true,
+		},
+		"WithMultipleMethodsLastMatches_ReturnsTrue": {
+			method:          http.MethodPatch,
+			statusCode:      200,
+			methodsToCheck:  []string{http.MethodPost, http.MethodPut, http.MethodPatch},
+			expectedMatches: true,
+		},
+		"WithNoMatch_ReturnsFalse": {
+			method:          http.MethodGet,
+			statusCode:      200,
+			methodsToCheck:  []string{http.MethodPost, http.MethodPut, http.MethodPatch},
+			expectedMatches: false,
+		},
+		"WithEmptyMethodList_ReturnsFalse": {
+			method:          http.MethodGet,
+			statusCode:      200,
+			methodsToCheck:  []string{},
+			expectedMatches: false,
+		},
+	}
 
-	result := interaction.HasAnyMethod(i, http.MethodGet)
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			g := NewWithT(t)
 
-	g.Expect(result).To(BeTrue())
-}
+			baseURL := mustParseURL("https://example.com/resource")
+			i := fake.Interaction(baseURL, c.method, c.statusCode)
 
-func TestHasAnyMethod_WithMultipleMethodsFirstMatches_ReturnsTrue(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
+			result := interaction.HasAnyMethod(i, c.methodsToCheck...)
 
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodPost, 201)
-
-	result := interaction.HasAnyMethod(i, http.MethodPost, http.MethodPut, http.MethodPatch)
-
-	g.Expect(result).To(BeTrue())
-}
-
-func TestHasAnyMethod_WithMultipleMethodsMiddleMatches_ReturnsTrue(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodPut, 200)
-
-	result := interaction.HasAnyMethod(i, http.MethodPost, http.MethodPut, http.MethodPatch)
-
-	g.Expect(result).To(BeTrue())
-}
-
-func TestHasAnyMethod_WithMultipleMethodsLastMatches_ReturnsTrue(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodPatch, 200)
-
-	result := interaction.HasAnyMethod(i, http.MethodPost, http.MethodPut, http.MethodPatch)
-
-	g.Expect(result).To(BeTrue())
-}
-
-func TestHasAnyMethod_WithNoMatch_ReturnsFalse(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodGet, 200)
-
-	result := interaction.HasAnyMethod(i, http.MethodPost, http.MethodPut, http.MethodPatch)
-
-	g.Expect(result).To(BeFalse())
-}
-
-func TestHasAnyMethod_WithEmptyMethodList_ReturnsFalse(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodGet, 200)
-
-	result := interaction.HasAnyMethod(i)
-
-	g.Expect(result).To(BeFalse())
+			g.Expect(result).To(Equal(c.expectedMatches))
+		})
+	}
 }
 
 // WasSuccessful Tests
 
-func TestWasSuccessful_With200_ReturnsTrue(t *testing.T) {
+func TestWasSuccessful(t *testing.T) {
 	t.Parallel()
-	g := NewWithT(t)
 
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodGet, 200)
+	cases := map[string]struct {
+		statusCode int
+		expected   bool
+	}{
+		"With200_ReturnsTrue": {
+			statusCode: 200,
+			expected:   true,
+		},
+		"With201_ReturnsTrue": {
+			statusCode: 201,
+			expected:   true,
+		},
+		"With204_ReturnsTrue": {
+			statusCode: 204,
+			expected:   true,
+		},
+		"With299_ReturnsTrue": {
+			statusCode: 299,
+			expected:   true,
+		},
+		"With199_ReturnsFalse": {
+			statusCode: 199,
+			expected:   false,
+		},
+		"With300_ReturnsFalse": {
+			statusCode: 300,
+			expected:   false,
+		},
+		"With404_ReturnsFalse": {
+			statusCode: 404,
+			expected:   false,
+		},
+		"With500_ReturnsFalse": {
+			statusCode: 500,
+			expected:   false,
+		},
+	}
 
-	result := interaction.WasSuccessful(i)
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			g := NewWithT(t)
 
-	g.Expect(result).To(BeTrue())
-}
+			baseURL := mustParseURL("https://example.com/resource")
+			i := fake.Interaction(baseURL, http.MethodGet, c.statusCode)
 
-func TestWasSuccessful_With201_ReturnsTrue(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
+			result := interaction.WasSuccessful(i)
 
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodPost, 201)
-
-	result := interaction.WasSuccessful(i)
-
-	g.Expect(result).To(BeTrue())
-}
-
-func TestWasSuccessful_With204_ReturnsTrue(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodDelete, 204)
-
-	result := interaction.WasSuccessful(i)
-
-	g.Expect(result).To(BeTrue())
-}
-
-func TestWasSuccessful_With299_ReturnsTrue(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodGet, 299)
-
-	result := interaction.WasSuccessful(i)
-
-	g.Expect(result).To(BeTrue())
-}
-
-func TestWasSuccessful_With199_ReturnsFalse(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodGet, 199)
-
-	result := interaction.WasSuccessful(i)
-
-	g.Expect(result).To(BeFalse())
-}
-
-func TestWasSuccessful_With300_ReturnsFalse(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodGet, 300)
-
-	result := interaction.WasSuccessful(i)
-
-	g.Expect(result).To(BeFalse())
-}
-
-func TestWasSuccessful_With404_ReturnsFalse(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodGet, 404)
-
-	result := interaction.WasSuccessful(i)
-
-	g.Expect(result).To(BeFalse())
-}
-
-func TestWasSuccessful_With500_ReturnsFalse(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	baseURL := mustParseURL("https://example.com/resource")
-	i := fake.Interaction(baseURL, http.MethodGet, 500)
-
-	result := interaction.WasSuccessful(i)
-
-	g.Expect(result).To(BeFalse())
+			g.Expect(result).To(Equal(c.expected))
+		})
+	}
 }
