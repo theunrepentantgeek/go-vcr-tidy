@@ -6,6 +6,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+//nolint:funlen // Length comes from the number of test cases
 func TestAzureCleaningOptions_Options(t *testing.T) {
 	t.Parallel()
 
