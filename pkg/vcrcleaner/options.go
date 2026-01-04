@@ -43,3 +43,11 @@ func ReduceAzureResourceDeletionMonitoring() Option {
 		c.AddAnalyzers(azure.NewDetectResourceDeletion())
 	}
 }
+
+// ReduceAzureAsynchronousOperationMonitoring adds an analyzer that reduces Azure asynchronous operation monitoring.
+// This analyzer watches for asynchronous operation polling interactions.
+func ReduceAzureAsynchronousOperationMonitoring() Option {
+	return func(c *cleaner.Cleaner) {
+		c.AddAnalyzers(azure.NewDetectAzureAsynchronousOperation())
+	}
+}
