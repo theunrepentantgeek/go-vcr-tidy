@@ -50,7 +50,7 @@ func runAnalyzer(
 }
 
 // mustParseURL parses a raw URL string and fails the test on error.
-func mustParseURL(t *testing.T, raw string) url.URL {
+func mustParseURL(t *testing.T, raw string) *url.URL {
 	t.Helper()
 
 	parsed, err := url.Parse(raw)
@@ -58,7 +58,7 @@ func mustParseURL(t *testing.T, raw string) url.URL {
 		t.Fatalf("failed to parse URL: %v", err)
 	}
 
-	return *parsed
+	return parsed
 }
 
 // newTestLogger creates a test logger for the given test.

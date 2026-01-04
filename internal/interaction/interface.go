@@ -23,9 +23,9 @@ type Interface interface {
 // Request is an abstract representation of an HTTP request.
 type Request interface {
 	// FullURL returns the full URL of the request.
-	FullURL() url.URL
+	FullURL() *url.URL
 	// BaseURL returns the BaseURL of the request without any parameters
-	BaseURL() url.URL
+	BaseURL() *url.URL
 	// The HTTP method of the request, e.g. "GET", "POST", etc.
 	Method() string
 }

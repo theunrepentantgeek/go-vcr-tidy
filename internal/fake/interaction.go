@@ -27,7 +27,7 @@ var (
 // method is the HTTP method of the request.
 // statusCode is the HTTP status code of the response.
 func Interaction(
-	fullURL url.URL,
+	fullURL *url.URL,
 	method string,
 	statusCode int,
 ) *TestInteraction {
@@ -41,7 +41,7 @@ func Interaction(
 
 	i.request = testRequest{
 		fullURL: fullURL,
-		baseURL: *baseURL,
+		baseURL: baseURL,
 		method:  method,
 	}
 
@@ -76,4 +76,9 @@ func (i *TestInteraction) String() string {
 // SetResponseBody sets the response body for the fake interaction.
 func (i *TestInteraction) SetResponseBody(body string) {
 	i.response.responseBody = body
+}
+
+// SetResponseHeader sets a response header for the fake interaction.
+func (i *TestInteraction) SetResponseHeader(name, value string) {
+	i.response.SetResponseHeader(name, value)
 }

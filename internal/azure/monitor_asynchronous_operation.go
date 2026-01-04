@@ -1,7 +1,6 @@
 package azure
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/url"
 
@@ -12,27 +11,27 @@ import (
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/urltool"
 )
 
-// MonitorAzureLongRunningOperation is an analyzer for monitoring Azure long-running operations.
-// After detecting a long-running operation via DetectAzureLongRunningOperation, an instance of this is spawned to track
-// the operation until completion.
-// It watches for GET operations to the same base URL (ignoring changes to the `t` and `c` parameters).
-type MonitorAzureLongRunningOperation struct {
-	operationURL *url.URL                // Base URL of the long-running operation to monitor
+// MonitorAzureAsynchronousOperation is an analyzer for monitoring Azure asynchronous operations.
+// After detecting an asynchronous operation via DetectAzureAsynchronousOperation, an instance of this is spawned to
+// track the operation until completion.
+// It watches for GET operations to the same base URL.
+type MonitorAzureAsynchronousOperation struct {
+	operationURL *url.URL                // Base URL of the asynchronous operation to monitor
 	interactions []interaction.Interface // an ordered list of interactions related to this operation
 }
 
-var _ analyzer.Interface = &MonitorAzureLongRunningOperation{}
+var _ analyzer.Interface = &MonitorAzureAsynchronousOperation{}
 
-func NewMonitorAzureLongRunningOperation(
+func NewMonitorAzureAsynchronousOperation(
 	operationURL *url.URL,
-) *MonitorAzureLongRunningOperation {
-	return &MonitorAzureLongRunningOperation{
+) *MonitorAzureAsynchronousOperation {
+	return &MonitorAzureAsynchronousOperation{
 		operationURL: urltool.BaseURL(operationURL),
 	}
 }
 
 // Analyze processes another interaction in the sequence.
-func (m *MonitorAzureLongRunningOperation) Analyze(
+func (m *MonitorAzureAsynchronousOperation) Analyze(
 	log logr.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
@@ -42,24 +41,14 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	}
 
 	// Check if the interaction is a GET
-	if !interaction.HasMethod(i, http.MethodGet) {
+	if i.Request().Method() != http.MethodGet {
 		return analyzer.Result{}, nil
 	}
 
-	// Check the status of the operation
-	var operation struct {
-		Status string `json:"status"`
-	}
-
-	err := json.Unmarshal(i.Response().Body(), &operation)
-	if err != nil {
-		// Not a valid operation response; ignore
-		//nolint:nilerr // Just ignore invalid responses
-		return analyzer.Result{}, nil
-	}
-
-	if operation.Status == "InProgress" {
-		// Record the interaction and continue
+	// If the status is 202 Accepted, and the Location header is present,
+	// the operation is still in progress, collect the interaction and continue.
+	location, ok := i.Response().Header("Location")
+	if ok && i.Response().StatusCode() == 202 && location != "" {
 		m.interactions = append(m.interactions, i)
 
 		return analyzer.Result{}, nil
@@ -69,7 +58,7 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	if len(m.interactions) <= 2 {
 		// No intermediate interactions to exclude.
 		log.Info(
-			"Long running operation finished quickly, nothing to exclude",
+			"Asynchronous operation finished quickly, nothing to exclude",
 			"url", m.operationURL,
 		)
 
@@ -77,7 +66,7 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	}
 
 	log.Info(
-		"Long running operation finished, excluding intermediate GETs",
+		"Asynchronous operation finished, excluding intermediate GETs",
 		"url", m.operationURL,
 		"removed", len(m.interactions)-2,
 	)

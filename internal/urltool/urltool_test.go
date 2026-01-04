@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func mustParseURL(t *testing.T, raw string) url.URL {
+func mustParseURL(t *testing.T, raw string) *url.URL {
 	t.Helper()
 
 	parsed, err := url.Parse(raw)
@@ -15,7 +15,7 @@ func mustParseURL(t *testing.T, raw string) url.URL {
 		t.Fatalf("failed to parse URL: %v", err)
 	}
 
-	return *parsed
+	return parsed
 }
 
 func TestBaseURL_WithQueryAndFragment_StripsQueryAndFragment(t *testing.T) {

@@ -6,19 +6,21 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+//nolint:funlen // Length comes from the number of test cases
 func TestAzureCleaningOptions_Options(t *testing.T) {
 	t.Parallel()
 
 	cases := map[string]struct {
-		all                   *bool
-		longRunningOperations *bool
-		resourceModifications *bool
-		resourceDeletions     *bool
-		expectedCount         int
+		all                    *bool
+		asynchronousOperations *bool
+		longRunningOperations  *bool
+		resourceModifications  *bool
+		resourceDeletions      *bool
+		expectedCount          int
 	}{
-		"WithAllSetToTrue_ReturnsAllThreeOptions": {
+		"WithAllSetToTrue_ReturnsAllOptions": {
 			all:           toPtr(true),
-			expectedCount: 3,
+			expectedCount: 4,
 		},
 		"WithAllSetToFalse_ReturnsNoOptions": {
 			all:           toPtr(false),
@@ -39,11 +41,16 @@ func TestAzureCleaningOptions_Options(t *testing.T) {
 			resourceDeletions: toPtr(true),
 			expectedCount:     1,
 		},
-		"WithAllThreeSpecificOptionsSet_ReturnsAllThreeOptions": {
-			longRunningOperations: toPtr(true),
-			resourceModifications: toPtr(true),
-			resourceDeletions:     toPtr(true),
-			expectedCount:         3,
+		"WithOnlyAsynchronousOperationsSet_ReturnsOneAsyncOperationOption": {
+			asynchronousOperations: toPtr(true),
+			expectedCount:          1,
+		},
+		"WithAllSpecificOptionsSet_ReturnsAllOptions": {
+			longRunningOperations:  toPtr(true),
+			resourceModifications:  toPtr(true),
+			resourceDeletions:      toPtr(true),
+			asynchronousOperations: toPtr(true),
+			expectedCount:          4,
 		},
 	}
 
@@ -53,10 +60,11 @@ func TestAzureCleaningOptions_Options(t *testing.T) {
 			g := NewWithT(t)
 
 			opt := &AzureCleaningOptions{
-				All:                   c.all,
-				LongRunningOperations: c.longRunningOperations,
-				ResourceModifications: c.resourceModifications,
-				ResourceDeletions:     c.resourceDeletions,
+				All:                    c.all,
+				AsynchronousOperations: c.asynchronousOperations,
+				LongRunningOperations:  c.longRunningOperations,
+				ResourceModifications:  c.resourceModifications,
+				ResourceDeletions:      c.resourceDeletions,
 			}
 
 			result := opt.Options()

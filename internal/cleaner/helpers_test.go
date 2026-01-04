@@ -8,7 +8,7 @@ import (
 // mustParseURL parses a raw URL string and fails the test on error.
 //
 //nolint:unparam // raw is always the same value
-func mustParseURL(t *testing.T, raw string) url.URL {
+func mustParseURL(t *testing.T, raw string) *url.URL {
 	t.Helper()
 
 	parsed, err := url.Parse(raw)
@@ -16,5 +16,5 @@ func mustParseURL(t *testing.T, raw string) url.URL {
 		t.Fatalf("failed to parse URL: %v", err)
 	}
 
-	return *parsed
+	return parsed
 }
