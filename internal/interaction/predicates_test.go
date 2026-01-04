@@ -8,6 +8,7 @@ import (
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
+	"github.com/theunrepentantgeek/go-vcr-tidy/internal/must"
 )
 
 // HasMethod Tests
@@ -16,7 +17,7 @@ func TestHasMethod_WithMatchingMethod_ReturnsTrue(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://example.com/resource")
+	baseURL := must.ParseURL(t, "https://example.com/resource")
 	i := fake.Interaction(baseURL, http.MethodGet, 200)
 
 	result := interaction.HasMethod(i, http.MethodGet)
@@ -28,7 +29,7 @@ func TestHasMethod_WithNonMatchingMethod_ReturnsFalse(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://example.com/resource")
+	baseURL := must.ParseURL(t, "https://example.com/resource")
 	i := fake.Interaction(baseURL, http.MethodGet, 200)
 
 	result := interaction.HasMethod(i, http.MethodPost)
@@ -90,7 +91,7 @@ func TestHasAnyMethod(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL(t, "https://example.com/resource")
+			baseURL := must.ParseURL(t, "https://example.com/resource")
 			i := fake.Interaction(baseURL, c.method, c.statusCode)
 
 			result := interaction.HasAnyMethod(i, c.methodsToCheck...)
@@ -148,7 +149,7 @@ func TestWasSuccessful(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL(t, "https://example.com/resource")
+			baseURL := must.ParseURL(t, "https://example.com/resource")
 			i := fake.Interaction(baseURL, http.MethodGet, c.statusCode)
 
 			result := interaction.WasSuccessful(i)

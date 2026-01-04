@@ -9,13 +9,14 @@ import (
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
+	"github.com/theunrepentantgeek/go-vcr-tidy/internal/must"
 )
 
 func TestMonitorProvisioningState_SingleState_AccumulatesAndExcludes(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	monitor := NewMonitorProvisioningState(baseURL, "Creating")
 	log := newTestLogger(t)
 
@@ -36,7 +37,7 @@ func TestMonitorProvisioningState_OnlyMatchesSpecificState(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	monitor := NewMonitorProvisioningState(baseURL, "Creating")
 	log := newTestLogger(t)
 
@@ -61,7 +62,7 @@ func TestMonitorProvisioningState_CaseInsensitive_MatchesState(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	monitor := NewMonitorProvisioningState(baseURL, "Creating")
 	log := newTestLogger(t)
 
@@ -82,7 +83,7 @@ func TestMonitorProvisioningState_ShortSequence_NothingExcluded(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	monitor := NewMonitorProvisioningState(baseURL, "Creating")
 	log := newTestLogger(t)
 
@@ -100,7 +101,7 @@ func TestMonitorProvisioningState_ImmediateTransition_NothingExcluded(t *testing
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	monitor := NewMonitorProvisioningState(baseURL, "Creating")
 	log := newTestLogger(t)
 
@@ -118,8 +119,8 @@ func TestMonitorProvisioningState_DifferentURL_Ignored(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	monitoredURL := mustParseURL(t, "https://management.azure.com/resource/123")
-	differentURL := mustParseURL(t, "https://management.azure.com/resource/456")
+	monitoredURL := must.ParseURL(t, "https://management.azure.com/resource/123")
+	differentURL := must.ParseURL(t, "https://management.azure.com/resource/456")
 	monitor := NewMonitorProvisioningState(monitoredURL, "Creating")
 	log := newTestLogger(t)
 
@@ -149,7 +150,7 @@ func TestMonitorProvisioningState_NonGETMethod_AbandonsMonitoring(t *testing.T) 
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL(t, "https://management.azure.com/resource")
+			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			monitor := NewMonitorProvisioningState(baseURL, "Creating")
 			log := newTestLogger(t)
 
@@ -181,7 +182,7 @@ func TestMonitorProvisioningState_UnexpectedStatusCode_AbandonsMonitoring(t *tes
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL(t, "https://management.azure.com/resource")
+			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			monitor := NewMonitorProvisioningState(baseURL, "Creating")
 			log := newTestLogger(t)
 
@@ -200,7 +201,7 @@ func TestMonitorProvisioningState_InvalidJSON_AbandonMonitoring(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	monitor := NewMonitorProvisioningState(baseURL, "Creating")
 	log := newTestLogger(t)
 
@@ -218,7 +219,7 @@ func TestMonitorProvisioningState_MissingProvisioningState_AbandonMonitoring(t *
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	monitor := NewMonitorProvisioningState(baseURL, "Creating")
 	log := newTestLogger(t)
 
@@ -236,8 +237,8 @@ func TestMonitorProvisioningState_URLWithQueryParameters_MonitorsBaseURL(t *test
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
-	urlWithParams := mustParseURL(t, "https://management.azure.com/resource?api-version=2021-01-01")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
+	urlWithParams := must.ParseURL(t, "https://management.azure.com/resource?api-version=2021-01-01")
 	monitor := NewMonitorProvisioningState(baseURL, "Creating")
 	log := newTestLogger(t)
 
@@ -256,7 +257,7 @@ func TestMonitorProvisioningState_ManyMiddleInteractions_AllExcluded(t *testing.
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	monitor := NewMonitorProvisioningState(baseURL, "Creating")
 	log := newTestLogger(t)
 
@@ -286,7 +287,7 @@ func TestMonitorProvisioningState_DeletingState_Works(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	monitor := NewMonitorProvisioningState(baseURL, "Deleting")
 	log := newTestLogger(t)
 
@@ -306,8 +307,8 @@ func TestMonitorProvisioningState_EmptyResult_WhenIgnoringInteraction(t *testing
 	t.Parallel()
 	g := NewWithT(t)
 
-	monitoredURL := mustParseURL(t, "https://management.azure.com/resource/123")
-	differentURL := mustParseURL(t, "https://management.azure.com/other")
+	monitoredURL := must.ParseURL(t, "https://management.azure.com/resource/123")
+	differentURL := must.ParseURL(t, "https://management.azure.com/other")
 	monitor := NewMonitorProvisioningState(monitoredURL, "Creating")
 	log := newTestLogger(t)
 
