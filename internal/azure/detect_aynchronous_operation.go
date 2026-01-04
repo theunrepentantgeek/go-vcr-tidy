@@ -12,7 +12,7 @@ import (
 )
 
 // DetectAzureAsynchronousOperation is an analyzer for detecting Azure asynchronous operations.
-// It watches for successful PUT, POST or DELETE requests where the response includes a `Azure-Asyncoperation` header.
+// It watches for successful PUT, POST or DELETE requests where the response includes a `Location` header.
 type DetectAzureAsynchronousOperation struct{}
 
 const azureLocationHeader = "Location"
