@@ -16,7 +16,7 @@ import (
 // track the operation until completion.
 // It watches for GET operations to the same base URL.
 type MonitorAzureAsynchronousOperation struct {
-	operationURL *url.URL                // Base URL of the long-running operation to monitor
+	operationURL *url.URL                // Base URL of the asynchronous operation to monitor
 	interactions []interaction.Interface // an ordered list of interactions related to this operation
 }
 
