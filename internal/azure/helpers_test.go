@@ -52,7 +52,7 @@ func runAnalyzer(
 }
 
 // mustParseURL parses a raw URL string and fails the test on error.
-func mustParseURL(t *testing.T, raw string) url.URL {
+func mustParseURL(t *testing.T, raw string) *url.URL {
 	t.Helper()
 
 	parsed, err := url.Parse(raw)
