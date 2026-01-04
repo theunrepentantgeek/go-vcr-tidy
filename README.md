@@ -89,7 +89,7 @@ This analyzer looks for the following pattern of HTTP interactions:
 | Monitor |                        GET &lt;operation&gt;                        |  2xx   | Operation status is `InProgress`        |
 | Finish  |                        GET &lt;operation&gt;                        |  2xx   | Operation status has changed            |
 
-When detected, the first and last GET of the operation URL are retained, and the intervening ones removed.
+When detected, the first and last GETs of the operation URL are retained, and the intervening ones removed.
 
 ## Azure asynchronous operation
 
@@ -100,3 +100,5 @@ This analyzer looks for the following pattern of HTTP interactions:
 | Trigger | PUT &lt;url&gt;<br/> or PATCH &lt;url&gt; <br/>or DELETE &lt;url&gt; |  2xx   | Returning `Location` header      |
 | Monitor |                         GET &lt;location&gt;                         |  2xx   | Operation status is `InProgress` |
 | Finish  |                         GET &lt;location&gt;                         |  2xx   | Operation status has changed     |
+
+When detected, the first and last GETs of the operation URL are retained, and the intervening ones removed.
