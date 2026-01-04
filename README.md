@@ -83,9 +83,9 @@ When detected, the first and last GET 2xx with `provisioningState` `Creating` ar
 
 This analyzer looks for the following pattern of HTTP interactions:
 
-| Stage   |                             HTTP Method                             | Status | Note                                    |
-| ------- | :-----------------------------------------------------------------: | :----: | --------------------------------------- |
-| Trigger | PUT &lt;url&gt;<br/>or PATCH &lt;url&gt; <br/>or DELETE &lt;url&gt; |  2xx   | Returning `Azure-Asyncoperation` header |
+| Stage   |                             HTTP Method                             | Status | Note                                     |
+| ------- | :-----------------------------------------------------------------: | :----: | ---------------------------------------- |
+| Trigger | PUT &lt;url&gt;<br/>or PATCH &lt;url&gt; <br/>or DELETE &lt;url&gt; |  2xx   | Returning `Azure-AsyncOperation` header |
 | Monitor |                        GET &lt;operation&gt;                        |  2xx   | Operation status is `InProgress`        |
 | Finish  |                        GET &lt;operation&gt;                        |  2xx   | Operation status has changed            |
 
