@@ -10,6 +10,8 @@ import (
 )
 
 type CleanCommand struct {
+	Verbose bool `help:"Enable verbose logging." short:"v"`
+
 	Globs []string        `arg:""   help:"Paths to go-vcr cassette files to clean. Globbing allowed." type:"file"`
 	Clean CleaningOptions `embed:"" prefix:"clean."`
 }
