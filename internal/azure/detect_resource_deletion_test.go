@@ -87,6 +87,7 @@ func TestDetectResourceDeletion_FailedDELETE_DoesNotSpawn(t *testing.T) {
 	}
 }
 
+//nolint:dupl // Similar tests for different methods
 func TestDetectResourceDeletion_OtherMethods_DoesNotSpawn(t *testing.T) {
 	t.Parallel()
 

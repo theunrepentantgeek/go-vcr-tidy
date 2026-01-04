@@ -107,6 +107,7 @@ func TestDetectResourceModification_FailedRequest_DoesNotSpawn(t *testing.T) {
 	}
 }
 
+//nolint:dupl // Similar tests for different methods
 func TestDetectResourceModification_OtherMethods_DoesNotSpawn(t *testing.T) {
 	t.Parallel()
 
