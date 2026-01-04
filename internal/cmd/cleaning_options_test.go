@@ -23,14 +23,14 @@ func TestCleaningOptions_Options(t *testing.T) {
 			deletes:       toPtr(true),
 			expectedCount: 1,
 		},
-		"WithOnlyAzureAllSet_ReturnsThreeAzureOptions": {
+		"WithOnlyAzureAllSet_ReturnsFourAzureOptions": {
 			azureAll:      toPtr(true),
-			expectedCount: 3,
+			expectedCount: 4,
 		},
 		"WithDeletesAndAzureAll_ReturnsFourOptions": {
 			deletes:       toPtr(true),
 			azureAll:      toPtr(true),
-			expectedCount: 4,
+			expectedCount: 5,
 		},
 	}
 
