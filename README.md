@@ -19,23 +19,23 @@ go install github.com/theunrepentantgeek/go-vcr-tidy@latest
 ```
 
 ``` bash
-$ go-vcr-tidy clean --help
-Usage: go-vcr-tidy clean <globs> ... [flags]
-
-Clean go-vcr cassette files.
+$ go-vcr-tidy --help
+Usage: go-vcr-tidy <globs> ... [flags]
 
 Arguments:
   <globs> ...    Paths to go-vcr cassette files to clean. Globbing allowed.
 
 Flags:
-  -h, --help                             Show context-sensitive help.
-  -v, --verbose                          Enable verbose logging.
-
-      --clean.deletes                    Clean delete interactions.
-      --clean.long-running-operations    Clean Azure long-running operation interactions.
-      --clean.resource-modifications     Clean Azure resource modification (PUT/PATCH) monitoring interactions.
-      --clean.resource-deletions         Clean Azure resource deletion monitoring interactions.
+  -h, --help                                   Show context-sensitive help.
+  -v, --verbose                                Enable verbose logging.
+      --clean.deletes                          Clean delete interactions.
+      --clean.azure.all                        Clean all Azure-related monitoring interactions.
+      --clean.azure.long-running-operations    Clean Azure long-running operation interactions.
+      --clean.azure.resource-modifications     Clean Azure resource modification (PUT/PATCH) monitoring interactions.
+      --clean.azure.resource-deletions         Clean Azure resource deletion monitoring interactions.
 ```
+
+On Linux and MacOS, globs should be "double quoted" to prevent the shell from expanding the wildcard.
 
 ## Quick Start
 
@@ -45,28 +45,58 @@ Add the `go-vcr-tidy` package to your project
 go get github.com/theunrepentantgeek/go-vcr-tidy
 ```
 
-When creating your `go-vcr` `recorder`, create a `Cleaner` and hook that into your `recorder`:
+When creating your `recorder`, create a `Cleaner` with appropriate options and hook that into your `recorder`:
 
 ``` go
 TBC
 ```
 
-## Supported Tools
+## Options
 
-### Monitoring for deletion
+A number of different cleaning strategies are available - select the ones that make sense for your context.
 
-After a client issuing a DELETE, a client issues repeated GET requests to the same URL, waiting for a final GET to return a 404 indicating deletion of the resource has completed. 
+### Monitored deletes
 
-**Status**: Implemented, pending testing
+This analyzer looks for the following pattern of HTTP interactions:
+
+| Stage   |    HTTP Method     | Status | Note            |
+| ------- | :----------------: | :----: | --------------- |
+| Trigger | DELETE &lt;url&gt; |  2xx   |                 |
+| Monitor |  GET &lt;url&gt;   |  2xx   | Repeats n times |
+| Finish  |  GET &lt;url&gt;   |  404   |                 |
+
+When detected, the first and last GET 2xx are retained, with the intervening ones removed.
 
 ### Post creation and update monitoring in Azure
 
-After issuing a PUT to an Azure service, a client issues repeated GET requests, waiting for the `provisioningState` of the resoruce to change from `Creating` to something else (hopefully `Succeeded`).
+This analyzer looks for the following pattern of HTTP interactions:
 
-**Status**: Implemented, pending testing
+| Stage   |                HTTP Method                | Status | Note                                                |
+| ------- | :---------------------------------------: | :----: | --------------------------------------------------- |
+| Trigger | PUT &lt;url&gt;<br/> or PATCH &lt;url&gt; |  2xx   |                                                     |
+| Monitor |              GET &lt;url&gt;              |  2xx   | `provisioningState` is `Creating`, repeated n times |
+| Finish  |              GET &lt;url&gt;              |  2xx   | `provisioningState` has changed                     |
 
-## Azure long running operations
+When detected, the first and last GET 2xx with `provisioningState` `Creating` are retained, and the intervening ones removed.
 
-If a PUT to an Azure service returns a long-running-operation (LRO), the client will poll that operation until it has completed.  We can shorten the runtime of the LRO - effectively turning it into a short-running-operation (SRO) - by eliding most of the waiting time.
+## Azure long running operation
 
-**Status**: Implemented, pending testing
+This analyzer looks for the following pattern of HTTP interactions:
+
+| Stage   |                             HTTP Method                             | Status | Note                                    |
+| ------- | :-----------------------------------------------------------------: | :----: | --------------------------------------- |
+| Trigger | PUT &lt;url&gt;<br/>or PATCH &lt;url&gt; <br/>or DELETE &lt;url&gt; |  2xx   | Returning `Azure-Asyncoperation` header |
+| Monitor |                        GET &lt;operation&gt;                        |  2xx   | Operation status is `InProgress`        |
+| Finish  |                        GET &lt;operation&gt;                        |  2xx   | Operation status has changed            |
+
+When detected, the first and last GET of the operation URL are retained, and the intervening ones removed.
+
+## Azure asynchronous operation
+
+This analyzer looks for the following pattern of HTTP interactions:
+
+| Stage   |                             HTTP Method                              | Status | Note                             |
+| ------- | :------------------------------------------------------------------: | :----: | -------------------------------- |
+| Trigger | PUT &lt;url&gt;<br/> or PATCH &lt;url&gt; <br/>or DELETE &lt;url&gt; |  2xx   | Returning `Location` header      |
+| Monitor |                         GET &lt;location&gt;                         |  2xx   | Operation status is `InProgress` |
+| Finish  |                         GET &lt;location&gt;                         |  2xx   | Operation status has changed     |
