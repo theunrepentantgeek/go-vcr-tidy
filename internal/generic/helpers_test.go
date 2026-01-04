@@ -1,7 +1,6 @@
 package generic
 
 import (
-	"net/url"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -47,18 +46,6 @@ func runAnalyzer(
 	}
 
 	return result
-}
-
-// mustParseURL parses a raw URL string and fails the test on error.
-func mustParseURL(t *testing.T, raw string) *url.URL {
-	t.Helper()
-
-	parsed, err := url.Parse(raw)
-	if err != nil {
-		t.Fatalf("failed to parse URL: %v", err)
-	}
-
-	return parsed
 }
 
 // newTestLogger creates a test logger for the given test.

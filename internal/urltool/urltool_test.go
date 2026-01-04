@@ -1,21 +1,10 @@
 package urltool
 
 import (
-	"net/url"
 	"testing"
 
 	. "github.com/onsi/gomega"
 
-func mustParseURL(t *testing.T, raw string) *url.URL {
-	t.Helper()
-
-	parsed, err := url.Parse(raw)
-	if err != nil {
-		t.Fatalf("failed to parse URL: %v", err)
-	}
-
-	return parsed
-}
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/must"
 )
 
