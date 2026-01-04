@@ -11,6 +11,7 @@ import (
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"
+	"github.com/theunrepentantgeek/go-vcr-tidy/internal/must"
 )
 
 // Constructor Tests
@@ -98,7 +99,7 @@ func TestAnalyze_SingleAnalyzer_ProcessesInteraction(t *testing.T) {
 	a := newFakeAnalyzer("analyzer1")
 	c := New(a)
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter)
 
@@ -117,7 +118,7 @@ func TestAnalyze_MultipleAnalyzers_AllProcessInteraction(t *testing.T) {
 	a3 := newFakeAnalyzer("analyzer3")
 	c := New(a1, a2, a3)
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter)
 
@@ -139,7 +140,7 @@ func TestAnalyze_WhenAnalyzerReturnsError_PropagatesError(t *testing.T) {
 	a := newFakeAnalyzer("analyzer1").withError(expectedErr)
 	c := New(a)
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter)
 
@@ -154,7 +155,7 @@ func TestAnalyze_WhenAnalyzerFinishes_RemovesFromActiveSet(t *testing.T) {
 	a := newFakeAnalyzer("analyzer1").withResult(analyzer.Finished())
 	c := New(a)
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter1)
 
@@ -180,7 +181,7 @@ func TestAnalyze_AnalyzerSpawns_AddsNewAnalyzersToActiveSet(t *testing.T) {
 	a := newFakeAnalyzer("analyzer1").withResult(analyzer.Spawn(spawned))
 	c := New(a)
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter1)
 
@@ -193,7 +194,7 @@ func TestAnalyze_AnalyzerExcludesInteractions_TracksExclusions(t *testing.T) {
 	g := NewWithT(t)
 	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	inter2 := fake.Interaction(baseURL, http.MethodGet, 200)
 
@@ -222,7 +223,7 @@ func TestAnalyze_AnalyzerFinishesAndSpawns_HandlesBoth(t *testing.T) {
 	a := newFakeAnalyzer("analyzer1").withResult(result)
 	c := New(a)
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter1)
 
@@ -248,7 +249,7 @@ func TestAnalyze_MultipleAnalyzersFinish_RemovesAll(t *testing.T) {
 	a3 := newFakeAnalyzer("analyzer3").withResult(analyzer.Finished())
 	c := New(a1, a2, a3)
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 
 	g.Expect(c.Analyze(log, inter1)).To(Succeed())
@@ -277,7 +278,7 @@ func TestAnalyze_SpawnedAnalyzerProcessesNextInteraction_Works(t *testing.T) {
 
 	c := New(a)
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 
 	// First interaction: a spawns spawned1
 	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
@@ -299,7 +300,7 @@ func TestAnalyze_ExclusionFromMultipleAnalyzers_AccumulatesAll(t *testing.T) {
 	g := NewWithT(t)
 	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	inter2 := fake.Interaction(baseURL, http.MethodGet, 201)
 	inter3 := fake.Interaction(baseURL, http.MethodGet, 202)
@@ -326,7 +327,7 @@ func TestAnalyze_EmptyResult_NoSideEffects(t *testing.T) {
 	a := newFakeAnalyzer("analyzer1").withResult(analyzer.Result{})
 	c := New(a)
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter1)
 
@@ -350,7 +351,7 @@ func TestAnalyze_NoAnalyzers_NoError(t *testing.T) {
 
 	c := New()
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter)
 
@@ -366,7 +367,7 @@ func TestAnalyze_AllAnalyzersFinish_LeavesEmptySet(t *testing.T) {
 	a2 := newFakeAnalyzer("analyzer2").withResult(analyzer.Finished())
 	c := New(a1, a2)
 
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
 	err := c.Analyze(log, inter1)
 

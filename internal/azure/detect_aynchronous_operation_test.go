@@ -7,6 +7,7 @@ import (
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"
+	"github.com/theunrepentantgeek/go-vcr-tidy/internal/must"
 )
 
 const testAsyncOperationURL = "https://management.azure.com/operations/12345"
@@ -27,7 +28,7 @@ func TestDetectAzureAsynchronousOperation_SuccessfulRequestsWith202AndLocationHe
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL(t, "https://management.azure.com/resource")
+			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			locationURL := testAsyncOperationURL
 			detector := NewDetectAzureAsynchronousOperation()
 			log := newTestLogger(t)
@@ -62,7 +63,7 @@ func TestDetectAzureAsynchronousOperation_OtherMethods_DoesNotSpawn(t *testing.T
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL(t, "https://management.azure.com/resource")
+			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			locationURL := testAsyncOperationURL
 			detector := NewDetectAzureAsynchronousOperation()
 			log := newTestLogger(t)
@@ -97,7 +98,7 @@ func TestDetectAzureAsynchronousOperation_Non202StatusCode_DoesNotSpawn(t *testi
 			t.Parallel()
 			g := NewWithT(t)
 
-			baseURL := mustParseURL(t, "https://management.azure.com/resource")
+			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			locationURL := testAsyncOperationURL
 			detector := NewDetectAzureAsynchronousOperation()
 			log := newTestLogger(t)
@@ -117,7 +118,7 @@ func TestDetectAzureAsynchronousOperation_MissingLocationHeader_DoesNotSpawn(t *
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectAzureAsynchronousOperation()
 	log := newTestLogger(t)
 
@@ -133,7 +134,7 @@ func TestDetectAzureAsynchronousOperation_EmptyLocationHeader_DoesNotSpawn(t *te
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectAzureAsynchronousOperation()
 	log := newTestLogger(t)
 
@@ -150,7 +151,7 @@ func TestDetectAzureAsynchronousOperation_InvalidLocationURL_DoesNotSpawn(t *tes
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectAzureAsynchronousOperation()
 	log := newTestLogger(t)
 
@@ -167,7 +168,7 @@ func TestDetectAzureAsynchronousOperation_ValidLocationURL_ParsesCorrectly(t *te
 	t.Parallel()
 	g := NewWithT(t)
 
-	baseURL := mustParseURL(t, "https://management.azure.com/resource")
+	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	locationURL := "https://management.azure.com/subscriptions/abc123/providers/" +
 		"Microsoft.Network/locations/eastus/operations/xyz789"
 	detector := NewDetectAzureAsynchronousOperation()

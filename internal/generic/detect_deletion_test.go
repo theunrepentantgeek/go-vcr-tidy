@@ -8,12 +8,13 @@ import (
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"
+	"github.com/theunrepentantgeek/go-vcr-tidy/internal/must"
 )
 
 func TestDetectDeletion_SuccessfulDELETE_SpawnsMonitor(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	detector := NewDetectDeletion()
 	log := newTestLogger(t)
 
@@ -44,7 +45,7 @@ func TestDetectDeletion_Various2xxDELETEStatusCodes_SpawnsMonitor(t *testing.T) 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
-			baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+			baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 			detector := NewDetectDeletion()
 			log := newTestLogger(t)
 
@@ -77,7 +78,7 @@ func TestDetectDeletion_FailedDELETE_DoesNotSpawn(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
-			baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+			baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 			detector := NewDetectDeletion()
 			log := newTestLogger(t)
 
@@ -109,7 +110,7 @@ func TestDetectDeletion_NonDELETEMethods_DoesNotSpawn(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 			g := NewWithT(t)
-			baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+			baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 			detector := NewDetectDeletion()
 			log := newTestLogger(t)
 
@@ -129,9 +130,9 @@ func TestDetectDeletion_MultipleDELETEs_SpawnsMultipleMonitors(t *testing.T) {
 	log := newTestLogger(t)
 
 	// Different URLs being deleted
-	url1 := mustParseURL(t, "https://api.example.com/resource/123")
-	url2 := mustParseURL(t, "https://api.example.com/resource/456")
-	url3 := mustParseURL(t, "https://api.example.com/other/789")
+	url1 := must.ParseURL(t, "https://api.example.com/resource/123")
+	url2 := must.ParseURL(t, "https://api.example.com/resource/456")
+	url3 := must.ParseURL(t, "https://api.example.com/other/789")
 
 	delete1 := fake.Interaction(url1, http.MethodDelete, 200)
 	delete2 := fake.Interaction(url2, http.MethodDelete, 204)
@@ -158,7 +159,7 @@ func TestDetectDeletion_MultipleDELETEs_SpawnsMultipleMonitors(t *testing.T) {
 func TestDetectDeletion_NeverFinishes(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	detector := NewDetectDeletion()
 	log := newTestLogger(t)
 
@@ -182,7 +183,7 @@ func TestDetectDeletion_NeverFinishes(t *testing.T) {
 func TestDetectDeletion_SpawnedMonitorHasCorrectURL(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	detector := NewDetectDeletion()
 	log := newTestLogger(t)
 
@@ -201,7 +202,7 @@ func TestDetectDeletion_SpawnedMonitorHasCorrectURL(t *testing.T) {
 func TestDetectDeletion_EmptyResult_WhenNoAction(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	baseURL := mustParseURL(t, "https://api.example.com/resource/123")
+	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	detector := NewDetectDeletion()
 	log := newTestLogger(t)
 

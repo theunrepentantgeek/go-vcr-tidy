@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	. "github.com/onsi/gomega"
-)
 
 func mustParseURL(t *testing.T, raw string) *url.URL {
 	t.Helper()
@@ -17,12 +16,14 @@ func mustParseURL(t *testing.T, raw string) *url.URL {
 
 	return parsed
 }
+	"github.com/theunrepentantgeek/go-vcr-tidy/internal/must"
+)
 
 func TestBaseURL_WithQueryAndFragment_StripsQueryAndFragment(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	input := mustParseURL(t, "https://example.com/foo/bar?x=1#section")
+	input := must.ParseURL(t, "https://example.com/foo/bar?x=1#section")
 
 	result := BaseURL(input)
 
@@ -35,7 +36,7 @@ func TestBaseURL_WithDotSegments_CanonicalizesPath(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	input := mustParseURL(t, "https://example.com/foo/../bar/./baz?skip=1#frag")
+	input := must.ParseURL(t, "https://example.com/foo/../bar/./baz?skip=1#frag")
 
 	result := BaseURL(input)
 
@@ -46,8 +47,8 @@ func TestSameBaseURL_DifferingOnlyOnQuery_MatchesOnBase(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	left := mustParseURL(t, "https://example.com/resource?first=1")
-	right := mustParseURL(t, "https://example.com/resource?second=2")
+	left := must.ParseURL(t, "https://example.com/resource?first=1")
+	right := must.ParseURL(t, "https://example.com/resource?second=2")
 
 	g.Expect(SameBaseURL(left, right)).To(BeTrue())
 }
@@ -56,8 +57,8 @@ func TestSameBaseURL_DifferingOnlyOnFragment_MatchesOnBase(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	left := mustParseURL(t, "https://example.com/resource#part1")
-	right := mustParseURL(t, "https://example.com/resource#part2")
+	left := must.ParseURL(t, "https://example.com/resource#part1")
+	right := must.ParseURL(t, "https://example.com/resource#part2")
 
 	g.Expect(SameBaseURL(left, right)).To(BeTrue())
 }
@@ -66,8 +67,8 @@ func TestSameBaseURL_DifferentPaths_DoesNotMatchOnBase(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	left := mustParseURL(t, "https://example.com/alpha")
-	right := mustParseURL(t, "https://example.com/beta")
+	left := must.ParseURL(t, "https://example.com/alpha")
+	right := must.ParseURL(t, "https://example.com/beta")
 
 	g.Expect(SameBaseURL(left, right)).To(BeFalse())
 }
@@ -76,8 +77,8 @@ func TestSameBaseURL_SameCanonicalPaths_MatchesOnBase(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	left := mustParseURL(t, "https://example.com/foo/../bar")
-	right := mustParseURL(t, "https://example.com/bar")
+	left := must.ParseURL(t, "https://example.com/foo/../bar")
+	right := must.ParseURL(t, "https://example.com/bar")
 
 	g.Expect(SameBaseURL(left, right)).To(BeTrue())
 }
@@ -86,8 +87,8 @@ func TestSameBaseURL_IdenticalPaths_MatchesOnBase(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
-	left := mustParseURL(t, "https://example.com/foo/bar")
-	right := mustParseURL(t, "https://example.com/foo/bar")
+	left := must.ParseURL(t, "https://example.com/foo/bar")
+	right := must.ParseURL(t, "https://example.com/foo/bar")
 
 	g.Expect(SameBaseURL(left, right)).To(BeTrue())
 }
