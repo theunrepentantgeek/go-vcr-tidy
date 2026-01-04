@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// Entry point for the application.
-	var cli cmd.CLI
+	var cli cmd.CleanCommand
 
 	ctx := kong.Parse(&cli,
 		kong.UsageOnError())

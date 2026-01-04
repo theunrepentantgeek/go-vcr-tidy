@@ -10,8 +10,9 @@ import (
 )
 
 type CleanCommand struct {
-	Globs []string        `arg:""   help:"Paths to go-vcr cassette files to clean. Globbing allowed." type:"file"`
-	Clean CleaningOptions `embed:"" prefix:"clean."`
+	Verbose bool            `help:"Enable verbose logging." short:"v"`
+	Globs   []string        `arg:""   help:"Paths to go-vcr cassette files to clean. Globbing allowed." type:"file"`
+	Clean   CleaningOptions `embed:"" prefix:"clean."`
 }
 
 // Run executes the clean command for each provided path.
