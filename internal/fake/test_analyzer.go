@@ -15,8 +15,8 @@ type TestAnalyzer struct {
 	LastInteraction interaction.Interface
 }
 
-// NewTestAnalyzer creates a new TestAnalyzer with the given name.
-func NewTestAnalyzer(name string) *TestAnalyzer {
+// Analyzer creates a new TestAnalyzer with the given name.
+func Analyzer(name string) *TestAnalyzer {
 	return &TestAnalyzer{
 		name: name,
 		analyzeFunc: func(logr.Logger, interaction.Interface) (analyzer.Result, error) {
