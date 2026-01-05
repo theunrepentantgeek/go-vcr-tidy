@@ -1,4 +1,4 @@
-package cleaner
+package fake
 
 import (
 	"github.com/go-logr/logr"
@@ -7,16 +7,17 @@ import (
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
 )
 
-// fakeAnalyzer is a mock analyzer for testing purposes.
-type fakeAnalyzer struct {
+// TestAnalyzer is a mock analyzer for testing purposes.
+type TestAnalyzer struct {
 	name            string
 	analyzeFunc     func(logr.Logger, interaction.Interface) (analyzer.Result, error)
-	callCount       int
-	lastInteraction interaction.Interface
+	CallCount       int
+	LastInteraction interaction.Interface
 }
 
-func newFakeAnalyzer(name string) *fakeAnalyzer {
-	return &fakeAnalyzer{
+// Analyzer creates a new TestAnalyzer with the given name.
+func Analyzer(name string) *TestAnalyzer {
+	return &TestAnalyzer{
 		name: name,
 		analyzeFunc: func(logr.Logger, interaction.Interface) (analyzer.Result, error) {
 			return analyzer.Result{}, nil
@@ -24,14 +25,16 @@ func newFakeAnalyzer(name string) *fakeAnalyzer {
 	}
 }
 
-func (f *fakeAnalyzer) Analyze(log logr.Logger, inter interaction.Interface) (analyzer.Result, error) {
-	f.callCount++
-	f.lastInteraction = inter
+// Analyze processes an interaction and tracks call count and last interaction.
+func (f *TestAnalyzer) Analyze(log logr.Logger, inter interaction.Interface) (analyzer.Result, error) {
+	f.CallCount++
+	f.LastInteraction = inter
 
 	return f.analyzeFunc(log, inter)
 }
 
-func (f *fakeAnalyzer) withResult(result analyzer.Result) *fakeAnalyzer {
+// WithResult configures the analyzer to return the specified result.
+func (f *TestAnalyzer) WithResult(result analyzer.Result) *TestAnalyzer {
 	f.analyzeFunc = func(logr.Logger, interaction.Interface) (analyzer.Result, error) {
 		return result, nil
 	}
@@ -39,7 +42,8 @@ func (f *fakeAnalyzer) withResult(result analyzer.Result) *fakeAnalyzer {
 	return f
 }
 
-func (f *fakeAnalyzer) withResults(results ...analyzer.Result) *fakeAnalyzer {
+// WithResults configures the analyzer to return a sequence of results.
+func (f *TestAnalyzer) WithResults(results ...analyzer.Result) *TestAnalyzer {
 	index := 0
 	f.analyzeFunc = func(logr.Logger, interaction.Interface) (analyzer.Result, error) {
 		if index >= len(results) {
@@ -55,7 +59,8 @@ func (f *fakeAnalyzer) withResults(results ...analyzer.Result) *fakeAnalyzer {
 	return f
 }
 
-func (f *fakeAnalyzer) withError(err error) *fakeAnalyzer {
+// WithError configures the analyzer to return an error.
+func (f *TestAnalyzer) WithError(err error) *TestAnalyzer {
 	f.analyzeFunc = func(logr.Logger, interaction.Interface) (analyzer.Result, error) {
 		return analyzer.Result{}, err
 	}
