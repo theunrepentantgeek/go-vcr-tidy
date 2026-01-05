@@ -28,11 +28,11 @@ Arguments:
 Flags:
   -h, --help                                   Show context-sensitive help.
   -v, --verbose                                Enable verbose logging.
-      --clean.deletes                          Clean delete interactions.
-      --clean.azure.all                        Clean all Azure-related monitoring interactions.
-      --clean.azure.long-running-operations    Clean Azure long-running operation interactions.
-      --clean.azure.resource-modifications     Clean Azure resource modification (PUT/PATCH) monitoring interactions.
-      --clean.azure.resource-deletions         Clean Azure resource deletion monitoring interactions.
+      --clean-deletes                          Clean delete interactions.
+      --clean-azure-all                        Clean all Azure-related monitoring interactions.
+      --clean-azure-long-running-operations    Clean Azure long-running operation interactions.
+      --clean-azure-resource-modifications     Clean Azure resource modification (PUT/PATCH) monitoring interactions.
+      --clean-azure-resource-deletions         Clean Azure resource deletion monitoring interactions.
 ```
 
 On Linux and MacOS, globs should be "double quoted" to prevent the shell from expanding the wildcard.
