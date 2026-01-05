@@ -4,7 +4,7 @@ import "github.com/theunrepentantgeek/go-vcr-tidy/pkg/vcrcleaner"
 
 type CleaningOptions struct {
 	Deletes *bool                `help:"Clean delete interactions."`
-	Azure   AzureCleaningOptions `embed:""                          prefix:"azure."`
+	Azure   AzureCleaningOptions `embed:""                          prefix:"azure-"`
 }
 
 func (opt *CleaningOptions) Options() []vcrcleaner.Option {
