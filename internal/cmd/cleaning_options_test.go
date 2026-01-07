@@ -59,6 +59,7 @@ func TestCleaningOptions_ShouldCleanDeletes(t *testing.T) {
 	t.Parallel()
 
 	cases := map[string]struct {
+		all      *bool
 		deletes  *bool
 		expected bool
 	}{
@@ -73,6 +74,24 @@ func TestCleaningOptions_ShouldCleanDeletes(t *testing.T) {
 		"WithDeletesNil_ReturnsFalse": {
 			expected: false,
 		},
+		"WithAllTrue_ReturnsTrue": {
+			all:      toPtr(true),
+			expected: true,
+		},
+		"WithAllFalse_ReturnsFalse": {
+			all:      toPtr(false),
+			expected: false,
+		},
+		"WithDeletesNilAndAllTrue_ReturnsTrue": {
+			deletes:  nil,
+			all:      toPtr(true),
+			expected: true,
+		},
+		"WithDeletesNilAndAllFalse_ReturnsFalse": {
+			deletes:  nil,
+			all:      toPtr(false),
+			expected: false,
+		},
 	}
 
 	for name, c := range cases {
@@ -84,7 +103,7 @@ func TestCleaningOptions_ShouldCleanDeletes(t *testing.T) {
 				Deletes: c.deletes,
 			}
 
-			result := opt.ShouldCleanDeletes()
+			result := opt.ShouldCleanDeletes(c.all)
 
 			g.Expect(result).To(Equal(c.expected))
 		})
