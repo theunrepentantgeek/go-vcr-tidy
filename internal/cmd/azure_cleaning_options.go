@@ -10,22 +10,26 @@ type AzureCleaningOptions struct {
 	ResourceDeletions      *bool `help:"Clean Azure resource deletion monitoring interactions."`
 }
 
-func (opt *AzureCleaningOptions) Options() []vcrcleaner.Option {
+// Options builds the vcrcleaner options based on the Azure cleaning options.
+// all specifies the general 'All' option from the parent CleaningOptions.
+func (opt *AzureCleaningOptions) Options(
+	all *bool,
+) []vcrcleaner.Option {
 	var result []vcrcleaner.Option
 
-	if opt.ShouldCleanLongRunningOperations() {
+	if opt.ShouldCleanLongRunningOperations(all) {
 		result = append(result, vcrcleaner.ReduceAzureLongRunningOperationPolling())
 	}
 
-	if opt.ShouldCleanResourceModifications() {
+	if opt.ShouldCleanResourceModifications(all) {
 		result = append(result, vcrcleaner.ReduceAzureResourceModificationMonitoring())
 	}
 
-	if opt.ShouldCleanResourceDeletions() {
+	if opt.ShouldCleanResourceDeletions(all) {
 		result = append(result, vcrcleaner.ReduceAzureResourceDeletionMonitoring())
 	}
 
-	if opt.ShouldCleanAsynchronousOperations() {
+	if opt.ShouldCleanAsynchronousOperations(all) {
 		result = append(result, vcrcleaner.ReduceAzureAsynchronousOperationMonitoring())
 	}
 
@@ -34,53 +38,49 @@ func (opt *AzureCleaningOptions) Options() []vcrcleaner.Option {
 
 // ShouldCleanLongRunningOperations indicates whether long-running operation monitoring should be cleaned.
 // More specific options override the general 'All' option.
-func (opt *AzureCleaningOptions) ShouldCleanLongRunningOperations() bool {
-	if opt.LongRunningOperations != nil {
-		return *opt.LongRunningOperations
-	}
-
-	if opt.All != nil {
-		return *opt.All
-	}
-
-	return false
+// all specifies the general 'All' option from the parent CleaningOptions.
+func (opt *AzureCleaningOptions) ShouldCleanLongRunningOperations(all *bool) bool {
+	return opt.coalesce(
+		opt.LongRunningOperations,
+		opt.All,
+		all)
 }
 
 // ShouldCleanResourceModifications indicates whether resource modification monitoring should be cleaned.
 // More specific options override the general 'All' option.
-func (opt *AzureCleaningOptions) ShouldCleanResourceModifications() bool {
-	if opt.ResourceModifications != nil {
-		return *opt.ResourceModifications
-	}
-
-	if opt.All != nil {
-		return *opt.All
-	}
-
-	return false
+// all specifies the general 'All' option from the parent CleaningOptions.
+func (opt *AzureCleaningOptions) ShouldCleanResourceModifications(all *bool) bool {
+	return opt.coalesce(
+		opt.ResourceModifications,
+		opt.All,
+		all)
 }
 
 // ShouldCleanResourceDeletions indicates whether resource deletion monitoring should be cleaned.
 // More specific options override the general 'All' option.
-func (opt *AzureCleaningOptions) ShouldCleanResourceDeletions() bool {
-	if opt.ResourceDeletions != nil {
-		return *opt.ResourceDeletions
-	}
-
-	if opt.All != nil {
-		return *opt.All
-	}
-
-	return false
+// all specifies the general 'All' option from the parent CleaningOptions.
+func (opt *AzureCleaningOptions) ShouldCleanResourceDeletions(all *bool) bool {
+	return opt.coalesce(
+		opt.ResourceDeletions,
+		opt.All,
+		all)
 }
 
-func (opt *AzureCleaningOptions) ShouldCleanAsynchronousOperations() bool {
-	if opt.AsynchronousOperations != nil {
-		return *opt.AsynchronousOperations
-	}
+// ShouldCleanAsynchronousOperations indicates whether asynchronous operation monitoring should be cleaned.
+// More specific options override the general 'All' option.
+// all specifies the general 'All' option from the parent CleaningOptions.
+func (opt *AzureCleaningOptions) ShouldCleanAsynchronousOperations(all *bool) bool {
+	return opt.coalesce(
+		opt.AsynchronousOperations,
+		opt.All,
+		all)
+}
 
-	if opt.All != nil {
-		return *opt.All
+func (*AzureCleaningOptions) coalesce(opts ...*bool) bool {
+	for _, o := range opts {
+		if o != nil {
+			return *o
+		}
 	}
 
 	return false

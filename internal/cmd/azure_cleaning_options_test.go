@@ -12,6 +12,7 @@ func TestAzureCleaningOptions_Options(t *testing.T) {
 
 	cases := map[string]struct {
 		all                    *bool
+		azureAll               *bool
 		asynchronousOperations *bool
 		longRunningOperations  *bool
 		resourceModifications  *bool
@@ -22,11 +23,15 @@ func TestAzureCleaningOptions_Options(t *testing.T) {
 			all:           toPtr(true),
 			expectedCount: 4,
 		},
-		"WithAllSetToFalse_ReturnsNoOptions": {
-			all:           toPtr(false),
+		"WithAzureAllSetToTrue_ReturnsAllOptions": {
+			azureAll:      toPtr(true),
+			expectedCount: 4,
+		},
+		"WithAzureAllSetToFalse_ReturnsNoOptions": {
+			azureAll:      toPtr(false),
 			expectedCount: 0,
 		},
-		"WithAllSetToNil_ReturnsNoOptions": {
+		"WithAzureAllSetToNil_ReturnsNoOptions": {
 			expectedCount: 0,
 		},
 		"WithOnlyLongRunningOperationsSet_ReturnsOneLROOption": {
@@ -60,27 +65,27 @@ func TestAzureCleaningOptions_Options(t *testing.T) {
 			g := NewWithT(t)
 
 			opt := &AzureCleaningOptions{
-				All:                    c.all,
+				All:                    c.azureAll,
 				AsynchronousOperations: c.asynchronousOperations,
 				LongRunningOperations:  c.longRunningOperations,
 				ResourceModifications:  c.resourceModifications,
 				ResourceDeletions:      c.resourceDeletions,
 			}
 
-			result := opt.Options()
+			result := opt.Options(c.all)
 
 			g.Expect(result).To(HaveLen(c.expectedCount))
 		})
 	}
 }
 
-//nolint:dupl // Intentional duplication across similar test methods
 func TestAzureCleaningOptions_ShouldCleanLongRunningOperations(t *testing.T) {
 	t.Parallel()
 
 	cases := map[string]struct {
-		longRunningOperations *bool
 		all                   *bool
+		azureAll              *bool
+		longRunningOperations *bool
 		expected              bool
 	}{
 		"WithLongRunningOperationsTrue_ReturnsTrue": {
@@ -92,11 +97,11 @@ func TestAzureCleaningOptions_ShouldCleanLongRunningOperations(t *testing.T) {
 			expected:              false,
 		},
 		"WithLongRunningOperationsNilAndAllTrue_ReturnsTrue": {
-			all:      toPtr(true),
+			azureAll: toPtr(true),
 			expected: true,
 		},
 		"WithLongRunningOperationsNilAndAllFalse_ReturnsFalse": {
-			all:      toPtr(false),
+			azureAll: toPtr(false),
 			expected: false,
 		},
 		"WithLongRunningOperationsNilAndAllNil_ReturnsFalse": {
@@ -104,12 +109,12 @@ func TestAzureCleaningOptions_ShouldCleanLongRunningOperations(t *testing.T) {
 		},
 		"WithLongRunningOperationsTrueAndAllFalse_ReturnsTrueOverridingAll": {
 			longRunningOperations: toPtr(true),
-			all:                   toPtr(false),
+			azureAll:              toPtr(false),
 			expected:              true,
 		},
 		"WithLongRunningOperationsFalseAndAllTrue_ReturnsFalseOverridingAll": {
 			longRunningOperations: toPtr(false),
-			all:                   toPtr(true),
+			azureAll:              toPtr(true),
 			expected:              false,
 		},
 	}
@@ -121,23 +126,24 @@ func TestAzureCleaningOptions_ShouldCleanLongRunningOperations(t *testing.T) {
 
 			opt := &AzureCleaningOptions{
 				LongRunningOperations: c.longRunningOperations,
-				All:                   c.all,
+				All:                   c.azureAll,
 			}
 
-			result := opt.ShouldCleanLongRunningOperations()
+			result := opt.ShouldCleanLongRunningOperations(c.all)
 
 			g.Expect(result).To(Equal(c.expected))
 		})
 	}
 }
 
-//nolint:dupl // Intentional duplication across similar test methods
+//nolint:dupl,funlen // Intentional duplication & length from test cases
 func TestAzureCleaningOptions_ShouldCleanResourceModifications(t *testing.T) {
 	t.Parallel()
 
 	cases := map[string]struct {
-		resourceModifications *bool
 		all                   *bool
+		azureAll              *bool
+		resourceModifications *bool
 		expected              bool
 	}{
 		"WithResourceModificationsTrue_ReturnsTrue": {
@@ -147,6 +153,14 @@ func TestAzureCleaningOptions_ShouldCleanResourceModifications(t *testing.T) {
 		"WithResourceModificationsFalse_ReturnsFalse": {
 			resourceModifications: toPtr(false),
 			expected:              false,
+		},
+		"WithResourceModificationsNilAndAllAzureTrue_ReturnsTrue": {
+			azureAll: toPtr(true),
+			expected: true,
+		},
+		"WithResourceModificationsNilAndAllAzureFalse_ReturnsFalse": {
+			azureAll: toPtr(false),
+			expected: false,
 		},
 		"WithResourceModificationsNilAndAllTrue_ReturnsTrue": {
 			all:      toPtr(true),
@@ -161,12 +175,12 @@ func TestAzureCleaningOptions_ShouldCleanResourceModifications(t *testing.T) {
 		},
 		"WithResourceModificationsTrueAndAllFalse_ReturnsTrueOverridingAll": {
 			resourceModifications: toPtr(true),
-			all:                   toPtr(false),
+			azureAll:              toPtr(false),
 			expected:              true,
 		},
 		"WithResourceModificationsFalseAndAllTrue_ReturnsFalseOverridingAll": {
 			resourceModifications: toPtr(false),
-			all:                   toPtr(true),
+			azureAll:              toPtr(true),
 			expected:              false,
 		},
 	}
@@ -178,23 +192,24 @@ func TestAzureCleaningOptions_ShouldCleanResourceModifications(t *testing.T) {
 
 			opt := &AzureCleaningOptions{
 				ResourceModifications: c.resourceModifications,
-				All:                   c.all,
+				All:                   c.azureAll,
 			}
 
-			result := opt.ShouldCleanResourceModifications()
+			result := opt.ShouldCleanResourceModifications(c.all)
 
 			g.Expect(result).To(Equal(c.expected))
 		})
 	}
 }
 
-//nolint:dupl // Intentional duplication across similar test methods
+//nolint:dupl,funlen // Intentional duplication & length from test cases
 func TestAzureCleaningOptions_ShouldCleanResourceDeletions(t *testing.T) {
 	t.Parallel()
 
 	cases := map[string]struct {
-		resourceDeletions *bool
 		all               *bool
+		azureAll          *bool
+		resourceDeletions *bool
 		expected          bool
 	}{
 		"WithResourceDeletionsTrue_ReturnsTrue": {
@@ -204,6 +219,14 @@ func TestAzureCleaningOptions_ShouldCleanResourceDeletions(t *testing.T) {
 		"WithResourceDeletionsFalse_ReturnsFalse": {
 			resourceDeletions: toPtr(false),
 			expected:          false,
+		},
+		"WithResourceDeletionsNilAndAzureAllTrue_ReturnsTrue": {
+			azureAll: toPtr(true),
+			expected: true,
+		},
+		"WithResourceDeletionsNilAndAzureAllFalse_ReturnsFalse": {
+			azureAll: toPtr(false),
+			expected: false,
 		},
 		"WithResourceDeletionsNilAndAllTrue_ReturnsTrue": {
 			all:      toPtr(true),
@@ -235,10 +258,10 @@ func TestAzureCleaningOptions_ShouldCleanResourceDeletions(t *testing.T) {
 
 			opt := &AzureCleaningOptions{
 				ResourceDeletions: c.resourceDeletions,
-				All:               c.all,
+				All:               c.azureAll,
 			}
 
-			result := opt.ShouldCleanResourceDeletions()
+			result := opt.ShouldCleanResourceDeletions(c.all)
 
 			g.Expect(result).To(Equal(c.expected))
 		})
