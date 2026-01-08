@@ -11,7 +11,7 @@ type CleaningOptions struct {
 
 func (opt *CleaningOptions) Options() []vcrcleaner.Option {
 	var result []vcrcleaner.Option
-	if opt.ShouldCleanDeletes(opt.All) {
+	if opt.ShouldCleanDeletes() {
 		result = append(result, vcrcleaner.ReduceDeleteMonitoring())
 	}
 
@@ -21,12 +21,10 @@ func (opt *CleaningOptions) Options() []vcrcleaner.Option {
 	return result
 }
 
-func (opt *CleaningOptions) ShouldCleanDeletes(all *bool) bool {
+func (opt *CleaningOptions) ShouldCleanDeletes() bool {
 	return opt.coalesce(
 		opt.Deletes,
-		opt.All,
-		all,
-	)
+		opt.All)
 }
 
 func (*CleaningOptions) coalesce(opts ...*bool) bool {
