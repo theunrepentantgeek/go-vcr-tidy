@@ -267,3 +267,71 @@ func TestAzureCleaningOptions_ShouldCleanResourceDeletions(t *testing.T) {
 		})
 	}
 }
+
+//nolint:funlen // Intentional length due to  test cases
+func TestAzureCleaningOptions_ShouldCleanAsynchronousOperations(t *testing.T) {
+	t.Parallel()
+
+	cases := map[string]struct {
+		all                    *bool
+		azureAll               *bool
+		asynchronousOperations *bool
+		expected               bool
+	}{
+		"WithAsynchronousOperationsTrue_ReturnsTrue": {
+			asynchronousOperations: toPtr(true),
+			expected:               true,
+		},
+		"WithAsynchronousOperationsFalse_ReturnsFalse": {
+			asynchronousOperations: toPtr(false),
+			expected:               false,
+		},
+		"WithAzureAllTrue_ReturnsTrue": {
+			azureAll: toPtr(true),
+			expected: true,
+		},
+		"WithAzureAllFalse_ReturnsFalse": {
+			azureAll: toPtr(false),
+			expected: false,
+		},
+		"WithAllTrue_ReturnsTrue": {
+			all:      toPtr(true),
+			expected: true,
+		},
+		"WithAllFalse_ReturnsFalse": {
+			all:      toPtr(false),
+			expected: false,
+		},
+		"WhenAzureAllTrueAndAsynchronousOperationsFalse_ReturnsAsynchronousOperations": {
+			azureAll:               toPtr(true),
+			asynchronousOperations: toPtr(false),
+			expected:               false,
+		},
+		"WhenAllTrueAndAsynchronousOperationsFalse_ReturnsAsynchronousOperations": {
+			all:                    toPtr(true),
+			asynchronousOperations: toPtr(false),
+			expected:               false,
+		},
+		"WhenAllTrueAndAzureAllFalse_ReturnsAzureAll": {
+			all:      toPtr(true),
+			azureAll: toPtr(false),
+			expected: false,
+		},
+	}
+
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			g := NewWithT(t)
+
+			opt := &AzureCleaningOptions{
+				AsynchronousOperations: c.asynchronousOperations,
+				All:                    c.azureAll,
+			}
+
+			result := opt.ShouldCleanAsynchronousOperations(c.all)
+
+			g.Expect(result).To(Equal(c.expected))
+		})
+	}
+}
