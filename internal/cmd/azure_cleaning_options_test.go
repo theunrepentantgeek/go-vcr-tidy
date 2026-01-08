@@ -286,34 +286,36 @@ func TestAzureCleaningOptions_ShouldCleanAsynchronousOperations(t *testing.T) {
 			asynchronousOperations: toPtr(false),
 			expected:               false,
 		},
-		"WithAsynchronousOperationsNilAndAzureAllTrue_ReturnsTrue": {
+		"WithAzureAllTrue_ReturnsTrue": {
 			azureAll: toPtr(true),
 			expected: true,
 		},
-		"WithAsynchronousOperationsNilAndAzureAllFalse_ReturnsFalse": {
+		"WithAzureAllFalse_ReturnsFalse": {
 			azureAll: toPtr(false),
 			expected: false,
 		},
-		"WithAsynchronousOperationsNilAndAllTrue_ReturnsTrue": {
+		"WithAllTrue_ReturnsTrue": {
 			all:      toPtr(true),
 			expected: true,
 		},
-		"WithAsynchronousOperationsNilAndAllFalse_ReturnsFalse": {
+		"WithAllFalse_ReturnsFalse": {
 			all:      toPtr(false),
 			expected: false,
 		},
-		"WithAsynchronousOperationsNilAndAllNil_ReturnsFalse": {
-			expected: false,
-		},
-		"WithAsynchronousOperationsTrueAndAllFalse_ReturnsTrueOverridingAll": {
-			asynchronousOperations: toPtr(true),
-			all:                    toPtr(false),
-			expected:               true,
-		},
-		"WithAsynchronousOperationsFalseAndAllTrue_ReturnsFalseOverridingAll": {
+		"WhenAzureAllTrueAndAsynchronousOperationsFalse_ReturnsAsynchronousOperations": {
+			azureAll:               toPtr(true),
 			asynchronousOperations: toPtr(false),
-			all:                    toPtr(true),
 			expected:               false,
+		},
+		"WhenAllTrueAndAsynchronousOperationsFalse_ReturnsAsynchronousOperations": {
+			all:                    toPtr(true),
+			asynchronousOperations: toPtr(false),
+			expected:               false,
+		},
+		"WhenAllTrueAndAzureAllFalse_ReturnsAzureAll": {
+			all:      toPtr(true),
+			azureAll: toPtr(false),
+			expected: false,
 		},
 	}
 
