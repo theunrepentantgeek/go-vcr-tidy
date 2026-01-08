@@ -267,3 +267,69 @@ func TestAzureCleaningOptions_ShouldCleanResourceDeletions(t *testing.T) {
 		})
 	}
 }
+
+//nolint:dupl,funlen // Intentional duplication & length from test cases
+func TestAzureCleaningOptions_ShouldCleanAsynchronousOperations(t *testing.T) {
+	t.Parallel()
+
+	cases := map[string]struct {
+		all                    *bool
+		azureAll               *bool
+		asynchronousOperations *bool
+		expected               bool
+	}{
+		"WithAsynchronousOperationsTrue_ReturnsTrue": {
+			asynchronousOperations: toPtr(true),
+			expected:               true,
+		},
+		"WithAsynchronousOperationsFalse_ReturnsFalse": {
+			asynchronousOperations: toPtr(false),
+			expected:               false,
+		},
+		"WithAsynchronousOperationsNilAndAzureAllTrue_ReturnsTrue": {
+			azureAll: toPtr(true),
+			expected: true,
+		},
+		"WithAsynchronousOperationsNilAndAzureAllFalse_ReturnsFalse": {
+			azureAll: toPtr(false),
+			expected: false,
+		},
+		"WithAsynchronousOperationsNilAndAllTrue_ReturnsTrue": {
+			all:      toPtr(true),
+			expected: true,
+		},
+		"WithAsynchronousOperationsNilAndAllFalse_ReturnsFalse": {
+			all:      toPtr(false),
+			expected: false,
+		},
+		"WithAsynchronousOperationsNilAndAllNil_ReturnsFalse": {
+			expected: false,
+		},
+		"WithAsynchronousOperationsTrueAndAllFalse_ReturnsTrueOverridingAll": {
+			asynchronousOperations: toPtr(true),
+			all:                    toPtr(false),
+			expected:               true,
+		},
+		"WithAsynchronousOperationsFalseAndAllTrue_ReturnsFalseOverridingAll": {
+			asynchronousOperations: toPtr(false),
+			all:                    toPtr(true),
+			expected:               false,
+		},
+	}
+
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			g := NewWithT(t)
+
+			opt := &AzureCleaningOptions{
+				AsynchronousOperations: c.asynchronousOperations,
+				All:                    c.azureAll,
+			}
+
+			result := opt.ShouldCleanAsynchronousOperations(c.all)
+
+			g.Expect(result).To(Equal(c.expected))
+		})
+	}
+}
