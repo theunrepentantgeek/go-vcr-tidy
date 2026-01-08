@@ -129,7 +129,7 @@ func TestAzureCleaningOptions_ShouldCleanLongRunningOperations(t *testing.T) {
 				All:                   c.azureAll,
 			}
 
-			result := opt.ShouldCleanLongRunningOperations(nil)
+			result := opt.ShouldCleanLongRunningOperations(c.all)
 
 			g.Expect(result).To(Equal(c.expected))
 		})
