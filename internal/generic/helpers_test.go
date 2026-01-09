@@ -2,9 +2,9 @@ package generic
 
 import (
 	"log/slog"
-	"os"
 	"testing"
 
+	"github.com/neilotoole/slogt"
 	. "github.com/onsi/gomega"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -51,5 +51,5 @@ func runAnalyzer(
 func newTestLogger(t *testing.T) *slog.Logger {
 	t.Helper()
 
-	return slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	return slogt.New(t)
 }

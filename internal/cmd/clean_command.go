@@ -55,7 +55,7 @@ func (c *CleanCommand) cleanFilesByGlob(ctx *Context, glob string) error {
 
 	if len(paths) > 1 {
 		// Multiple matches, log details
-		ctx.Log.Debug(
+		ctx.Log.Info(
 			"Found cassettes to clean",
 			"count", len(paths),
 			"glob", glob)

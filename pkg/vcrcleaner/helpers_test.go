@@ -2,11 +2,11 @@ package vcrcleaner
 
 import (
 	"log/slog"
-	"os"
 	"strconv"
 	"strings"
 	"testing"
 
+	"github.com/neilotoole/slogt"
 	"github.com/sergi/go-diff/diffmatchpatch"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 
@@ -76,5 +76,5 @@ func commonURLPrefix(cas *cassette.Cassette) string {
 func newTestLogger(t *testing.T) *slog.Logger {
 	t.Helper()
 
-	return slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	return slogt.New(t)
 }

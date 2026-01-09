@@ -7,8 +7,20 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/neilotoole/slogt"
 	. "github.com/onsi/gomega"
 )
+
+/*
+ * Helper functions for testing
+ */
+
+// newTestLogger creates a test logger for the given test.
+func newTestLogger(t *testing.T) *slog.Logger {
+	t.Helper()
+
+	return slogt.New(t)
+}
 
 // buildOptions Tests
 
@@ -111,7 +123,7 @@ func TestCleanGlob_WithNoMatchingFiles_LogsAndSucceeds(t *testing.T) {
 	}
 
 	ctx := &Context{
-		Log: slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})),
+		Log: newTestLogger(t),
 	}
 
 	glob := filepath.Join(tmpDir, "nonexistent-*.yaml")
@@ -133,7 +145,7 @@ func TestCleanGlob_WithSingleMatchingFile_CleansFile(t *testing.T) {
 	}
 
 	ctx := &Context{
-		Log: slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})),
+		Log: newTestLogger(t),
 	}
 
 	glob := filepath.Join(tmpDir, "test.yaml")
@@ -163,7 +175,7 @@ func TestCleanGlob_WithMultipleMatchingFiles_CleansAllFiles(t *testing.T) {
 	}
 
 	ctx := &Context{
-		Log: slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})),
+		Log: newTestLogger(t),
 	}
 
 	glob := filepath.Join(tmpDir, "test*.yaml")
@@ -183,7 +195,7 @@ func TestCleanGlob_WithInvalidGlobPattern_ReturnsError(t *testing.T) {
 	}
 
 	ctx := &Context{
-		Log: slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})),
+		Log: newTestLogger(t),
 	}
 
 	glob := filepath.Join(t.TempDir(), "test[.yaml")
@@ -207,7 +219,7 @@ func TestCleanPath_WithValidCassette_CleansSuccessfully(t *testing.T) {
 	}
 
 	ctx := &Context{
-		Log: slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})),
+		Log: newTestLogger(t),
 	}
 
 	err := c.cleanFile(ctx, cassettePath)
@@ -225,7 +237,7 @@ func TestCleanPath_WithNoOptionsSet_ReturnsError(t *testing.T) {
 	c := &CleanCommand{}
 
 	ctx := &Context{
-		Log: slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})),
+		Log: newTestLogger(t),
 	}
 
 	err := c.cleanFile(ctx, cassettePath)
@@ -244,7 +256,7 @@ func TestCleanPath_WithNonexistentFile_ReturnsError(t *testing.T) {
 	}
 
 	ctx := &Context{
-		Log: slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})),
+		Log: newTestLogger(t),
 	}
 
 	err := c.cleanFile(ctx, filepath.Join(t.TempDir(), "nonexistent", "path", "cassette.yaml"))
@@ -269,7 +281,7 @@ func TestRun_WithSingleGlob_ProcessesSuccessfully(t *testing.T) {
 	}
 
 	ctx := &Context{
-		Log: slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})),
+		Log: newTestLogger(t),
 	}
 
 	err := c.Run(ctx)
@@ -298,7 +310,7 @@ func TestRun_WithMultipleGlobs_ProcessesAllSuccessfully(t *testing.T) {
 	}
 
 	ctx := &Context{
-		Log: slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})),
+		Log: newTestLogger(t),
 	}
 
 	err := c.Run(ctx)
@@ -315,7 +327,7 @@ func TestRun_WithNoGlobs_SucceedsWithoutProcessing(t *testing.T) {
 	}
 
 	ctx := &Context{
-		Log: slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})),
+		Log: newTestLogger(t),
 	}
 
 	err := c.Run(ctx)
@@ -335,7 +347,7 @@ func TestRun_WithErrorInGlob_PropagatesError(t *testing.T) {
 	}
 
 	ctx := &Context{
-		Log: slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})),
+		Log: newTestLogger(t),
 	}
 
 	err := c.Run(ctx)
