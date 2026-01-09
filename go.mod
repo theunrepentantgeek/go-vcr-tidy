@@ -5,6 +5,7 @@ go 1.25.0
 require (
 	github.com/alecthomas/kong v1.13.0
 	github.com/google/uuid v1.6.0
+	github.com/neilotoole/slogt v1.1.0
 	github.com/onsi/gomega v1.38.3
 	github.com/rotisserie/eris v0.5.4
 	github.com/sebdah/goldie/v2 v2.8.0
@@ -15,7 +16,6 @@ require (
 
 require (
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/neilotoole/slogt v1.1.0 // indirect
 	github.com/onsi/ginkgo/v2 v2.27.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect

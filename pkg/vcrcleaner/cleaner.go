@@ -1,6 +1,7 @@
 package vcrcleaner
 
 import (
+	"context"
 	"log/slog"
 	"strings"
 	"sync"
@@ -11,6 +12,9 @@ import (
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/cleaner"
 )
+
+// LevelVerbose is a custom log level between INFO and DEBUG.
+const LevelVerbose = slog.Level(-2)
 
 // Cleaner is a tool for cleaning go-vcr recordings.
 type Cleaner struct {
@@ -37,23 +41,31 @@ func New(
 	return result
 }
 
-func (c *Cleaner) CleanFile(path string) error {
+// CleanFile processes a single cassette file, removing unnecessary interactions.
+// The path parameter should be the full path to the cassette file, including the .yaml extension.
+// Returns true if the file was modified and saved, false if no changes were made.
+// Returns an error if the file cannot be processed.
+func (c *Cleaner) CleanFile(
+	path string,
+) (bool, error) {
 	// Remove .yaml from the path if present, as go-vcr expects just the base name
-	path = strings.TrimSuffix(path, ".yaml")
+	cassetteName := strings.TrimSuffix(path, ".yaml")
 
 	// Attempt to load a cassette from the specified path
 	// This might fail if we are given a different kind of YAML file, so we need to handle that gracefully
-	cas, err := cassette.Load(path)
+	cas, err := cassette.Load(cassetteName)
 	if err != nil {
-		return eris.Errorf("Skipping non-cassette file %s", path)
+		c.log.Warn("Skipping non-cassette file", "path", path, "error", err)
+
+		return false, nil
 	}
 
-	c.log.Info("Cleaning cassette", "path", path)
+	c.log.Log(context.Background(), LevelVerbose, "Cleaning cassette", "path", path)
 
 	// Clean the cassette
 	modified, err := c.CleanCassette(cas)
 	if err != nil {
-		return eris.Wrapf(err, "cleaning cassette from %s", path)
+		return false, eris.Wrapf(err, "cleaning cassette from %s", path)
 	}
 
 	// If modified, save the cassette back
@@ -62,15 +74,15 @@ func (c *Cleaner) CleanFile(path string) error {
 
 		err = cas.Save()
 		if err != nil {
-			return eris.Wrapf(err, "saving cleaned cassette to %s", path)
+			return false, eris.Wrapf(err, "saving cleaned cassette to %s", path)
 		}
 
 		c.log.Info("Saved cleaned cassette", "path", path)
 	} else {
-		c.log.Info("No change to cassette", "path", path)
+		c.log.Log(context.Background(), LevelVerbose, "No change to cassette", "path", path)
 	}
 
-	return nil
+	return modified, nil
 }
 
 // CleanCassette processes a cassette, marking interactions for removal as needed.

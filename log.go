@@ -3,15 +3,19 @@ package main
 import (
 	"log/slog"
 	"os"
+
+	"github.com/theunrepentantgeek/go-vcr-tidy/pkg/vcrcleaner"
 )
 
 // CreateLogger creates a standard slog logger.
 //
 //nolint:revive // temporary suppression
-func CreateLogger(verbose bool) *slog.Logger {
+func CreateLogger(verbose bool, debug bool) *slog.Logger {
 	level := slog.LevelInfo
-	if verbose {
+	if debug {
 		level = slog.LevelDebug
+	} else if verbose {
+		level = vcrcleaner.LevelVerbose
 	}
 
 	opts := &slog.HandlerOptions{
