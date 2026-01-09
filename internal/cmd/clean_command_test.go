@@ -405,4 +405,3 @@ func TestRun_TracksFilesModified(t *testing.T) {
 	g.Expect(ctx.FilesScanned).To(Equal(3))
 	g.Expect(ctx.FilesModified).To(Equal(0)) // sample.yaml has no DELETE operations
 }
-

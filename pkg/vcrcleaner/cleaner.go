@@ -1,6 +1,7 @@
 package vcrcleaner
 
 import (
+	"context"
 	"log/slog"
 	"strings"
 	"sync"
@@ -44,7 +45,9 @@ func New(
 // The path parameter should be the full path to the cassette file, including the .yaml extension.
 // Returns true if the file was modified and saved, false if no changes were made.
 // Returns an error if the file cannot be processed.
-func (c *Cleaner) CleanFile(path string) (bool, error) {
+func (c *Cleaner) CleanFile(
+	path string,
+) (bool, error) {
 	// Remove .yaml from the path if present, as go-vcr expects just the base name
 	cassetteName := strings.TrimSuffix(path, ".yaml")
 
@@ -53,10 +56,11 @@ func (c *Cleaner) CleanFile(path string) (bool, error) {
 	cas, err := cassette.Load(cassetteName)
 	if err != nil {
 		c.log.Warn("Skipping non-cassette file", "path", path, "error", err)
+		
 		return false, nil
 	}
 
-	c.log.Log(nil, LevelVerbose, "Cleaning cassette", "path", path)
+	c.log.Log(context.Background(), LevelVerbose, "Cleaning cassette", "path", path)
 
 	// Clean the cassette
 	modified, err := c.CleanCassette(cas)
@@ -75,7 +79,7 @@ func (c *Cleaner) CleanFile(path string) (bool, error) {
 
 		c.log.Info("Saved cleaned cassette", "path", path)
 	} else {
-		c.log.Log(nil, LevelVerbose, "No change to cassette", "path", path)
+		c.log.Log(context.Background(), LevelVerbose, "No change to cassette", "path", path)
 	}
 
 	return modified, nil
