@@ -343,3 +343,64 @@ func TestRun_WithErrorInGlob_PropagatesError(t *testing.T) {
 
 	g.Expect(err).To(MatchError(ContainSubstring("failed to glob path")))
 }
+
+// Statistics Tests
+
+func TestRun_TracksFilesScanned(t *testing.T) {
+	t.Parallel()
+	g := NewWithT(t)
+
+	tmpDir := t.TempDir()
+
+	// Create three test cassettes
+	for i := 1; i <= 3; i++ {
+		createTestRecording(t, g, tmpDir, "test"+strconv.Itoa(i)+".yaml")
+	}
+
+	c := &CleanCommand{
+		Clean: CleaningOptions{
+			Deletes: toPtr(true),
+		},
+		Globs: []string{filepath.Join(tmpDir, "*.yaml")},
+	}
+
+	ctx := &Context{
+		Log: slogt.New(t),
+	}
+
+	err := c.Run(ctx)
+
+	g.Expect(err).ToNot(HaveOccurred())
+	g.Expect(ctx.FilesScanned).To(Equal(3))
+}
+
+func TestRun_TracksFilesModified(t *testing.T) {
+	t.Parallel()
+	g := NewWithT(t)
+
+	tmpDir := t.TempDir()
+
+	// Create test cassettes - the sample.yaml won't be modified by --clean-deletes
+	// since it doesn't contain DELETE operations
+	for i := 1; i <= 3; i++ {
+		createTestRecording(t, g, tmpDir, "test"+strconv.Itoa(i)+".yaml")
+	}
+
+	c := &CleanCommand{
+		Clean: CleaningOptions{
+			Deletes: toPtr(true),
+		},
+		Globs: []string{filepath.Join(tmpDir, "*.yaml")},
+	}
+
+	ctx := &Context{
+		Log: slogt.New(t),
+	}
+
+	err := c.Run(ctx)
+
+	g.Expect(err).ToNot(HaveOccurred())
+	g.Expect(ctx.FilesScanned).To(Equal(3))
+	g.Expect(ctx.FilesModified).To(Equal(0)) // sample.yaml has no DELETE operations
+}
+
