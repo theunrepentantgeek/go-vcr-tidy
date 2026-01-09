@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/neilotoole/slogt"
 	. "github.com/onsi/gomega"
+
+	"github.com/neilotoole/slogt"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"

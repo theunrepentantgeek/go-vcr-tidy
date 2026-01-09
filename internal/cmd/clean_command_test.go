@@ -6,8 +6,9 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/neilotoole/slogt"
 	. "github.com/onsi/gomega"
+
+	"github.com/neilotoole/slogt"
 )
 
 // buildOptions Tests

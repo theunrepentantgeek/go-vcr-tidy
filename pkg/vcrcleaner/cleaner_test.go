@@ -4,9 +4,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/neilotoole/slogt"
 	. "github.com/onsi/gomega"
 
+	"github.com/neilotoole/slogt"
 	"github.com/sebdah/goldie/v2"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 )
