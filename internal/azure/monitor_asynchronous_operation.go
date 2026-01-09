@@ -1,10 +1,9 @@
 package azure
 
 import (
+	"log/slog"
 	"net/http"
 	"net/url"
-
-	"log/slog"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"

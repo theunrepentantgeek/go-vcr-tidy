@@ -268,7 +268,7 @@ func TestAzureCleaningOptions_ShouldCleanResourceDeletions(t *testing.T) {
 	}
 }
 
-//nolint:funlen // Intentional length due to  test cases
+//nolint:funlen // Intentional length due to test cases
 func TestAzureCleaningOptions_ShouldCleanAsynchronousOperations(t *testing.T) {
 	t.Parallel()
 

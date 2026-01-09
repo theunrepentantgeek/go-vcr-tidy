@@ -6,6 +6,8 @@ import (
 )
 
 // CreateLogger creates a standard slog logger.
+//
+//nolint:revive // temporary suppression
 func CreateLogger(verbose bool) *slog.Logger {
 	level := slog.LevelInfo
 	if verbose {
@@ -17,5 +19,6 @@ func CreateLogger(verbose bool) *slog.Logger {
 	}
 
 	handler := slog.NewTextHandler(os.Stdout, opts)
+
 	return slog.New(handler)
 }

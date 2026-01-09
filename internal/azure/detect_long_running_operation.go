@@ -1,10 +1,10 @@
 package azure
 
 import (
+	"log/slog"
 	"net/http"
 	"net/url"
 
-	"log/slog"
 	"github.com/rotisserie/eris"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"

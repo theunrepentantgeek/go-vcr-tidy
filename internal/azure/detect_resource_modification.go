@@ -2,9 +2,8 @@ package azure
 
 import (
 	"encoding/json"
-	"net/http"
-
 	"log/slog"
+	"net/http"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
