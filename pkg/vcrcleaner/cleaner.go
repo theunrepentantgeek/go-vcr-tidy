@@ -56,7 +56,7 @@ func (c *Cleaner) CleanFile(
 	cas, err := cassette.Load(cassetteName)
 	if err != nil {
 		c.log.Warn("Skipping non-cassette file", "path", path, "error", err)
-		
+
 		return false, nil
 	}
 
