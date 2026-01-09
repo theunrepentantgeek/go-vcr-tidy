@@ -11,6 +11,7 @@ import (
 
 type CleanCommand struct {
 	Verbose bool `help:"Enable verbose logging." short:"v"`
+	Debug   bool `help:"Enable debug logging." short:"d"`
 
 	Globs []string        `arg:""   help:"Paths to go-vcr cassette files to clean. Globbing allowed." type:"file"`
 	Clean CleaningOptions `embed:"" prefix:"clean-"`
@@ -24,6 +25,13 @@ func (c *CleanCommand) Run(ctx *Context) error {
 			return err
 		}
 	}
+
+	// Log final summary
+	ctx.Log.Info(
+		"Cleaning complete",
+		"scanned", ctx.FilesScanned,
+		"modified", ctx.FilesModified,
+	)
 
 	return nil
 }
@@ -53,13 +61,11 @@ func (c *CleanCommand) cleanFilesByGlob(ctx *Context, glob string) error {
 		return nil
 	}
 
-	if len(paths) > 1 {
-		// Multiple matches, log details
-		ctx.Log.Info(
-			"Found cassettes to clean",
-			"count", len(paths),
-			"glob", glob)
-	}
+	// Log the number of matching files found for globs
+	ctx.Log.Info(
+		"Found cassettes to clean",
+		"count", len(paths),
+		"glob", glob)
 
 	// Collect errors, allowing us to attempt processing of all files
 	var errs []error
@@ -87,14 +93,20 @@ func (c *CleanCommand) cleanFile(ctx *Context, path string) error {
 		return eris.Wrap(err, "building cleaner options")
 	}
 
+	ctx.FilesScanned++
+
 	cleaner := vcrcleaner.New(
 		ctx.Log,
 		options...,
 	)
 
-	err = cleaner.CleanFile(path)
+	modified, err := cleaner.CleanFile(path)
 	if err != nil {
 		return eris.Wrapf(err, "cleaning cassette file at path %s", path)
+	}
+
+	if modified {
+		ctx.FilesModified++
 	}
 
 	return nil
