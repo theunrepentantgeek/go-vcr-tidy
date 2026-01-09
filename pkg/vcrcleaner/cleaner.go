@@ -40,15 +40,19 @@ func New(
 	return result
 }
 
+// CleanFile processes a single cassette file, removing unnecessary interactions.
+// The path parameter should be the full path to the cassette file, including the .yaml extension.
+// Returns true if the file was modified and saved, false if no changes were made.
+// Returns an error if the file cannot be processed.
 func (c *Cleaner) CleanFile(path string) (bool, error) {
 	// Remove .yaml from the path if present, as go-vcr expects just the base name
-	path = strings.TrimSuffix(path, ".yaml")
+	cassetteName := strings.TrimSuffix(path, ".yaml")
 
 	// Attempt to load a cassette from the specified path
 	// This might fail if we are given a different kind of YAML file, so we need to handle that gracefully
-	cas, err := cassette.Load(path)
+	cas, err := cassette.Load(cassetteName)
 	if err != nil {
-		c.log.Warn("Skipping non-cassette file", "path", path+".yaml", "error", err)
+		c.log.Warn("Skipping non-cassette file", "path", path, "error", err)
 		return false, nil
 	}
 
