@@ -7,7 +7,7 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"github.com/go-logr/logr/testr"
+	"github.com/neilotoole/slogt"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"
@@ -94,7 +94,7 @@ func TestAdd_WhenCalledMultipleTimes_AccumulatesAnalyzers(t *testing.T) {
 func TestAnalyze_SingleAnalyzer_ProcessesInteraction(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	a := fake.Analyzer("analyzer1")
 	c := New(a)
@@ -111,7 +111,7 @@ func TestAnalyze_SingleAnalyzer_ProcessesInteraction(t *testing.T) {
 func TestAnalyze_MultipleAnalyzers_AllProcessInteraction(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	a1 := fake.Analyzer("analyzer1")
 	a2 := fake.Analyzer("analyzer2")
@@ -134,7 +134,7 @@ func TestAnalyze_MultipleAnalyzers_AllProcessInteraction(t *testing.T) {
 func TestAnalyze_WhenAnalyzerReturnsError_PropagatesError(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	expectedErr := errors.New("analysis failed")
 	a := fake.Analyzer("analyzer1").WithError(expectedErr)
@@ -150,7 +150,7 @@ func TestAnalyze_WhenAnalyzerReturnsError_PropagatesError(t *testing.T) {
 func TestAnalyze_WhenAnalyzerFinishes_RemovesFromActiveSet(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	a := fake.Analyzer("analyzer1").WithResult(analyzer.Finished())
 	c := New(a)
@@ -175,7 +175,7 @@ func TestAnalyze_WhenAnalyzerFinishes_RemovesFromActiveSet(t *testing.T) {
 func TestAnalyze_AnalyzerSpawns_AddsNewAnalyzersToActiveSet(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	spawned := fake.Analyzer("spawned")
 	a := fake.Analyzer("analyzer1").WithResult(analyzer.Spawn(spawned))
@@ -192,7 +192,7 @@ func TestAnalyze_AnalyzerSpawns_AddsNewAnalyzersToActiveSet(t *testing.T) {
 func TestAnalyze_AnalyzerExcludesInteractions_TracksExclusions(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
@@ -213,7 +213,7 @@ func TestAnalyze_AnalyzerExcludesInteractions_TracksExclusions(t *testing.T) {
 func TestAnalyze_AnalyzerFinishesAndSpawns_HandlesBoth(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	spawned := fake.Analyzer("spawned")
 	result := analyzer.Result{
@@ -242,7 +242,7 @@ func TestAnalyze_AnalyzerFinishesAndSpawns_HandlesBoth(t *testing.T) {
 func TestAnalyze_MultipleAnalyzersFinish_RemovesAll(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	a1 := fake.Analyzer("analyzer1").WithResult(analyzer.Finished())
 	a2 := fake.Analyzer("analyzer2").WithResult(analyzer.Finished())
@@ -262,7 +262,7 @@ func TestAnalyze_MultipleAnalyzersFinish_RemovesAll(t *testing.T) {
 func TestAnalyze_SpawnedAnalyzerProcessesNextInteraction_Works(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	spawned1 := fake.Analyzer("spawned1")
 	spawned2 := fake.Analyzer("spawned2")
@@ -298,7 +298,7 @@ func TestAnalyze_SpawnedAnalyzerProcessesNextInteraction_Works(t *testing.T) {
 func TestAnalyze_ExclusionFromMultipleAnalyzers_AccumulatesAll(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	inter1 := fake.Interaction(baseURL, http.MethodGet, 200)
@@ -322,7 +322,7 @@ func TestAnalyze_ExclusionFromMultipleAnalyzers_AccumulatesAll(t *testing.T) {
 func TestAnalyze_EmptyResult_NoSideEffects(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	a := fake.Analyzer("analyzer1").WithResult(analyzer.Result{})
 	c := New(a)
@@ -347,7 +347,7 @@ func TestAnalyze_EmptyResult_NoSideEffects(t *testing.T) {
 func TestAnalyze_NoAnalyzers_NoError(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	c := New()
 
@@ -361,7 +361,7 @@ func TestAnalyze_NoAnalyzers_NoError(t *testing.T) {
 func TestAnalyze_AllAnalyzersFinish_LeavesEmptySet(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-	log := testr.NewWithOptions(t, testr.Options{Verbosity: 1})
+	log := slogt.New(t)
 
 	a1 := fake.Analyzer("analyzer1").WithResult(analyzer.Finished())
 	a2 := fake.Analyzer("analyzer2").WithResult(analyzer.Finished())

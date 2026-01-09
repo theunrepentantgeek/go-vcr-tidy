@@ -1,8 +1,8 @@
 package cmd
 
-import "github.com/go-logr/logr"
+import "log/slog"
 
 type Context struct {
-	Verbose bool        // Use verbose logging
-	Log     logr.Logger // Logger to use
+	Verbose bool         // Use verbose logging
+	Log     *slog.Logger // Logger to use
 }

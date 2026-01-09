@@ -2,11 +2,10 @@ package azure
 
 import (
 	"encoding/json"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"strings"
-
-	"github.com/go-logr/logr"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
@@ -40,7 +39,7 @@ func NewMonitorProvisioningState(
 
 // Analyze processes another interaction in the sequence.
 func (m *MonitorProvisioningState) Analyze(
-	log logr.Logger,
+	log *slog.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	reqURL := i.Request().BaseURL()
@@ -79,7 +78,7 @@ func (m *MonitorProvisioningState) Analyze(
 
 // checkProvisioningState examines the response body for provisioningState.
 func (m *MonitorProvisioningState) checkProvisioningState(
-	log logr.Logger,
+	log *slog.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	// Parse the response body to extract provisioningState
@@ -123,7 +122,7 @@ func (m *MonitorProvisioningState) checkProvisioningState(
 
 // stateTransitioned handles the case where provisioningState has moved to a final state.
 func (m *MonitorProvisioningState) stateTransitioned(
-	log logr.Logger,
+	log *slog.Logger,
 ) (analyzer.Result, error) {
 	if len(m.interactions) < 2 {
 		// No intermediate interactions to exclude.

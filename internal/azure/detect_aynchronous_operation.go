@@ -1,10 +1,9 @@
 package azure
 
 import (
+	"log/slog"
 	"net/http"
 	"net/url"
-
-	"github.com/go-logr/logr"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
@@ -27,7 +26,7 @@ func NewDetectAzureAsynchronousOperation() *DetectAzureAsynchronousOperation {
 // Analyze processes another interaction in the sequence.
 // interaction is the interaction to analyze.
 func (*DetectAzureAsynchronousOperation) Analyze(
-	log logr.Logger,
+	log *slog.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	// Check if the interaction is a PUT, POST, or DELETE

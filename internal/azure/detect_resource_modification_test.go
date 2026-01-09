@@ -6,6 +6,8 @@ import (
 
 	. "github.com/onsi/gomega"
 
+	"github.com/neilotoole/slogt"
+
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/must"
@@ -17,7 +19,7 @@ func TestDetectResourceModification_SuccessfulPUT_SpawnsMonitor(t *testing.T) {
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	putInteraction := createAzureResourceInteraction(baseURL, http.MethodPut, 200, "Creating")
 	result, err := detector.Analyze(log, putInteraction)
@@ -36,7 +38,7 @@ func TestDetectResourceModification_SuccessfulPATCH_SpawnsMonitor(t *testing.T) 
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	patchInteraction := createAzureResourceInteraction(baseURL, http.MethodPatch, 200, "Updating")
 	result, err := detector.Analyze(log, patchInteraction)
@@ -67,7 +69,7 @@ func TestDetectResourceModification_Various2xxStatusCodes_SpawnsMonitor(t *testi
 
 			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			detector := NewDetectResourceModification()
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			putInteraction := createAzureResourceInteraction(baseURL, http.MethodPut, c.statusCode, "Creating")
 			result, err := detector.Analyze(log, putInteraction)
@@ -96,7 +98,7 @@ func TestDetectResourceModification_FailedRequest_DoesNotSpawn(t *testing.T) {
 
 			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			detector := NewDetectResourceModification()
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			putInteraction := createAzureResourceInteraction(baseURL, http.MethodPut, c.statusCode, "Creating")
 			result, err := detector.Analyze(log, putInteraction)
@@ -127,7 +129,7 @@ func TestDetectResourceModification_OtherMethods_DoesNotSpawn(t *testing.T) {
 
 			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			detector := NewDetectResourceModification()
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			interaction := createAzureResourceInteraction(baseURL, c.method, 200, "Creating")
 			result, err := detector.Analyze(log, interaction)
@@ -144,7 +146,7 @@ func TestDetectResourceModification_InvalidJSON_DoesNotSpawn(t *testing.T) {
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	putInteraction := fake.Interaction(baseURL, http.MethodPut, 200)
 
@@ -160,7 +162,7 @@ func TestDetectResourceModification_MissingProvisioningState_DoesNotSpawn(t *tes
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	putInteraction := createInteractionWithJSON(baseURL, http.MethodPut, 200, `{"properties": {}}`)
 
@@ -176,7 +178,7 @@ func TestDetectResourceModification_NeverFinishes(t *testing.T) {
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	// Process various interactions
 	interactions := []*fake.TestInteraction{
@@ -199,7 +201,7 @@ func TestDetectResourceModification_SpawnsTwoMonitors(t *testing.T) {
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	putInteraction := createAzureResourceInteraction(baseURL, http.MethodPut, 200, "Creating")
 	result, err := detector.Analyze(log, putInteraction)
@@ -236,7 +238,7 @@ func TestDetectResourceModification_MultipleRequests_SpawnsMultipleMonitors(t *t
 	g := NewWithT(t)
 
 	detector := NewDetectResourceModification()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	url1 := must.ParseURL(t, "https://management.azure.com/resource/123")
 	url2 := must.ParseURL(t, "https://management.azure.com/resource/456")
@@ -263,7 +265,7 @@ func TestDetectResourceModification_EmptyResult_WhenNoAction(t *testing.T) {
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceModification()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	getInteraction := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Succeeded")
 	result, err := detector.Analyze(log, getInteraction)

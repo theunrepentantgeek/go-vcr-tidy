@@ -2,9 +2,8 @@ package azure
 
 import (
 	"encoding/json"
+	"log/slog"
 	"net/http"
-
-	"github.com/go-logr/logr"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
@@ -24,7 +23,7 @@ func NewDetectResourceModification() *DetectResourceModification {
 
 // Analyze processes another interaction in the sequence.
 func (*DetectResourceModification) Analyze(
-	log logr.Logger,
+	log *slog.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	// Check if it's a PUT or PATCH with successful status

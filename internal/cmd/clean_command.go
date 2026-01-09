@@ -55,7 +55,7 @@ func (c *CleanCommand) cleanFilesByGlob(ctx *Context, glob string) error {
 
 	if len(paths) > 1 {
 		// Multiple matches, log details
-		ctx.Log.V(1).Info(
+		ctx.Log.Info(
 			"Found cassettes to clean",
 			"count", len(paths),
 			"glob", glob)
@@ -88,7 +88,7 @@ func (c *CleanCommand) cleanFile(ctx *Context, path string) error {
 	}
 
 	cleaner := vcrcleaner.New(
-		ctx.Log.V(1),
+		ctx.Log,
 		options...,
 	)
 

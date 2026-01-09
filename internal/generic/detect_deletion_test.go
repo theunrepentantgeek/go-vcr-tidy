@@ -6,6 +6,8 @@ import (
 
 	. "github.com/onsi/gomega"
 
+	"github.com/neilotoole/slogt"
+
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/fake"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/must"
@@ -16,7 +18,7 @@ func TestDetectDeletion_SuccessfulDELETE_SpawnsMonitor(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	detector := NewDetectDeletion()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	// Successful DELETE should spawn a MonitorDeletion analyzer
 	deleteInteraction := fake.Interaction(baseURL, http.MethodDelete, 200)
@@ -47,7 +49,7 @@ func TestDetectDeletion_Various2xxDELETEStatusCodes_SpawnsMonitor(t *testing.T) 
 			g := NewWithT(t)
 			baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 			detector := NewDetectDeletion()
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			deleteInteraction := fake.Interaction(baseURL, http.MethodDelete, c.statusCode)
 			result, err := detector.Analyze(log, deleteInteraction)
@@ -80,7 +82,7 @@ func TestDetectDeletion_FailedDELETE_DoesNotSpawn(t *testing.T) {
 			g := NewWithT(t)
 			baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 			detector := NewDetectDeletion()
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			deleteInteraction := fake.Interaction(baseURL, http.MethodDelete, c.statusCode)
 			result, err := detector.Analyze(log, deleteInteraction)
@@ -112,7 +114,7 @@ func TestDetectDeletion_NonDELETEMethods_DoesNotSpawn(t *testing.T) {
 			g := NewWithT(t)
 			baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 			detector := NewDetectDeletion()
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			interaction := fake.Interaction(baseURL, c.method, c.statusCode)
 			result, err := detector.Analyze(log, interaction)
@@ -127,7 +129,7 @@ func TestDetectDeletion_MultipleDELETEs_SpawnsMultipleMonitors(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 	detector := NewDetectDeletion()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	// Different URLs being deleted
 	url1 := must.ParseURL(t, "https://api.example.com/resource/123")
@@ -161,7 +163,7 @@ func TestDetectDeletion_NeverFinishes(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	detector := NewDetectDeletion()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	// Process various interactions
 	interactions := []*fake.TestInteraction{
@@ -185,7 +187,7 @@ func TestDetectDeletion_SpawnedMonitorHasCorrectURL(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	detector := NewDetectDeletion()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	deleteInteraction := fake.Interaction(baseURL, http.MethodDelete, 200)
 	result, err := detector.Analyze(log, deleteInteraction)
@@ -204,7 +206,7 @@ func TestDetectDeletion_EmptyResult_WhenNoAction(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	detector := NewDetectDeletion()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	// Non-DELETE interaction
 	getInteraction := fake.Interaction(baseURL, http.MethodGet, 200)

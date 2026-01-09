@@ -3,10 +3,7 @@ package vcrcleaner
 import (
 	"strconv"
 	"strings"
-	"testing"
 
-	"github.com/go-logr/logr"
-	"github.com/go-logr/logr/testr"
 	"github.com/sergi/go-diff/diffmatchpatch"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
 
@@ -70,11 +67,4 @@ func commonURLPrefix(cas *cassette.Cassette) string {
 	}
 
 	return prefix
-}
-
-// newTestLogger creates a test logger for the given test.
-func newTestLogger(t *testing.T) logr.Logger {
-	t.Helper()
-
-	return testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 }

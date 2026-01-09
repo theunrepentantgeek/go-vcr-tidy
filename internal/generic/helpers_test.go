@@ -1,12 +1,10 @@
 package generic
 
 import (
+	"log/slog"
 	"testing"
 
 	. "github.com/onsi/gomega"
-
-	"github.com/go-logr/logr"
-	"github.com/go-logr/logr/testr"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
@@ -23,7 +21,7 @@ import (
 // interactions are the interactions to feed to the analyzer.
 func runAnalyzer(
 	t *testing.T,
-	log logr.Logger,
+	log *slog.Logger,
 	a analyzer.Interface,
 	interactions ...interaction.Interface,
 ) analyzer.Result {
@@ -46,11 +44,4 @@ func runAnalyzer(
 	}
 
 	return result
-}
-
-// newTestLogger creates a test logger for the given test.
-func newTestLogger(t *testing.T) logr.Logger {
-	t.Helper()
-
-	return testr.NewWithOptions(t, testr.Options{Verbosity: 1})
 }

@@ -1,9 +1,8 @@
 package generic
 
 import (
+	"log/slog"
 	"net/http"
-
-	"github.com/go-logr/logr"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
@@ -24,7 +23,7 @@ func NewDetectDeletion() *DetectDeletion {
 // Analyze processes another interaction in the sequence.
 // interaction is the interaction to analyze.
 func (*DetectDeletion) Analyze(
-	log logr.Logger,
+	log *slog.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	reqURL := i.Request().BaseURL()

@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/alecthomas/kong"
-	"github.com/go-logr/zerologr"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/cmd"
 )
@@ -14,13 +13,9 @@ func main() {
 	ctx := kong.Parse(&cli,
 		kong.UsageOnError())
 
-	if cli.Verbose {
-		zerologr.SetMaxV(4)
-	}
-
 	cmdCtx := &cmd.Context{
 		Verbose: cli.Verbose,
-		Log:     CreateLogger(),
+		Log:     CreateLogger(cli.Verbose),
 	}
 
 	err := ctx.Run(cmdCtx)
