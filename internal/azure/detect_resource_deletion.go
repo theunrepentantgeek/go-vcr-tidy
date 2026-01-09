@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/go-logr/logr"
+	"log/slog"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
@@ -24,7 +24,7 @@ func NewDetectResourceDeletion() *DetectResourceDeletion {
 
 // Analyze processes another interaction in the sequence.
 func (*DetectResourceDeletion) Analyze(
-	log logr.Logger,
+	log *slog.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	// Check if it's a DELETE with successful status

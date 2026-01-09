@@ -1,7 +1,7 @@
 package analyzer
 
 import (
-	"github.com/go-logr/logr"
+	"log/slog"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
 )
@@ -16,5 +16,5 @@ import (
 // possible.
 type Interface interface {
 	// Analyze processes another in a series of interactions.
-	Analyze(log logr.Logger, i interaction.Interface) (Result, error)
+	Analyze(log *slog.Logger, i interaction.Interface) (Result, error)
 }

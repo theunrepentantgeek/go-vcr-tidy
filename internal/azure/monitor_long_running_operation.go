@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/go-logr/logr"
+	"log/slog"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
@@ -33,7 +33,7 @@ func NewMonitorAzureLongRunningOperation(
 
 // Analyze processes another interaction in the sequence.
 func (m *MonitorAzureLongRunningOperation) Analyze(
-	log logr.Logger,
+	log *slog.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	// Check if the interaction is for the operation URL

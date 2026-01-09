@@ -1,10 +1,10 @@
 package vcrcleaner
 
 import (
+	"log/slog"
 	"strings"
 	"sync"
 
-	"github.com/go-logr/logr"
 	"github.com/rotisserie/eris"
 	"go.yaml.in/yaml/v3"
 	"gopkg.in/dnaeon/go-vcr.v4/pkg/cassette"
@@ -16,12 +16,12 @@ import (
 type Cleaner struct {
 	core    *cleaner.Cleaner
 	mapping map[int]*vcrInteraction
-	log     logr.Logger
+	log     *slog.Logger
 	padlock sync.Mutex
 }
 
 func New(
-	log logr.Logger,
+	log *slog.Logger,
 	options ...Option,
 ) *Cleaner {
 	result := &Cleaner{

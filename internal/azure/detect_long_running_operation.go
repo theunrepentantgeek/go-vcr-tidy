@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/go-logr/logr"
+	"log/slog"
 	"github.com/rotisserie/eris"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -28,7 +28,7 @@ func NewDetectAzureLongRunningOperation() *DetectAzureLongRunningOperation {
 // Analyze processes another interaction in the sequence.
 // interaction is the interaction to analyze.
 func (*DetectAzureLongRunningOperation) Analyze(
-	log logr.Logger,
+	log *slog.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	// Check if the interaction is a PUT, POST, or DELETE

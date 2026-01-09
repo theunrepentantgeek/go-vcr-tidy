@@ -1,29 +1,21 @@
 package main
 
 import (
+	"log/slog"
 	"os"
-
-	"github.com/go-logr/logr"
-	"github.com/go-logr/zerologr"
-	"github.com/rs/zerolog"
 )
 
-// CreateLogger uses zerolog to provide logging.
-func CreateLogger() logr.Logger {
-	output := zerolog.ConsoleWriter{
-		Out:        os.Stdout,
-		TimeFormat: "15:04:05.999",
+// CreateLogger creates a standard slog logger.
+func CreateLogger(verbose bool) *slog.Logger {
+	level := slog.LevelInfo
+	if verbose {
+		level = slog.LevelDebug
 	}
 
-	zl := zerolog.New(output).
-		With().Timestamp().
-		Logger()
+	opts := &slog.HandlerOptions{
+		Level: level,
+	}
 
-	zerologr.SetMaxV(0)
-
-	// Use standard interface for logging
-	zerologr.VerbosityFieldName = "" // Don't include verbosity in output
-	log := zerologr.New(&zl)
-
-	return log
+	handler := slog.NewTextHandler(os.Stdout, opts)
+	return slog.New(handler)
 }

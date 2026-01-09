@@ -1,10 +1,10 @@
 package cleaner
 
 import (
+	"log/slog"
 	"maps"
 	"sync"
 
-	"github.com/go-logr/logr"
 	"github.com/google/uuid"
 	"github.com/rotisserie/eris"
 
@@ -44,7 +44,7 @@ func (c *Cleaner) AddAnalyzers(analyzers ...analyzer.Interface) {
 
 // Analyze processes an interaction through all active analyzers, handling spawning and finishing as needed.
 func (c *Cleaner) Analyze(
-	log logr.Logger,
+	log *slog.Logger,
 	i interaction.Interface,
 ) error {
 	var (

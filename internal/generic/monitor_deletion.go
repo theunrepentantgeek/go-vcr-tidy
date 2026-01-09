@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/go-logr/logr"
+	"log/slog"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
@@ -39,7 +39,7 @@ func NewMonitorDeletion(
 //
 //nolint:cyclomatic // Complexity is acceptable for this method
 func (m *MonitorDeletion) Analyze(
-	log logr.Logger,
+	log *slog.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	reqURL := i.Request().BaseURL()
@@ -85,7 +85,7 @@ func (m *MonitorDeletion) Analyze(
 
 // deletionConfirmed handles the confirmation of deletion via a 404 GET response.
 func (m *MonitorDeletion) deletionConfirmed(
-	log logr.Logger,
+	log *slog.Logger,
 ) (analyzer.Result, error) {
 	if len(m.interactions) < 2 {
 		// No intermediate interactions to exclude.

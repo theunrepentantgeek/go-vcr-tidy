@@ -1,7 +1,7 @@
 package fake
 
 import (
-	"github.com/go-logr/logr"
+	"log/slog"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/interaction"
@@ -10,7 +10,7 @@ import (
 // TestAnalyzer is a mock analyzer for testing purposes.
 type TestAnalyzer struct {
 	name            string
-	analyzeFunc     func(logr.Logger, interaction.Interface) (analyzer.Result, error)
+	analyzeFunc     func(*slog.Logger, interaction.Interface) (analyzer.Result, error)
 	CallCount       int
 	LastInteraction interaction.Interface
 }
@@ -19,14 +19,14 @@ type TestAnalyzer struct {
 func Analyzer(name string) *TestAnalyzer {
 	return &TestAnalyzer{
 		name: name,
-		analyzeFunc: func(logr.Logger, interaction.Interface) (analyzer.Result, error) {
+		analyzeFunc: func(*slog.Logger, interaction.Interface) (analyzer.Result, error) {
 			return analyzer.Result{}, nil
 		},
 	}
 }
 
 // Analyze processes an interaction and tracks call count and last interaction.
-func (f *TestAnalyzer) Analyze(log logr.Logger, inter interaction.Interface) (analyzer.Result, error) {
+func (f *TestAnalyzer) Analyze(log *slog.Logger, inter interaction.Interface) (analyzer.Result, error) {
 	f.CallCount++
 	f.LastInteraction = inter
 
@@ -35,7 +35,7 @@ func (f *TestAnalyzer) Analyze(log logr.Logger, inter interaction.Interface) (an
 
 // WithResult configures the analyzer to return the specified result.
 func (f *TestAnalyzer) WithResult(result analyzer.Result) *TestAnalyzer {
-	f.analyzeFunc = func(logr.Logger, interaction.Interface) (analyzer.Result, error) {
+	f.analyzeFunc = func(*slog.Logger, interaction.Interface) (analyzer.Result, error) {
 		return result, nil
 	}
 
@@ -45,7 +45,7 @@ func (f *TestAnalyzer) WithResult(result analyzer.Result) *TestAnalyzer {
 // WithResults configures the analyzer to return a sequence of results.
 func (f *TestAnalyzer) WithResults(results ...analyzer.Result) *TestAnalyzer {
 	index := 0
-	f.analyzeFunc = func(logr.Logger, interaction.Interface) (analyzer.Result, error) {
+	f.analyzeFunc = func(*slog.Logger, interaction.Interface) (analyzer.Result, error) {
 		if index >= len(results) {
 			return results[len(results)-1], nil
 		}
@@ -61,7 +61,7 @@ func (f *TestAnalyzer) WithResults(results ...analyzer.Result) *TestAnalyzer {
 
 // WithError configures the analyzer to return an error.
 func (f *TestAnalyzer) WithError(err error) *TestAnalyzer {
-	f.analyzeFunc = func(logr.Logger, interaction.Interface) (analyzer.Result, error) {
+	f.analyzeFunc = func(*slog.Logger, interaction.Interface) (analyzer.Result, error) {
 		return analyzer.Result{}, err
 	}
 
