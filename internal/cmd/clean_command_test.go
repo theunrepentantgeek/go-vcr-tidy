@@ -234,7 +234,7 @@ func TestCleanPath_WithNoOptionsSet_ReturnsError(t *testing.T) {
 	g.Expect(err).To(MatchError(ContainSubstring("building cleaner options")))
 }
 
-func TestCleanPath_WithNonexistentFile_ReturnsError(t *testing.T) {
+func TestCleanPath_WithNonexistentFile_SkipsFile(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
@@ -250,7 +250,9 @@ func TestCleanPath_WithNonexistentFile_ReturnsError(t *testing.T) {
 
 	err := c.cleanFile(ctx, filepath.Join(t.TempDir(), "nonexistent", "path", "cassette.yaml"))
 
-	g.Expect(err).To(MatchError(ContainSubstring("cleaning cassette file")))
+	g.Expect(err).ToNot(HaveOccurred())
+	g.Expect(ctx.FilesScanned).To(Equal(1))
+	g.Expect(ctx.FilesModified).To(Equal(0))
 }
 
 // Run Tests
@@ -353,8 +355,8 @@ func TestRun_TracksFilesScanned(t *testing.T) {
 	tmpDir := t.TempDir()
 
 	// Create three test cassettes
-	for i := 1; i <= 3; i++ {
-		createTestRecording(t, g, tmpDir, "test"+strconv.Itoa(i)+".yaml")
+	for i := range 3 {
+		createTestRecording(t, g, tmpDir, "test"+strconv.Itoa(i+1)+".yaml")
 	}
 
 	c := &CleanCommand{
@@ -382,8 +384,8 @@ func TestRun_TracksFilesModified(t *testing.T) {
 
 	// Create test cassettes - the sample.yaml won't be modified by --clean-deletes
 	// since it doesn't contain DELETE operations
-	for i := 1; i <= 3; i++ {
-		createTestRecording(t, g, tmpDir, "test"+strconv.Itoa(i)+".yaml")
+	for i := range 3 {
+		createTestRecording(t, g, tmpDir, "test"+strconv.Itoa(i+1)+".yaml")
 	}
 
 	c := &CleanCommand{
