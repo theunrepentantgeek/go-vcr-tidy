@@ -3,12 +3,9 @@ package main
 import (
 	"log/slog"
 	"os"
-)
 
-// LevelVerbose is a custom log level between INFO and DEBUG
-// It is used to log additional information that is more detailed than INFO
-// but not as detailed as DEBUG.
-const LevelVerbose = slog.Level(-2)
+	"github.com/theunrepentantgeek/go-vcr-tidy/pkg/vcrcleaner"
+)
 
 // CreateLogger creates a standard slog logger.
 //
@@ -18,7 +15,7 @@ func CreateLogger(verbose bool, debug bool) *slog.Logger {
 	if debug {
 		level = slog.LevelDebug
 	} else if verbose {
-		level = LevelVerbose
+		level = vcrcleaner.LevelVerbose
 	}
 
 	opts := &slog.HandlerOptions{
