@@ -6,7 +6,6 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/neilotoole/slogt"
 	. "github.com/onsi/gomega"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -48,13 +47,6 @@ func runAnalyzer(
 	}
 
 	return result
-}
-
-// newTestLogger creates a test logger for the given test.
-func newTestLogger(t *testing.T) *slog.Logger {
-	t.Helper()
-
-	return slogt.New(t)
 }
 
 // createAzureResourceInteraction creates a fake interaction with Azure resource JSON.

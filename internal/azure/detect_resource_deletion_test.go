@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/neilotoole/slogt"
 	. "github.com/onsi/gomega"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -17,7 +18,7 @@ func TestDetectResourceDeletion_SuccessfulDELETE_SpawnsMonitor(t *testing.T) {
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceDeletion()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	deleteInteraction := createAzureResourceInteraction(baseURL, http.MethodDelete, 200, "Deleting")
 	result, err := detector.Analyze(log, deleteInteraction)
@@ -47,7 +48,7 @@ func TestDetectResourceDeletion_Various2xxStatusCodes_SpawnsMonitor(t *testing.T
 
 			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			detector := NewDetectResourceDeletion()
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			deleteInteraction := createAzureResourceInteraction(baseURL, http.MethodDelete, c.statusCode, "Deleting")
 			result, err := detector.Analyze(log, deleteInteraction)
@@ -76,7 +77,7 @@ func TestDetectResourceDeletion_FailedDELETE_DoesNotSpawn(t *testing.T) {
 
 			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			detector := NewDetectResourceDeletion()
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			deleteInteraction := createAzureResourceInteraction(baseURL, http.MethodDelete, c.statusCode, "Deleting")
 			result, err := detector.Analyze(log, deleteInteraction)
@@ -107,7 +108,7 @@ func TestDetectResourceDeletion_OtherMethods_DoesNotSpawn(t *testing.T) {
 
 			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			detector := NewDetectResourceDeletion()
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			interaction := createAzureResourceInteraction(baseURL, c.method, 200, "Deleting")
 			result, err := detector.Analyze(log, interaction)
@@ -124,7 +125,7 @@ func TestDetectResourceDeletion_InvalidJSON_DoesNotSpawn(t *testing.T) {
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceDeletion()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	deleteInteraction := fake.Interaction(baseURL, http.MethodDelete, 200)
 
@@ -140,7 +141,7 @@ func TestDetectResourceDeletion_MissingProvisioningState_DoesNotSpawn(t *testing
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceDeletion()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	deleteInteraction := createInteractionWithJSON(baseURL, http.MethodDelete, 200, `{"properties": {}}`)
 
@@ -156,7 +157,7 @@ func TestDetectResourceDeletion_NeverFinishes(t *testing.T) {
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceDeletion()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	// Process various interactions
 	interactions := []*fake.TestInteraction{
@@ -178,7 +179,7 @@ func TestDetectResourceDeletion_SpawnedMonitorHasCorrectState(t *testing.T) {
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceDeletion()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	deleteInteraction := createAzureResourceInteraction(baseURL, http.MethodDelete, 200, "Deleting")
 	result, err := detector.Analyze(log, deleteInteraction)
@@ -198,7 +199,7 @@ func TestDetectResourceDeletion_MultipleDELETEs_SpawnsMultipleMonitors(t *testin
 	g := NewWithT(t)
 
 	detector := NewDetectResourceDeletion()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	url1 := must.ParseURL(t, "https://management.azure.com/resource/123")
 	url2 := must.ParseURL(t, "https://management.azure.com/resource/456")
@@ -224,7 +225,7 @@ func TestDetectResourceDeletion_EmptyResult_WhenNoAction(t *testing.T) {
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectResourceDeletion()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	getInteraction := createAzureResourceInteraction(baseURL, http.MethodGet, 200, "Succeeded")
 	result, err := detector.Analyze(log, getInteraction)

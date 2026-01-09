@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/neilotoole/slogt"
 	. "github.com/onsi/gomega"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -18,7 +19,7 @@ func TestMonitorDeletion_SingleGETReturning404_MarksFinished(t *testing.T) {
 	g := NewWithT(t)
 	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	// Single GET returning 404 should finish immediately
 	i := fake.Interaction(baseURL, http.MethodGet, 404)
@@ -36,7 +37,7 @@ func TestMonitorDeletion_TwoGETsThenConfirmation_NothingIsRemoved(t *testing.T) 
 	g := NewWithT(t)
 	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	// Two successful GETs followed by 404
 	get1 := fake.Interaction(baseURL, http.MethodGet, 200)
@@ -56,7 +57,7 @@ func TestMonitorDeletion_ThreeGETsThenConfirmation_MiddleIsRemoved(t *testing.T)
 	g := NewWithT(t)
 	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	// Three successful GETs followed by 404
 	get1 := fake.Interaction(baseURL, http.MethodGet, 200)
@@ -78,7 +79,7 @@ func TestMonitorDeletion_MultipleMiddleGETs_AllMiddleAreRemoved(t *testing.T) {
 
 	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	// Many successful GETs followed by 404
 	interactions := make([]interaction.Interface, 0, 10)
@@ -109,7 +110,7 @@ func TestMonitorDeletion_DifferentURL_Ignored(t *testing.T) {
 	monitoredURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	differentURL := must.ParseURL(t, "https://api.example.com/resource/456")
 	monitor := NewMonitorDeletion(monitoredURL)
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	i := fake.Interaction(differentURL, http.MethodGet, 200)
 
@@ -140,7 +141,7 @@ func TestMonitorDeletion_AbandonsMonitoring(t *testing.T) {
 
 			baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 			monitor := NewMonitorDeletion(baseURL)
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			// Start with some successful GETs
 			// Then a request that should abandon monitoring
@@ -160,7 +161,7 @@ func TestMonitorDeletion_Various2xxStatusCodes_Accumulated(t *testing.T) {
 
 	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	monitor := NewMonitorDeletion(baseURL)
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	// Test various 2xx status codes
 	statusCodes := []int{200, 201, 202, 204, 206}
@@ -191,7 +192,7 @@ func TestMonitorDeletion_URLWithQueryParameters_MonitorsBaseURL(t *testing.T) {
 	baseURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	urlWithParams := must.ParseURL(t, "https://api.example.com/resource/123?param=value")
 	monitor := NewMonitorDeletion(baseURL)
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	// Interaction with query parameters should match base URL
 	i := fake.Interaction(urlWithParams, http.MethodGet, 200)
@@ -208,7 +209,7 @@ func TestMonitorDeletion_EmptyResult_WhenIgnoringInteraction(t *testing.T) {
 	monitoredURL := must.ParseURL(t, "https://api.example.com/resource/123")
 	differentURL := must.ParseURL(t, "https://api.example.com/other")
 	monitor := NewMonitorDeletion(monitoredURL)
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	i := fake.Interaction(differentURL, http.MethodGet, 200)
 	result, err := monitor.Analyze(log, i)

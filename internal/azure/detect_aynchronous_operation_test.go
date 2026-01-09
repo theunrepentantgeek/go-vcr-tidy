@@ -3,6 +3,7 @@ package azure
 import (
 	"testing"
 
+	"github.com/neilotoole/slogt"
 	. "github.com/onsi/gomega"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/analyzer"
@@ -31,7 +32,7 @@ func TestDetectAzureAsynchronousOperation_SuccessfulRequestsWith202AndLocationHe
 			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			locationURL := testAsyncOperationURL
 			detector := NewDetectAzureAsynchronousOperation()
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			interaction := fake.Interaction(baseURL, c.method, 202)
 			interaction.SetResponseHeader(azureLocationHeader, locationURL)
@@ -66,7 +67,7 @@ func TestDetectAzureAsynchronousOperation_OtherMethods_DoesNotSpawn(t *testing.T
 			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			locationURL := testAsyncOperationURL
 			detector := NewDetectAzureAsynchronousOperation()
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			interaction := fake.Interaction(baseURL, c.method, 202)
 			interaction.SetResponseHeader(azureLocationHeader, locationURL)
@@ -101,7 +102,7 @@ func TestDetectAzureAsynchronousOperation_Non202StatusCode_DoesNotSpawn(t *testi
 			baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 			locationURL := testAsyncOperationURL
 			detector := NewDetectAzureAsynchronousOperation()
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			interaction := fake.Interaction(baseURL, "PUT", c.statusCode)
 			interaction.SetResponseHeader(azureLocationHeader, locationURL)
@@ -120,7 +121,7 @@ func TestDetectAzureAsynchronousOperation_MissingLocationHeader_DoesNotSpawn(t *
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectAzureAsynchronousOperation()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	interaction := fake.Interaction(baseURL, "PUT", 202)
 
@@ -136,7 +137,7 @@ func TestDetectAzureAsynchronousOperation_EmptyLocationHeader_DoesNotSpawn(t *te
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectAzureAsynchronousOperation()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	interaction := fake.Interaction(baseURL, "PUT", 202)
 	interaction.SetResponseHeader(azureLocationHeader, "")
@@ -153,7 +154,7 @@ func TestDetectAzureAsynchronousOperation_InvalidLocationURL_DoesNotSpawn(t *tes
 
 	baseURL := must.ParseURL(t, "https://management.azure.com/resource")
 	detector := NewDetectAzureAsynchronousOperation()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	interaction := fake.Interaction(baseURL, "PUT", 202)
 	interaction.SetResponseHeader(azureLocationHeader, "://invalid")
@@ -172,7 +173,7 @@ func TestDetectAzureAsynchronousOperation_ValidLocationURL_ParsesCorrectly(t *te
 	locationURL := "https://management.azure.com/subscriptions/abc123/providers/" +
 		"Microsoft.Network/locations/eastus/operations/xyz789"
 	detector := NewDetectAzureAsynchronousOperation()
-	log := newTestLogger(t)
+	log := slogt.New(t)
 
 	interaction := fake.Interaction(baseURL, "PUT", 202)
 	interaction.SetResponseHeader(azureLocationHeader, locationURL)

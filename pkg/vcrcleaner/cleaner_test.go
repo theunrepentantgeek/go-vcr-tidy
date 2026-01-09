@@ -4,6 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/neilotoole/slogt"
 	. "github.com/onsi/gomega"
 
 	"github.com/sebdah/goldie/v2"
@@ -55,7 +56,7 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			t.Parallel()
 			g := NewGomegaWithT(t)
 
-			log := newTestLogger(t)
+			log := slogt.New(t)
 
 			// Load the cassette from the file
 			fp := filepath.Join("testdata", c.recordingPath)
