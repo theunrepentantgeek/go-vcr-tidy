@@ -48,7 +48,7 @@ func (*DetectResourceDeletion) Analyze(
 
 	// Start monitoring for Deleting state
 	reqURL := i.Request().BaseURL()
-	log.Info(
+	log.Debug(
 		"Found resource deletion to monitor",
 		"url", reqURL.String(),
 		"provisioningState", response.Properties.ProvisioningState,

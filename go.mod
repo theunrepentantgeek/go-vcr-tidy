@@ -7,6 +7,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/neilotoole/slogt v1.1.0
 	github.com/onsi/gomega v1.38.3
+	github.com/phsym/console-slog v0.3.1
 	github.com/rotisserie/eris v0.5.4
 	github.com/sebdah/goldie/v2 v2.8.0
 	github.com/sergi/go-diff v1.4.0

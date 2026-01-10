@@ -2,8 +2,12 @@ package cmd
 
 import (
 	"errors"
+	"log/slog"
+	"os"
 	"path/filepath"
+	"strings"
 
+	"github.com/phsym/console-slog"
 	"github.com/rotisserie/eris"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/pkg/vcrcleaner"
@@ -56,16 +60,18 @@ func (c *CleanCommand) cleanFilesByGlob(ctx *Context, glob string) error {
 
 	// Early exit for no matches
 	if len(paths) == 0 {
-		ctx.Log.Info("No cassettes found to clean", "glob", glob)
+		ctx.Log.Info("No cassettes found to clean", "filespec", glob)
 
 		return nil
 	}
 
-	// Log the number of matching files found for globs
-	ctx.Log.Info(
-		"Found cassettes to clean",
-		"count", len(paths),
-		"glob", glob)
+	// Log the number of matching files found, for globs only
+	if c.isGlob(glob) {
+		ctx.Log.Info(
+			"Found multiple cassettes to clean",
+			"count", len(paths),
+			"filespec", glob)
+	}
 
 	// Collect errors, allowing us to attempt processing of all files
 	var errs []error
@@ -110,4 +116,26 @@ func (c *CleanCommand) cleanFile(ctx *Context, path string) error {
 	}
 
 	return nil
+}
+
+// CreateLogger builds a slog logger configured from the CleanCommand flags.
+func (c *CleanCommand) CreateLogger() *slog.Logger {
+	level := slog.LevelInfo
+	if c.Debug {
+		level = slog.LevelDebug
+	} else if c.Verbose {
+		level = vcrcleaner.LevelVerbose
+	}
+
+	opts := &console.HandlerOptions{
+		Level: level,
+	}
+	handler := console.NewHandler(os.Stderr, opts)
+
+	return slog.New(handler)
+}
+
+// isGlob checks if the provided path contains any globbing characters.
+func (*CleanCommand) isGlob(path string) bool {
+	return strings.ContainsAny(path, "*?[]")
 }

@@ -61,7 +61,7 @@ func (m *MonitorDeletion) Analyze(
 
 	case interaction.HasAnyMethod(i, http.MethodPost, http.MethodPut, http.MethodDelete):
 		// Resource has changed, abandon monitoring.
-		log.Info(
+		log.Debug(
 			"Abandoning DELETE monitor, resource changed",
 			"url", m.baseURL.String(),
 			"method", i.Request().Method(),
@@ -71,7 +71,7 @@ func (m *MonitorDeletion) Analyze(
 
 	default:
 		// Unexpected method or status code, abandon monitoring.
-		log.Info(
+		log.Debug(
 			"Abandoning DELETE monitor due to unexpected request",
 			"url", m.baseURL.String(),
 			"method", i.Request().Method(),
@@ -88,7 +88,7 @@ func (m *MonitorDeletion) deletionConfirmed(
 ) (analyzer.Result, error) {
 	if len(m.interactions) < 2 {
 		// No intermediate interactions to exclude.
-		log.Info(
+		log.Debug(
 			"Short DELETE monitor, nothing to exclude",
 			"url", m.baseURL.String(),
 		)
@@ -96,7 +96,7 @@ func (m *MonitorDeletion) deletionConfirmed(
 		return analyzer.Finished(), nil
 	}
 
-	log.Info(
+	log.Debug(
 		"Long DELETE found, excluding intermediate GETs",
 		"url", m.baseURL.String(),
 		"removed", len(m.interactions)-2,

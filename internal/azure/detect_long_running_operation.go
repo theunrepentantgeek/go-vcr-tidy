@@ -52,7 +52,7 @@ func (*DetectAzureLongRunningOperation) Analyze(
 		return analyzer.Result{}, eris.Wrapf(err, "parsing Azure-Asyncoperation URL: %s", asyncHeader)
 	}
 
-	log.Info(
+	log.Debug(
 		"Found Azure long running operation",
 		"url", urltool.BaseURL(operationURL).String())
 

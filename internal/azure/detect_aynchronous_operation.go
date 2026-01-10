@@ -55,7 +55,7 @@ func (*DetectAzureAsynchronousOperation) Analyze(
 		return analyzer.Result{}, nil
 	}
 
-	log.Info(
+	log.Debug(
 		"Found Azure asynchronous operation",
 		"url", urltool.BaseURL(operationURL).String())
 

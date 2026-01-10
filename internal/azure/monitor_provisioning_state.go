@@ -52,7 +52,7 @@ func (m *MonitorProvisioningState) Analyze(
 
 	case !interaction.HasMethod(i, http.MethodGet):
 		// Resource changed via non-GET method, abandon monitoring.
-		log.Info(
+		log.Debug(
 			"Abandoning provisioning state monitor, resource changed",
 			"url", m.baseURL.String(),
 			"method", i.Request().Method(),
@@ -62,7 +62,7 @@ func (m *MonitorProvisioningState) Analyze(
 
 	case !interaction.WasSuccessful(i):
 		// Unexpected status code, abandon monitoring.
-		log.Info(
+		log.Debug(
 			"Abandoning provisioning state monitor due to unexpected status",
 			"url", m.baseURL.String(),
 			"statusCode", statusCode,
@@ -88,7 +88,7 @@ func (m *MonitorProvisioningState) checkProvisioningState(
 	if err != nil {
 		// Not a valid Azure resource response; abandon monitoring
 		// This is not an error - just a condition this monitor isn't prepared to handle
-		log.Info(
+		log.Debug(
 			"Abandoning provisioning state monitor, invalid JSON response",
 			"url", m.baseURL.String(),
 		)
@@ -100,7 +100,7 @@ func (m *MonitorProvisioningState) checkProvisioningState(
 	currentState := response.Properties.ProvisioningState
 	if currentState == "" {
 		// No provisioningState field; abandon monitoring
-		log.Info(
+		log.Debug(
 			"Abandoning provisioning state monitor, missing provisioningState",
 			"url", m.baseURL.String(),
 		)
@@ -126,7 +126,7 @@ func (m *MonitorProvisioningState) stateTransitioned(
 ) (analyzer.Result, error) {
 	if len(m.interactions) < 2 {
 		// No intermediate interactions to exclude.
-		log.Info(
+		log.Debug(
 			"Short provisioning state sequence, nothing to exclude",
 			"url", m.baseURL.String(),
 		)
@@ -134,7 +134,7 @@ func (m *MonitorProvisioningState) stateTransitioned(
 		return analyzer.Finished(), nil
 	}
 
-	log.Info(
+	log.Debug(
 		"Provisioning state sequence finished, excluding intermediate GETs",
 		"url", m.baseURL.String(),
 		"removed", len(m.interactions)-2,
