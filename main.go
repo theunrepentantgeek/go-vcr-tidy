@@ -13,13 +13,19 @@ func main() {
 	ctx := kong.Parse(&cli,
 		kong.UsageOnError())
 
+	log := cli.CreateLogger()
+
 	cmdCtx := &cmd.Context{
 		Verbose: cli.Verbose,
 		Debug:   cli.Debug,
-		Log:     cli.CreateLogger(),
+		Log:     log,
 	}
 
 	err := ctx.Run(cmdCtx)
+	if err != nil {
+		cmdCtx.Log.Error("Error executing command", "error", err)
+		ctx.Exit(1)
+	}
 
-	ctx.FatalIfErrorf(err)
+	ctx.Exit(0)
 }

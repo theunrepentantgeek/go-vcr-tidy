@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/phsym/console-slog"
 	"github.com/rotisserie/eris"
 
 	"github.com/theunrepentantgeek/go-vcr-tidy/pkg/vcrcleaner"
@@ -123,8 +124,10 @@ func (c *CleanCommand) CreateLogger() *slog.Logger {
 		level = vcrcleaner.LevelVerbose
 	}
 
-	opts := &slog.HandlerOptions{Level: level}
-	handler := slog.NewTextHandler(os.Stdout, opts)
+	opts := &console.HandlerOptions{
+		Level: level,
+	}
+	handler := console.NewHandler(os.Stderr, opts)
 
 	return slog.New(handler)
 }

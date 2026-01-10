@@ -17,6 +17,7 @@ require (
 require (
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/onsi/ginkgo/v2 v2.27.2 // indirect
+	github.com/phsym/console-slog v0.3.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
