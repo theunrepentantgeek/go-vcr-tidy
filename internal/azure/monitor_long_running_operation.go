@@ -67,7 +67,7 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	// Operation is complete, check whether we have any interactions to exclude
 	if len(m.interactions) <= 2 {
 		// No intermediate interactions to exclude.
-		log.Info(
+		log.Debug(
 			"Long running operation finished quickly, nothing to exclude",
 			"url", m.operationURL,
 		)
@@ -75,7 +75,7 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 		return analyzer.Finished(), nil
 	}
 
-	log.Info(
+	log.Debug(
 		"Long running operation finished, excluding intermediate GETs",
 		"url", m.operationURL,
 		"removed", len(m.interactions)-2,

@@ -30,7 +30,7 @@ func (*DetectDeletion) Analyze(
 
 	if interaction.HasMethod(i, http.MethodDelete) && interaction.WasSuccessful(i) {
 		// Start monitoring for deletion confirmation via GET requests.
-		log.Info(
+		log.Debug(
 			"Found DELETE to monitor",
 			"url", reqURL.String(),
 		)

@@ -48,7 +48,7 @@ func (*DetectResourceModification) Analyze(
 
 	// Start monitoring for Creating/Updating states
 	reqURL := i.Request().BaseURL()
-	log.Info(
+	log.Debug(
 		"Found resource modification to monitor",
 		"url", reqURL.String(),
 		"method", i.Request().Method(),
