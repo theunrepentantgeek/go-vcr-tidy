@@ -16,7 +16,7 @@ func main() {
 	cmdCtx := &cmd.Context{
 		Verbose: cli.Verbose,
 		Debug:   cli.Debug,
-		Log:     CreateLogger(cli.Verbose, cli.Debug),
+		Log:     cli.CreateLogger(),
 	}
 
 	err := ctx.Run(cmdCtx)

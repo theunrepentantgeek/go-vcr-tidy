@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"errors"
+	"log/slog"
+	"os"
 	"path/filepath"
 
 	"github.com/rotisserie/eris"
@@ -110,4 +112,19 @@ func (c *CleanCommand) cleanFile(ctx *Context, path string) error {
 	}
 
 	return nil
+}
+
+// CreateLogger builds a slog logger configured from the CleanCommand flags.
+func (c *CleanCommand) CreateLogger() *slog.Logger {
+	level := slog.LevelInfo
+	if c.Debug {
+		level = slog.LevelDebug
+	} else if c.Verbose {
+		level = vcrcleaner.LevelVerbose
+	}
+
+	opts := &slog.HandlerOptions{Level: level}
+	handler := slog.NewTextHandler(os.Stdout, opts)
+
+	return slog.New(handler)
 }
