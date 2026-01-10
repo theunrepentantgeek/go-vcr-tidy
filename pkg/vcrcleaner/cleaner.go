@@ -60,7 +60,7 @@ func (c *Cleaner) CleanFile(
 		return false, nil
 	}
 
-	c.log.Log(context.Background(), LevelVerbose, "Cleaning cassette", "path", path)
+	c.log.Info("Checking cassette", "path", path)
 
 	// Clean the cassette
 	modified, err := c.CleanCassette(cas)
@@ -77,7 +77,7 @@ func (c *Cleaner) CleanFile(
 			return false, eris.Wrapf(err, "saving cleaned cassette to %s", path)
 		}
 
-		c.log.Info("Saved cleaned cassette", "path", path)
+		c.log.Info("Modified cassette", "path", path)
 	} else {
 		c.log.Log(context.Background(), LevelVerbose, "No change to cassette", "path", path)
 	}
