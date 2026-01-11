@@ -109,7 +109,7 @@ Client issues a PUT, PATCH or DELETE request to create, update or delete an Azur
 
 Retain the initial PUT/PATCH/DELETE request, the first and last GET requests of the operation with status `InProgress` and remove the intervening ones.
 
-Enable on the CLI with `--clean-azure-long-running-operations` or in code by passing the `ReduceAzureLongRunningOperations()` option to `vcrcleaner.New()`.
+Enable on the CLI with `--clean-azure-long-running-operations` or in code by passing the `ReduceAzureLongRunningOperationPolling()` option to `vcrcleaner.New()`.
 
 ### Azure asynchronous operation
 
