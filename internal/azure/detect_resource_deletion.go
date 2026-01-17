@@ -32,7 +32,7 @@ func (*DetectResourceDeletion) Analyze(
 	}
 
 	// Check if response contains provisioningState indicating deletion
-	var response azureResourceResponse
+	var response ResourceResponse
 
 	err := json.Unmarshal(i.Response().Body(), &response)
 	if err != nil {
