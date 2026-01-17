@@ -29,17 +29,17 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 		"reduce-long-running-operation-polling-sql-server": {
 			option:        ReduceAzureLongRunningOperationPolling(),
 			recordingPath: "Test_SQL_Server_FailoverGroup_CRUD",
-			extraColumn:   &operationStatusColumn,
+			extraColumn:   operationStatusColumn,
 		},
 		"reduce-long-running-operation-polling-managed-cluster": {
 			option:        ReduceAzureLongRunningOperationPolling(),
 			recordingPath: "Test_AKS_ManagedCluster_20231001_CRUD",
-			extraColumn:   &operationStatusColumn,
+			extraColumn:   operationStatusColumn,
 		},
 		"reduce-long-running-operation-polling-api-management": {
 			option:        ReduceAzureLongRunningOperationPolling(),
 			recordingPath: "Test_Apimanagement_v1api20220801_CreationAndDeletion",
-			extraColumn:   &operationStatusColumn,
+			extraColumn:   operationStatusColumn,
 		},
 		"reduce-asynchronous-operation-polling-api-management": {
 			option:        ReduceAzureAsynchronousOperationPolling(),
@@ -48,7 +48,7 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 		"reduce-azure-resource-modification-monitoring-eventhub": {
 			option:        ReduceAzureResourceModificationMonitoring(),
 			recordingPath: "Test_EventHub_Namespace_v20240101_CRUD",
-			extraColumn:   &provisioningStateColumn,
+			extraColumn:   provisioningStateColumn,
 		},
 	}
 
@@ -99,7 +99,10 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 func provisioningState(i *cassette.Interaction) string {
 	var resp azure.ResourceResponse
 
-	_ = json.Unmarshal([]byte(i.Response.Body), &resp)
+	if err := json.Unmarshal([]byte(i.Response.Body), &resp); err != nil {
+		// Not a JSON payload, return empty string
+		return ""
+	}
 
 	return resp.Properties.ProvisioningState
 }
@@ -109,7 +112,10 @@ func operationStatus(i *cassette.Interaction) string {
 		Status string `json:"status"`
 	}
 
-	_ = json.Unmarshal([]byte(i.Response.Body), &resp)
+	if err := json.Unmarshal([]byte(i.Response.Body), &resp); err != nil {
+		// Not a JSON payload, return empty string
+		return ""
+	}
 
 	return resp.Status
 }

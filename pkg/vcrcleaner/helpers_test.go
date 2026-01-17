@@ -55,6 +55,7 @@ func cassetteSummary(
 	return builder.String()
 }
 
+// displayDiscardFlag returns "X" if the interaction is marked as DiscardOnSave, otherwise "".
 func displayDiscardFlag(interaction *cassette.Interaction) string {
 	discarded := ""
 	if interaction.DiscardOnSave {
@@ -64,6 +65,7 @@ func displayDiscardFlag(interaction *cassette.Interaction) string {
 	return discarded
 }
 
+// displayStatusCode returns the response status code as a string.
 func displayStatusCode(interaction *cassette.Interaction) string {
 	statusCode := strconv.Itoa(interaction.Response.Code)
 
@@ -99,16 +101,18 @@ func commonURLPrefix(cas *cassette.Cassette) string {
 	return prefix
 }
 
+// cassetteColumn represents an additional column to include in the cassette summary.
 type cassetteColumn struct {
 	Header string
 	fn     func(*cassette.Interaction) string
 }
 
+// withColumn creates a new cassetteColumn with the given header and function.
 func withColumn(
 	header string,
 	fn func(*cassette.Interaction) string,
-) cassetteColumn {
-	return cassetteColumn{
+) *cassetteColumn {
+	return &cassetteColumn{
 		Header: header,
 		fn:     fn,
 	}
