@@ -10,44 +10,76 @@ import (
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/report"
 )
 
-func cassetteSummary(cas *cassette.Cassette) string {
+// cassetteSummary generates a summary table of the cassette interactions.
+// cas is the cassette to summarize.
+// columns are additional columns to include in the summary.
+func cassetteSummary(
+	cas *cassette.Cassette,
+	columns ...*cassetteColumn,
+) string {
 	// Build common URL prefix
 	prefix := commonURLPrefix(cas)
 
+	headers := []string{"", "Method", "Code", prefix}
+
+	for _, column := range columns {
+		headers = append(headers, column.Header)
+	}
+
 	// Build a summary of the cassette interactions
-	tbl := report.NewMarkdownTable(
-		"",
-		"Method",
-		"Code",
-		prefix)
+	tbl := report.NewMarkdownTable(headers...)
 
 	for _, interaction := range cas.Interactions {
-		discard := ""
-		if interaction.DiscardOnSave {
-			discard = "X"
-		}
+		discarded := displayDiscardFlag(interaction)
+		u := displayURL(interaction, prefix)
+		statusCode := displayStatusCode(interaction)
 
-		// Get URL without query parameters and common prefix
-		u := strings.TrimPrefix(interaction.Request.URL, prefix)
-		if i := strings.Index(u, "?"); i != -1 {
-			u = u[:i]
-		}
-
-		// Format status code as string
-		statusCode := strconv.Itoa(interaction.Response.Code)
-
-		// Write method and URL
-		tbl.AddRow(
-			discard,
+		// Write method, URL, and other details, including custom columns (if any)
+		row := []string{
+			discarded,
 			interaction.Request.Method,
 			statusCode,
-			u)
+			u,
+		}
+
+		for _, column := range columns {
+			row = append(row, column.fn(interaction))
+		}
+
+		tbl.AddRow(row...)
 	}
 
 	var builder strings.Builder
 	tbl.WriteTo(&builder)
 
 	return builder.String()
+}
+
+// displayDiscardFlag returns "X" if the interaction is marked as DiscardOnSave, otherwise "".
+func displayDiscardFlag(interaction *cassette.Interaction) string {
+	discarded := ""
+	if interaction.DiscardOnSave {
+		discarded = "X"
+	}
+
+	return discarded
+}
+
+// displayStatusCode returns the response status code as a string.
+func displayStatusCode(interaction *cassette.Interaction) string {
+	statusCode := strconv.Itoa(interaction.Response.Code)
+
+	return statusCode
+}
+
+// displayURL returns the URL without query parameters and common prefix.
+func displayURL(interaction *cassette.Interaction, prefix string) string {
+	u := strings.TrimPrefix(interaction.Request.URL, prefix)
+	if i := strings.Index(u, "?"); i != -1 {
+		u = u[:i]
+	}
+
+	return u
 }
 
 // commonURLPrefix returns the common URL prefix for all interactions in the cassette.
@@ -67,4 +99,21 @@ func commonURLPrefix(cas *cassette.Cassette) string {
 	}
 
 	return prefix
+}
+
+// cassetteColumn represents an additional column to include in the cassette summary.
+type cassetteColumn struct {
+	Header string
+	fn     func(*cassette.Interaction) string
+}
+
+// withColumn creates a new cassetteColumn with the given header and function.
+func withColumn(
+	header string,
+	fn func(*cassette.Interaction) string,
+) *cassetteColumn {
+	return &cassetteColumn{
+		Header: header,
+		fn:     fn,
+	}
 }

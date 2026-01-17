@@ -82,7 +82,7 @@ func (m *MonitorProvisioningState) checkProvisioningState(
 	i interaction.Interface,
 ) (analyzer.Result, error) {
 	// Parse the response body to extract provisioningState
-	var response azureResourceResponse
+	var response ResourceResponse
 
 	err := json.Unmarshal(i.Response().Body(), &response)
 	if err != nil {

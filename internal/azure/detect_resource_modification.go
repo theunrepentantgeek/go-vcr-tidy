@@ -32,7 +32,7 @@ func (*DetectResourceModification) Analyze(
 	}
 
 	// Check if response contains provisioningState indicating a transient state
-	var response azureResourceResponse
+	var response ResourceResponse
 
 	err := json.Unmarshal(i.Response().Body(), &response)
 	if err != nil {
