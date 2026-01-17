@@ -15,12 +15,13 @@ import (
 // columns are additional columns to include in the summary.
 func cassetteSummary(
 	cas *cassette.Cassette,
-	columns ...cassetteColumn,
+	columns ...*cassetteColumn,
 ) string {
 	// Build common URL prefix
 	prefix := commonURLPrefix(cas)
 
 	headers := []string{"", "Method", "Code", prefix}
+
 	for _, column := range columns {
 		headers = append(headers, column.Header)
 	}
@@ -29,19 +30,9 @@ func cassetteSummary(
 	tbl := report.NewMarkdownTable(headers...)
 
 	for _, interaction := range cas.Interactions {
-		discarded := ""
-		if interaction.DiscardOnSave {
-			discarded = "X"
-		}
-
-		// Get URL without query parameters and common prefix
-		u := strings.TrimPrefix(interaction.Request.URL, prefix)
-		if i := strings.Index(u, "?"); i != -1 {
-			u = u[:i]
-		}
-
-		// Format status code as string
-		statusCode := strconv.Itoa(interaction.Response.Code)
+		discarded := displayDiscardFlag(interaction)
+		u := displayURL(interaction, prefix)
+		statusCode := displayStatusCode(interaction)
 
 		// Write method, URL, and other details, including custom columns (if any)
 		row := []string{
@@ -62,6 +53,31 @@ func cassetteSummary(
 	tbl.WriteTo(&builder)
 
 	return builder.String()
+}
+
+func displayDiscardFlag(interaction *cassette.Interaction) string {
+	discarded := ""
+	if interaction.DiscardOnSave {
+		discarded = "X"
+	}
+
+	return discarded
+}
+
+func displayStatusCode(interaction *cassette.Interaction) string {
+	statusCode := strconv.Itoa(interaction.Response.Code)
+
+	return statusCode
+}
+
+// displayURL returns the URL without query parameters and common prefix.
+func displayURL(interaction *cassette.Interaction, prefix string) string {
+	u := strings.TrimPrefix(interaction.Request.URL, prefix)
+	if i := strings.Index(u, "?"); i != -1 {
+		u = u[:i]
+	}
+
+	return u
 }
 
 // commonURLPrefix returns the common URL prefix for all interactions in the cassette.
