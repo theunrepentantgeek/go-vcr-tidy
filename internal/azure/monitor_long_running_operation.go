@@ -31,9 +31,9 @@ func NewMonitorAzureLongRunningOperation(
 }
 
 const (
-	// headerLength is the number of retained interactions at the start of the operation
+	// headerLength is the number of retained interactions at the start of the operation.
 	headerLength = 1
-	// footerLength is the number of retained interactions at the end of the operation
+	// footerLength is the number of retained interactions at the end of the operation.
 	footerLength = 1
 )
 
@@ -118,7 +118,7 @@ func (m *MonitorAzureLongRunningOperation) rewireSequence(
 	}
 }
 
-func (m *MonitorAzureLongRunningOperation) rewire(
+func (*MonitorAzureLongRunningOperation) rewire(
 	prior interaction.Interface,
 	next interaction.Interface,
 ) {
@@ -129,13 +129,13 @@ func (m *MonitorAzureLongRunningOperation) rewire(
 		// Same URL, ensure no Location header present
 		_, ok := prior.Response().Header("Location")
 		if ok {
-			panic("not implemented")
+			prior.Response().RemoveHeader("Location")
 		}
 	} else {
 		// Different URL, ensure Location header present
 		_, ok := prior.Response().Header("Location")
 		if !ok {
-			panic("not implemented")
+			prior.Response().SetHeader("Location", nextURL.String())
 		}
 	}
 }
