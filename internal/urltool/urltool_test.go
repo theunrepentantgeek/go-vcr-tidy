@@ -82,62 +82,57 @@ func TestSameBaseURL_IdenticalPaths_MatchesOnBase(t *testing.T) {
 	g.Expect(SameBaseURL(left, right)).To(BeTrue())
 }
 
-func TestSameURL_IdenticalURLs_Matches(t *testing.T) {
+func TestSameURL(t *testing.T) {
 	t.Parallel()
-	g := NewWithT(t)
 
-	left := must.ParseURL(t, "https://example.com/foo/bar?x=1#section")
-	right := must.ParseURL(t, "https://example.com/foo/bar?x=1#section")
+	cases := map[string]struct {
+		left     string
+		right    string
+		expected bool
+	}{
+		"IdenticalURLs_Matches": {
+			left:     "https://example.com/foo/bar?x=1#section",
+			right:    "https://example.com/foo/bar?x=1#section",
+			expected: true,
+		},
+		"DifferentQueryParameters_DoesNotMatch": {
+			left:     "https://example.com/resource?first=1",
+			right:    "https://example.com/resource?second=2",
+			expected: false,
+		},
+		"DifferentFragments_DoesNotMatch": {
+			left:     "https://example.com/resource#part1",
+			right:    "https://example.com/resource#part2",
+			expected: false,
+		},
+		"DifferentPaths_DoesNotMatch": {
+			left:     "https://example.com/alpha",
+			right:    "https://example.com/beta",
+			expected: false,
+		},
+		"DifferentCanonicalPaths_DoesNotMatch": {
+			left:     "https://example.com/foo/../bar",
+			right:    "https://example.com/bar",
+			expected: false,
+		},
+		"IdenticalPathsWithoutQueryOrFragment_Matches": {
+			left:     "https://example.com/foo/bar",
+			right:    "https://example.com/foo/bar",
+			expected: true,
+		},
+	}
 
-	g.Expect(SameURL(left, right)).To(BeTrue())
-}
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			g := NewWithT(t)
 
-func TestSameURL_DifferentQueryParameters_DoesNotMatch(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
+			left := must.ParseURL(t, c.left)
+			right := must.ParseURL(t, c.right)
 
-	left := must.ParseURL(t, "https://example.com/resource?first=1")
-	right := must.ParseURL(t, "https://example.com/resource?second=2")
+			result := SameURL(left, right)
 
-	g.Expect(SameURL(left, right)).To(BeFalse())
-}
-
-func TestSameURL_DifferentFragments_DoesNotMatch(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	left := must.ParseURL(t, "https://example.com/resource#part1")
-	right := must.ParseURL(t, "https://example.com/resource#part2")
-
-	g.Expect(SameURL(left, right)).To(BeFalse())
-}
-
-func TestSameURL_DifferentPaths_DoesNotMatch(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	left := must.ParseURL(t, "https://example.com/alpha")
-	right := must.ParseURL(t, "https://example.com/beta")
-
-	g.Expect(SameURL(left, right)).To(BeFalse())
-}
-
-func TestSameURL_DifferentCanonicalPaths_DoesNotMatch(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	left := must.ParseURL(t, "https://example.com/foo/../bar")
-	right := must.ParseURL(t, "https://example.com/bar")
-
-	g.Expect(SameURL(left, right)).To(BeFalse())
-}
-
-func TestSameURL_IdenticalPathsWithoutQueryOrFragment_Matches(t *testing.T) {
-	t.Parallel()
-	g := NewWithT(t)
-
-	left := must.ParseURL(t, "https://example.com/foo/bar")
-	right := must.ParseURL(t, "https://example.com/foo/bar")
-
-	g.Expect(SameURL(left, right)).To(BeTrue())
+			g.Expect(result).To(Equal(c.expected))
+		})
+	}
 }
