@@ -30,6 +30,13 @@ func NewMonitorAzureLongRunningOperation(
 	}
 }
 
+const (
+	// headerLength is the number of retained interactions at the start of the operation
+	headerLength = 1
+	// footerLength is the number of retained interactions at the end of the operation
+	footerLength = 1
+)
+
 // Analyze processes another interaction in the sequence.
 func (m *MonitorAzureLongRunningOperation) Analyze(
 	log *slog.Logger,
@@ -59,7 +66,7 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	}
 
 	// Operation is complete, check whether we have any interactions to exclude
-	if len(m.interactions) <= 2 {
+	if len(m.interactions) <= headerLength+footerLength {
 		// No intermediate interactions to exclude.
 		log.Debug(
 			"Long running operation finished quickly, nothing to exclude",
@@ -69,13 +76,13 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 		return analyzer.Finished(), nil
 	}
 
+	excluded := m.interactions[headerLength : len(m.interactions)-footerLength]
+
 	log.Debug(
 		"Long running operation finished, excluding intermediate GETs",
 		"url", m.operationURL,
-		"removed", len(m.interactions)-2,
+		"removed", len(excluded),
 	)
-
-	excluded := m.interactions[1 : len(m.interactions)-1]
 
 	return analyzer.FinishedWithExclusions(excluded...), nil
 }
