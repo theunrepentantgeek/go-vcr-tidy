@@ -23,3 +23,10 @@ func SameBaseURL(
 
 	return l == r
 }
+
+func SameURL(
+	left *url.URL,
+	right *url.URL,
+) bool {
+	return left.String() == right.String()
+}
