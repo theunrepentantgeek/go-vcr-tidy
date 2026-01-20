@@ -5,34 +5,34 @@
 |   | GET    | 404  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | PUT    | 201  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2a40ddca-a28c-4d9e-879b-813f7dacc701                                    | Succeeded        |
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | PUT    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/5b8ab102-f841-4643-9ceb-068c90b548e0                                    | Succeeded        |
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | PUT    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/94212da1-b435-4d7d-8302-1e0e6658bccd                                    | Succeeded        |
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
@@ -63,8 +63,8 @@
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/trustedAccessRoleBindings/tarb    |                  |
 |   | PUT    | 201  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/trustedAccessRoleBindings/tarb    |                  |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/e913172e-757b-4250-8dd0-c0be9dd972ec                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/e913172e-757b-4250-8dd0-c0be9dd972ec                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/e913172e-757b-4250-8dd0-c0be9dd972ec                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/e913172e-757b-4250-8dd0-c0be9dd972ec                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/e913172e-757b-4250-8dd0-c0be9dd972ec                                    | Succeeded        |
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/trustedAccessRoleBindings/tarb    |                  |
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/trustedAccessRoleBindings/tarb    |                  |
@@ -74,22 +74,22 @@
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239                                    | InProgress       |
 |   | DELETE | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.KeyVault/vaults/asotest-kv-setxmk                                                    |                  |
 |   | DELETE | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.Storage/storageAccounts/asoteststornwipxd                                            |                  |
+|   | GET    | 200  | providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578              | InProgress       |
+|   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239                                    | InProgress       |
 | X | GET    | 200  | providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578              | InProgress       |
 | X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239                                    | InProgress       |
 | X | GET    | 200  | providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578              | InProgress       |
-|   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578              | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/2f62112b-677c-4039-a59e-52793eb70239                                    | Succeeded        |
 | X | GET    | 200  | providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578              | InProgress       |
-|   | GET    | 200  | providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578              | InProgress       |
+| X | GET    | 200  | providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578              | InProgress       |
 |   | GET    | 200  | providers/Microsoft.MachineLearningServices/locations/westus2/workspaceOperationsStatus/5293ca3e-a4f5-4985-ba07-58590d602578              | Succeeded        |
 |   | GET    | 404  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2                    |                  |
 |   | PUT    | 201  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2                    |                  |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/c0b4797a-b2dd-4b24-a0ef-2199fa1e03b4                                    | Succeeded        |
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2                    |                  |
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2                    |                  |
@@ -106,18 +106,18 @@
 |   | GET    | 200  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2                    |                  |
 |   | DELETE | 202  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep/agentPools/ap2                    |                  |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/db56002c-369e-4df9-94ac-512ccbc71d69                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/db56002c-369e-4df9-94ac-512ccbc71d69                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/db56002c-369e-4df9-94ac-512ccbc71d69                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/db56002c-369e-4df9-94ac-512ccbc71d69                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/db56002c-369e-4df9-94ac-512ccbc71d69                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/db56002c-369e-4df9-94ac-512ccbc71d69                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/db56002c-369e-4df9-94ac-512ccbc71d69                                    | Succeeded        |
 |   | DELETE | 202  | resourceGroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | InProgress       |
-| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | InProgress       |
+| X | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | InProgress       |
 |   | GET    | 200  | providers/Microsoft.ContainerService/locations/westus3/operations/ed78124c-748d-4bc8-980b-1c4baf99a9cd                                    | Succeeded        |
 |   | GET    | 404  | resourcegroups/asotest-rg-rhrpbh/providers/Microsoft.ContainerService/managedClusters/asotest-mc-kpgpep                                   |                  |
 |   | DELETE | 202  | resourceGroups/asotest-rg-rhrpbh                                                                                                          |                  |
