@@ -18,11 +18,11 @@ func TestMonitorLongRunningOperation_Rewire_AddsLocationHeader_WhenURLsDiffer(t 
 	monitor := &MonitorAzureLongRunningOperation{}
 
 	// Create two interactions with different URLs
-	url1 := must.ParseURL(t, "https://management.azure.com/operations/1")
-	url2 := must.ParseURL(t, "https://management.azure.com/operations/2")
+	priorURL := must.ParseURL(t, "https://management.azure.com/operations/1")
+	nextURL := must.ParseURL(t, "https://management.azure.com/operations/2")
 
-	prior := fake.Interaction(url1, http.MethodGet, 200)
-	next := fake.Interaction(url2, http.MethodGet, 200)
+	prior := fake.Interaction(priorURL, http.MethodGet, 200)
+	next := fake.Interaction(nextURL, http.MethodGet, 200)
 
 	// Verify no Location header initially
 	_, ok := prior.Response().Header("Location")
@@ -33,7 +33,7 @@ func TestMonitorLongRunningOperation_Rewire_AddsLocationHeader_WhenURLsDiffer(t 
 
 	location, ok := prior.Response().Header("Location")
 	g.Expect(ok).To(BeTrue())
-	g.Expect(location).To(Equal(url2.String()))
+	g.Expect(location).To(Equal(nextURL.String()))
 }
 
 func TestMonitorLongRunningOperation_Rewire_RemovesLocationHeader_WhenURLsSame(t *testing.T) {
@@ -43,10 +43,10 @@ func TestMonitorLongRunningOperation_Rewire_RemovesLocationHeader_WhenURLsSame(t
 	monitor := &MonitorAzureLongRunningOperation{}
 
 	// Create two interactions with the same URL
-	url1 := must.ParseURL(t, "https://management.azure.com/operations/1")
+	sameURL := must.ParseURL(t, "https://management.azure.com/operations/1")
 
-	prior := fake.Interaction(url1, http.MethodGet, 200)
-	next := fake.Interaction(url1, http.MethodGet, 200)
+	prior := fake.Interaction(sameURL, http.MethodGet, 200)
+	next := fake.Interaction(sameURL, http.MethodGet, 200)
 
 	// Add a Location header to the prior interaction
 	prior.SetResponseHeader("Location", "https://somewhere.else.com")
@@ -68,11 +68,11 @@ func TestMonitorLongRunningOperation_Rewire_KeepsExistingLocationHeader_WhenURLs
 
 	monitor := &MonitorAzureLongRunningOperation{}
 
-	url1 := must.ParseURL(t, "https://management.azure.com/operations/1")
-	url2 := must.ParseURL(t, "https://management.azure.com/operations/2")
+	priorURL := must.ParseURL(t, "https://management.azure.com/operations/1")
+	nextURL := must.ParseURL(t, "https://management.azure.com/operations/2")
 
-	prior := fake.Interaction(url1, http.MethodGet, 200)
-	next := fake.Interaction(url2, http.MethodGet, 200)
+	prior := fake.Interaction(priorURL, http.MethodGet, 200)
+	next := fake.Interaction(nextURL, http.MethodGet, 200)
 
 	// Add a Location header to the prior interaction
 	existingLocation := "https://existing.location.com"
@@ -93,18 +93,18 @@ func TestMonitorLongRunningOperation_Rewire_HandlesQueryParameters(t *testing.T)
 	monitor := &MonitorAzureLongRunningOperation{}
 
 	// URLs with different query parameters are considered different
-	url1 := must.ParseURL(t, "https://management.azure.com/operations/1?t=123")
-	url2 := must.ParseURL(t, "https://management.azure.com/operations/1?t=456")
+	priorURL := must.ParseURL(t, "https://management.azure.com/operations/1?t=123")
+	nextURL := must.ParseURL(t, "https://management.azure.com/operations/1?t=456")
 
-	prior := fake.Interaction(url1, http.MethodGet, 200)
-	next := fake.Interaction(url2, http.MethodGet, 200)
+	prior := fake.Interaction(priorURL, http.MethodGet, 200)
+	next := fake.Interaction(nextURL, http.MethodGet, 200)
 
 	// Rewire should add Location header because URLs differ
 	monitor.rewire(prior, next)
 
 	location, ok := prior.Response().Header("Location")
 	g.Expect(ok).To(BeTrue())
-	g.Expect(location).To(Equal(url2.String()))
+	g.Expect(location).To(Equal(nextURL.String()))
 }
 
 func TestMonitorLongRunningOperation_RewireSequence_LinksAllInteractions(t *testing.T) {
