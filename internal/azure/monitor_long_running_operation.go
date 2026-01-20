@@ -78,6 +78,11 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 
 	excluded := m.interactions[headerLength : len(m.interactions)-footerLength]
 
+	retained := m.interactions[:headerLength]
+	retained = append(retained, m.interactions[len(m.interactions)-footerLength:]...)
+
+	m.rewireSequence(retained)
+
 	log.Debug(
 		"Long running operation finished, excluding intermediate GETs",
 		"url", m.operationURL,
@@ -102,4 +107,37 @@ func (m *MonitorAzureLongRunningOperation) isRelevantGet(
 	}
 
 	return true
+}
+
+func (m *MonitorAzureLongRunningOperation) rewireSequence(
+	interactions []interaction.Interface,
+) {
+	for i := range len(interactions) - 1 {
+		prior := interactions[i]
+		next := interactions[i+1]
+
+		m.rewire(prior, next)
+	}
+}
+
+func (m *MonitorAzureLongRunningOperation) rewire(
+	prior interaction.Interface,
+	next interaction.Interface,
+) {
+	priorURL := prior.Request().FullURL()
+	nextURL := next.Request().FullURL()
+
+	if urltool.SameURL(priorURL, nextURL) {
+		// Same URL, ensure no Location header present
+		_, ok := prior.Response().Header("Location")
+		if ok {
+			panic("not implemented")
+		}
+	} else {
+		// Different URL, ensure Location header present
+		_, ok := prior.Response().Header("Location")
+		if !ok {
+			panic("not implemented")
+		}
+	}
 }
