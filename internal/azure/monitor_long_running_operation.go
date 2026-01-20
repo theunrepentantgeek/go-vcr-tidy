@@ -47,9 +47,7 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	}
 
 	// Check the status of the operation
-	var operation struct {
-		Status string `json:"status"`
-	}
+	var operation Operation
 
 	err := json.Unmarshal(i.Response().Body(), &operation)
 	if err != nil {
