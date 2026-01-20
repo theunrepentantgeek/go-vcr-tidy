@@ -127,15 +127,9 @@ func (*MonitorAzureLongRunningOperation) rewire(
 
 	if urltool.SameURL(priorURL, nextURL) {
 		// Same URL, ensure no Location header present
-		_, ok := prior.Response().Header("Location")
-		if ok {
-			prior.Response().RemoveHeader("Location")
-		}
+		prior.Response().RemoveHeader("Location")
 	} else {
 		// Different URL, ensure Location header present
-		_, ok := prior.Response().Header("Location")
-		if !ok {
-			prior.Response().SetHeader("Location", nextURL.String())
-		}
+		prior.Response().SetHeader("Location", nextURL.String())
 	}
 }
