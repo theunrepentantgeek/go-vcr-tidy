@@ -30,12 +30,27 @@ func (r *testResponse) Header(name string) (string, bool) {
 	return values[0], true
 }
 
-// SetResponseHeader sets a response header value for the fake interaction.
-func (r *testResponse) SetResponseHeader(name, value string) {
+// SetHeader sets the value of the specified response header.
+func (r *testResponse) SetHeader(name string, value string) {
+	if r.responseHeaders == nil {
+		r.responseHeaders = make(map[string][]string)
+	}
+
 	key := http.CanonicalHeaderKey(name)
 	r.responseHeaders[key] = []string{value}
 }
 
+// RemoveHeader removes the specified response header.
+func (r *testResponse) RemoveHeader(name string) {
+	if r.responseHeaders == nil {
+		return
+	}
+
+	key := http.CanonicalHeaderKey(name)
+	delete(r.responseHeaders, key)
+}
+
+// Body returns the body of the response.
 func (r *testResponse) Body() []byte {
 	return []byte(r.responseBody)
 }

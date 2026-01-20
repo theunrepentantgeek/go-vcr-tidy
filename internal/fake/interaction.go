@@ -80,5 +80,5 @@ func (i *TestInteraction) SetResponseBody(body string) {
 
 // SetResponseHeader sets a response header for the fake interaction.
 func (i *TestInteraction) SetResponseHeader(name, value string) {
-	i.response.SetResponseHeader(name, value)
+	i.response.SetHeader(name, value)
 }

@@ -29,6 +29,29 @@ func (r *vcrResponse) Header(name string) (string, bool) {
 	return values[0], true
 }
 
+// SetHeader sets the value of the specified response header.
+func (r *vcrResponse) SetHeader(name string, value string) {
+	headers := r.parent.interaction.Response.Headers
+	if headers == nil {
+		headers = make(map[string][]string)
+		r.parent.interaction.Response.Headers = headers
+	}
+
+	key := http.CanonicalHeaderKey(name)
+	headers[key] = []string{value}
+}
+
+// RemoveHeader removes the specified response header.
+func (r *vcrResponse) RemoveHeader(name string) {
+	headers := r.parent.interaction.Response.Headers
+	if headers == nil {
+		return
+	}
+
+	key := http.CanonicalHeaderKey(name)
+	delete(headers, key)
+}
+
 func (r *vcrResponse) Body() []byte {
 	return []byte(r.parent.interaction.Response.Body)
 }
