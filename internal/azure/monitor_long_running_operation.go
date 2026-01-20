@@ -35,13 +35,7 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	log *slog.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
-	// Check if the interaction is for the operation URL
-	if !urltool.SameBaseURL(m.operationURL, i.Request().FullURL()) {
-		return analyzer.Result{}, nil
-	}
-
-	// Check if the interaction is a GET
-	if !interaction.HasMethod(i, http.MethodGet) {
+	if !m.isRelevantGet(i) {
 		return analyzer.Result{}, nil
 	}
 
@@ -84,4 +78,21 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	excluded := m.interactions[1 : len(m.interactions)-1]
 
 	return analyzer.FinishedWithExclusions(excluded...), nil
+}
+
+// isRelevantGet checks whether the interaction is a GET to the operation URL.
+func (m *MonitorAzureLongRunningOperation) isRelevantGet(
+	i interaction.Interface,
+) bool {
+	// Check if the interaction is for the operation URL
+	if !urltool.SameBaseURL(m.operationURL, i.Request().FullURL()) {
+		return false
+	}
+
+	// Check if the interaction is a GET
+	if !interaction.HasMethod(i, http.MethodGet) {
+		return false
+	}
+
+	return true
 }
