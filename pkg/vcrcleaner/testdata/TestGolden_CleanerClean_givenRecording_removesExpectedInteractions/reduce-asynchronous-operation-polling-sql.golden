@@ -1,0 +1,160 @@
+|   | Method | Code | https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/                                                                            | Operation Status |
+|---|--------|------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------|
+|   | PUT    | 201  | resourceGroups/asotest-rg-nqaknx                                                                                                                            |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx                                                                                                                            |                  |
+|   | GET    | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Network/virtualNetworks/samplesqlvnet                                                                  |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw                                                                              |                  |
+|   | PUT    | 201  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Network/virtualNetworks/samplesqlvnet                                                                  |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Storage/storageAccounts/asotestsqlstorageref                                                           |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/serverAzureAsyncOperation/fad4bb45-64ae-4994-973b-1b9505840b63                    | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/serverAzureAsyncOperation/fad4bb45-64ae-4994-973b-1b9505840b63                    | InProgress       |
+|   | GET    | 200  | providers/Microsoft.Network/locations/eastus/operations/781afd47-655e-40bc-8c66-5d1052fe707a                                                                | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Network/virtualNetworks/samplesqlvnet                                                                  |                  |
+|   | GET    | 202  | providers/Microsoft.Storage/locations/eastus/asyncoperations/990e422f-fa41-419f-b205-ce583f8e7500                                                           |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Network/virtualNetworks/samplesqlvnet                                                                  |                  |
+|   | PUT    | 201  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Network/virtualNetworks/samplesqlvnet/subnets/samplesqlsubnet                                          |                  |
+|   | GET    | 200  | providers/Microsoft.Network/locations/eastus/operations/126210be-8a0b-4eaf-b2ec-ebd3812e8ad7                                                                | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/serverAzureAsyncOperation/fad4bb45-64ae-4994-973b-1b9505840b63                    | InProgress       |
+|   | GET    | 200  | providers/Microsoft.Storage/locations/eastus/asyncoperations/990e422f-fa41-419f-b205-ce583f8e7500                                                           |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Storage/storageAccounts/asotestsqlstorageref                                                           |                  |
+|   | POST   | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Storage/storageAccounts/asotestsqlstorageref/listKeys                                                  |                  |
+|   | GET    | 200  | providers/Microsoft.Network/locations/eastus/operations/126210be-8a0b-4eaf-b2ec-ebd3812e8ad7                                                                | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Network/virtualNetworks/samplesqlvnet/subnets/samplesqlsubnet                                          |                  |
+|   | PUT    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Storage/storageAccounts/asotestsqlstorageref/blobServices/default                                      |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Storage/storageAccounts/asotestsqlstorageref/blobServices/default                                      |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Network/virtualNetworks/samplesqlvnet/subnets/samplesqlsubnet                                          |                  |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/serverAzureAsyncOperation/fad4bb45-64ae-4994-973b-1b9505840b63                    | InProgress       |
+|   | PUT    | 201  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Storage/storageAccounts/asotestsqlstorageref/blobServices/default/containers/vulnerabilityassessments  |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Storage/storageAccounts/asotestsqlstorageref/blobServices/default/containers/vulnerabilityassessments  |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Storage/storageAccounts/asotestsqlstorageref/blobServices/default/containers/vulnerabilityassessments  |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/serverAzureAsyncOperation/fad4bb45-64ae-4994-973b-1b9505840b63                    | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw                                                                              |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw                                                                              |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/auditingSettings/default                                                     |                  |
+|   | PUT    | 400  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/vulnerabilityAssessments/default                                             |                  |
+|   | GET    | 200  | providers/Microsoft.Sql/locations/eastus/auditingSettingsAzureAsyncOperation/0c74a14c-f71c-420a-9f95-36e7c20fedf9                                           | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/auditingSettings/default                                                     |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/auditingSettings/default                                                     |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/securityAlertPolicies/Default                                                |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/advancedThreatProtectionSettings/Default                                     |                  |
+|   | PUT    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/firewallRules/asotestcjeffa                                                  |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl                                                      |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/connectionPolicies/default                                                   |                  |
+|   | PUT    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/ipv6FirewallRules/asotestzojvjw                                              |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/outboundFirewallRules/server.database.windows.net                            |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/elasticPools/asotestxzopfv                                                   |                  |
+|   | GET    | 200  | providers/Microsoft.Sql/locations/eastus/securityAlertPoliciesAzureAsyncOperation/841d7d48-b61b-4839-b977-2f6d2325f38a                                      | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/advancedThreatProtectionAzureAsyncOperation/3a05dbb4-c9b9-4279-9b3d-f26384aa811b  | InProgress       |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/virtualNetworkRules/asotestvpsffl                                            |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/firewallRules/asotestcjeffa                                                  |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/securityAlertPolicies/Default                                                |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/ipv6FirewallRules/asotestzojvjw                                              |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/databaseAzureAsyncOperation/244d418f-473f-4186-8e8a-f3cd9f7c4c5b                  | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/securityAlertPolicies/Default                                                |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/connectionPoliciesAzureAsyncOperation/c856c52e-41d1-4a8c-a848-4dc94fb7ab6d        | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/elasticPoolAzureAsyncOperation/84276ab7-9774-4267-badd-b19de5f36e98               | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/advancedThreatProtectionAzureAsyncOperation/3a05dbb4-c9b9-4279-9b3d-f26384aa811b  | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/connectionPolicies/default                                                   |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/connectionPolicies/default                                                   |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/virtualNetworkRulesAzureAsyncOperation/c651c5c3-6b8f-4851-aed3-507cd2244fae       | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/advancedThreatProtectionAzureAsyncOperation/3a05dbb4-c9b9-4279-9b3d-f26384aa811b  | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/advancedThreatProtectionAzureAsyncOperation/3a05dbb4-c9b9-4279-9b3d-f26384aa811b  | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/databaseAzureAsyncOperation/244d418f-473f-4186-8e8a-f3cd9f7c4c5b                  | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/elasticPoolAzureAsyncOperation/84276ab7-9774-4267-badd-b19de5f36e98               | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/virtualNetworkRulesAzureAsyncOperation/c651c5c3-6b8f-4851-aed3-507cd2244fae       | Succeeded        |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/virtualNetworkRules/asotestvpsffl                                            |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/virtualNetworkRules/asotestvpsffl                                            |                  |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+|   | PUT    | 201  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/vulnerabilityAssessments/default                                             |                  |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/vulnerabilityAssessments/default                                             |                  |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/databaseAzureAsyncOperation/244d418f-473f-4186-8e8a-f3cd9f7c4c5b                  | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/advancedThreatProtectionAzureAsyncOperation/3a05dbb4-c9b9-4279-9b3d-f26384aa811b  | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/vulnerabilityAssessments/default                                             |                  |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/elasticPoolAzureAsyncOperation/84276ab7-9774-4267-badd-b19de5f36e98               | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/databaseAzureAsyncOperation/244d418f-473f-4186-8e8a-f3cd9f7c4c5b                  | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/elasticPoolAzureAsyncOperation/84276ab7-9774-4267-badd-b19de5f36e98               | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/elasticPools/asotestxzopfv                                                   |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/elasticPools/asotestxzopfv                                                   |                  |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/databaseAzureAsyncOperation/244d418f-473f-4186-8e8a-f3cd9f7c4c5b                  | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/advancedThreatProtectionAzureAsyncOperation/3a05dbb4-c9b9-4279-9b3d-f26384aa811b  | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/outboundFirewallRulesAzureAsyncOperation/4c9ceb45-d7db-4e48-a02f-ed1da827cb90     | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/outboundFirewallRules/server.database.windows.net                            |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/outboundFirewallRules/server.database.windows.net                            |                  |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/databaseAzureAsyncOperation/244d418f-473f-4186-8e8a-f3cd9f7c4c5b                  | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/databaseAzureAsyncOperation/244d418f-473f-4186-8e8a-f3cd9f7c4c5b                  | InProgress       |
+| X | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/databaseAzureAsyncOperation/244d418f-473f-4186-8e8a-f3cd9f7c4c5b                  | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/advancedThreatProtectionAzureAsyncOperation/3a05dbb4-c9b9-4279-9b3d-f26384aa811b  | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/advancedThreatProtectionSettings/Default                                     |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/databaseAzureAsyncOperation/244d418f-473f-4186-8e8a-f3cd9f7c4c5b                  | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl                                                      |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/advancedThreatProtectionSettings/Default                                     |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl                                                      |                  |
+|   | PUT    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/vulnerabilityAssessments/default                     |                  |
+|   | PUT    | 201  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/auditingSettings/default                             |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/vulnerabilityAssessments/default                     |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/auditingSettings/default                             |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/auditingSettings/default                             |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/backupLongTermRetentionPolicies/default              |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/backupShortTermRetentionPolicies/default             |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/transparentDataEncryption/current                    |                  |
+|   | PUT    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/securityAlertPolicies/default                        |                  |
+|   | PUT    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/advancedThreatProtectionSettings/Default             |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/longTermRetentionPolicyAzureAsyncOperation/254f6fc7-704f-4afa-8b36-e22083a34a95   | InProgress       |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/shortTermRetentionPolicyAzureAsyncOperation/22b24999-2a49-4e73-ab17-665e0ea196d3  | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/transparentDataEncryptionAzureAsyncOperation/4152f0e9-b1c0-4f2b-9c0a-49e2ab6e66c7 | Failed           |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/securityAlertPolicies/default                        |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/advancedThreatProtectionSettings/Default             |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/backupShortTermRetentionPolicies/default             |                  |
+|   | PUT    | 202  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/transparentDataEncryption/current                    |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/backupShortTermRetentionPolicies/default             |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/transparentDataEncryptionAzureAsyncOperation/1ea8007e-c5cd-4ea4-8f1a-d782366963ff | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/transparentDataEncryption/current                    |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/transparentDataEncryption/current                    |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/locations/eastus/longTermRetentionPolicyAzureAsyncOperation/254f6fc7-704f-4afa-8b36-e22083a34a95   | Succeeded        |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/backupLongTermRetentionPolicies/default              |                  |
+|   | GET    | 200  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/backupLongTermRetentionPolicies/default              |                  |
+|   | DELETE | 202  | resourceGroups/asotest-rg-nqaknx                                                                                                                            |                  |
+|   | GET    | 202  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkROUUFLTlgtV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9                   |                  |
+|   | GET    | 202  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkROUUFLTlgtV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9                   |                  |
+|   | GET    | 202  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkROUUFLTlgtV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9                   |                  |
+|   | GET    | 202  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkROUUFLTlgtV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9                   |                  |
+|   | GET    | 202  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkROUUFLTlgtV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9                   |                  |
+|   | GET    | 202  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkROUUFLTlgtV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9                   |                  |
+|   | GET    | 202  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkROUUFLTlgtV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9                   |                  |
+|   | GET    | 200  | operationresults/eyJqb2JJZCI6IlJFU09VUkNFR1JPVVBERUxFVElPTkpPQi1BU09URVNUOjJEUkc6MkROUUFLTlgtV0VTVFVTMiIsImpvYkxvY2F0aW9uIjoid2VzdHVzMiJ9                   |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Storage/storageAccounts/asotestsqlstorageref                                                           |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw                                                                              |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Network/virtualNetworks/samplesqlvnet                                                                  |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl                                                      |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Storage/storageAccounts/asotestsqlstorageref/blobServices/default                                      |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/elasticPools/asotestxzopfv                                                   |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Network/virtualNetworks/samplesqlvnet/subnets/samplesqlsubnet                                          |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/connectionPolicies/default                                                   |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/virtualNetworkRules/asotestvpsffl                                            |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/outboundFirewallRules/server.database.windows.net                            |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/firewallRules/asotestcjeffa                                                  |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/securityAlertPolicies/Default                                                |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/ipv6FirewallRules/asotestzojvjw                                              |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/vulnerabilityAssessments/default                                             |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/advancedThreatProtectionSettings/Default                                     |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/auditingSettings/default                                                     |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Storage/storageAccounts/asotestsqlstorageref/blobServices/default/containers/vulnerabilityassessments  |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/advancedThreatProtectionSettings/Default             |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/backupShortTermRetentionPolicies/default             |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/backupLongTermRetentionPolicies/default              |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/auditingSettings/default                             |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/securityAlertPolicies/default                        |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/transparentDataEncryption/current                    |                  |
+|   | DELETE | 404  | resourceGroups/asotest-rg-nqaknx/providers/Microsoft.Sql/servers/asotestbtrodw/databases/asotestwrgocl/vulnerabilityAssessments/default                     |                  |

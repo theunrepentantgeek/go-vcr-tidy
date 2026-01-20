@@ -50,6 +50,11 @@ func TestGolden_CleanerClean_givenRecording_removesExpectedInteractions(t *testi
 			recordingPath: "Test_EventHub_Namespace_v20240101_CRUD",
 			extraColumn:   provisioningStateColumn,
 		},
+		"reduce-asynchronous-operation-polling-sql": {
+			option:        ReduceAzureLongRunningOperationPolling(),
+			recordingPath: "Test_Sql_v1api20211101_CreationAndDeletion",
+			extraColumn:   operationStatusColumn,
+		},
 	}
 
 	/*
