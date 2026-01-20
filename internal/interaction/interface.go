@@ -36,6 +36,13 @@ type Response interface {
 	StatusCode() int
 	// ResponseHeader returns the value of the specified response header.
 	Header(name string) (string, bool)
+	// SetHeader sets the value of the specified response header.
+	// name is the name of the header to set.
+	// value is the value to set the header to.
+	SetHeader(name string, value string)
+	// RemoveHeader removes the specified response header.
+	// name is the name of the header to remove.
+	RemoveHeader(name string)
 	// Body returns the body of the response.
 	Body() []byte
 }

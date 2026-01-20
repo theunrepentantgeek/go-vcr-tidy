@@ -30,25 +30,24 @@ func NewMonitorAzureLongRunningOperation(
 	}
 }
 
+const (
+	// headerLength is the number of retained interactions at the start of the operation.
+	headerLength = 1
+	// footerLength is the number of retained interactions at the end of the operation.
+	footerLength = 1
+)
+
 // Analyze processes another interaction in the sequence.
 func (m *MonitorAzureLongRunningOperation) Analyze(
 	log *slog.Logger,
 	i interaction.Interface,
 ) (analyzer.Result, error) {
-	// Check if the interaction is for the operation URL
-	if !urltool.SameBaseURL(m.operationURL, i.Request().FullURL()) {
-		return analyzer.Result{}, nil
-	}
-
-	// Check if the interaction is a GET
-	if !interaction.HasMethod(i, http.MethodGet) {
+	if !m.isRelevantGet(i) {
 		return analyzer.Result{}, nil
 	}
 
 	// Check the status of the operation
-	var operation struct {
-		Status string `json:"status"`
-	}
+	var operation Operation
 
 	err := json.Unmarshal(i.Response().Body(), &operation)
 	if err != nil {
@@ -65,7 +64,7 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 	}
 
 	// Operation is complete, check whether we have any interactions to exclude
-	if len(m.interactions) <= 2 {
+	if len(m.interactions) <= headerLength+footerLength {
 		// No intermediate interactions to exclude.
 		log.Debug(
 			"Long running operation finished quickly, nothing to exclude",
@@ -75,13 +74,62 @@ func (m *MonitorAzureLongRunningOperation) Analyze(
 		return analyzer.Finished(), nil
 	}
 
+	excluded := m.interactions[headerLength : len(m.interactions)-footerLength]
+
+	retained := m.interactions[:headerLength]
+	retained = append(retained, m.interactions[len(m.interactions)-footerLength:]...)
+
+	m.rewireSequence(retained)
+
 	log.Debug(
 		"Long running operation finished, excluding intermediate GETs",
 		"url", m.operationURL,
-		"removed", len(m.interactions)-2,
+		"removed", len(excluded),
 	)
 
-	excluded := m.interactions[1 : len(m.interactions)-1]
-
 	return analyzer.FinishedWithExclusions(excluded...), nil
+}
+
+// isRelevantGet checks whether the interaction is a GET to the operation URL.
+func (m *MonitorAzureLongRunningOperation) isRelevantGet(
+	i interaction.Interface,
+) bool {
+	// Check if the interaction is for the operation URL
+	if !urltool.SameBaseURL(m.operationURL, i.Request().FullURL()) {
+		return false
+	}
+
+	// Check if the interaction is a GET
+	if !interaction.HasMethod(i, http.MethodGet) {
+		return false
+	}
+
+	return true
+}
+
+func (m *MonitorAzureLongRunningOperation) rewireSequence(
+	interactions []interaction.Interface,
+) {
+	for i := range len(interactions) - 1 {
+		prior := interactions[i]
+		next := interactions[i+1]
+
+		m.rewire(prior, next)
+	}
+}
+
+func (*MonitorAzureLongRunningOperation) rewire(
+	prior interaction.Interface,
+	next interaction.Interface,
+) {
+	priorURL := prior.Request().FullURL()
+	nextURL := next.Request().FullURL()
+
+	if urltool.SameURL(priorURL, nextURL) {
+		// Same URL, ensure no Location header present
+		prior.Response().RemoveHeader("Location")
+	} else {
+		// Different URL, ensure Location header present
+		prior.Response().SetHeader("Location", nextURL.String())
+	}
 }
