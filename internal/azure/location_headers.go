@@ -8,6 +8,7 @@ import (
 func relinkLocationHeaders(
 	interactions []interaction.Interface,
 ) {
+	//nolint:gosec // No risk of slice index out of range; loop condition ensures at least two elements
 	for i := range len(interactions) - 1 {
 		prior := interactions[i]
 		next := interactions[i+1]
