@@ -64,13 +64,19 @@ func (m *MonitorAzureAsynchronousOperation) Analyze(
 		return analyzer.Finished(), nil
 	}
 
+	retained := m.interactions[:headerLength]
+	retained = append(retained, m.interactions[len(m.interactions)-footerLength:]...)
+
+	// Ensure Location headers are linked correctly
+	relinkLocationHeaders(retained)
+
+	excluded := m.interactions[headerLength : len(m.interactions)-footerLength]
+
 	log.Debug(
 		"Asynchronous operation finished, excluding intermediate GETs",
 		"url", m.operationURL,
-		"removed", len(m.interactions)-2,
+		"removed", len(excluded),
 	)
-
-	excluded := m.interactions[1 : len(m.interactions)-1]
 
 	return analyzer.FinishedWithExclusions(excluded...), nil
 }
