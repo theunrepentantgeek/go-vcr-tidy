@@ -58,7 +58,7 @@ func TestRelinkLocationHeader_RemovesLocationHeader_WhenURLsSame(t *testing.T) {
 	g.Expect(ok).To(BeFalse())
 }
 
-func TestRelinkLocationHeader_KeepsExistingLocationHeader_WhenURLsDiffer(t *testing.T) {
+func TestRelinkLocationHeader_UpdatesExistingLocationHeader_WhenURLsDiffer(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
 
@@ -72,7 +72,7 @@ func TestRelinkLocationHeader_KeepsExistingLocationHeader_WhenURLsDiffer(t *test
 	existingLocation := "https://existing.location.com"
 	prior.SetResponseHeader("Location", existingLocation)
 
-	// Rewire should hook up the existing Location header
+	// Rewire should update the existing Location header
 	relinkLocationHeader(prior, next)
 
 	location, ok := prior.Response().Header("Location")
