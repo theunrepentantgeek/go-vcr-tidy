@@ -11,11 +11,9 @@ import (
 	"github.com/theunrepentantgeek/go-vcr-tidy/internal/must"
 )
 
-func TestMonitorLongRunningOperation_Rewire_AddsLocationHeader_WhenURLsDiffer(t *testing.T) {
+func TestRelinkLocationHeader_AddsLocationHeader_WhenURLsDiffer(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-
-	monitor := &MonitorAzureLongRunningOperation{}
 
 	// Create two interactions with different URLs
 	priorURL := must.ParseURL(t, "https://management.azure.com/operations/1")
@@ -29,18 +27,16 @@ func TestMonitorLongRunningOperation_Rewire_AddsLocationHeader_WhenURLsDiffer(t 
 	g.Expect(ok).To(BeFalse())
 
 	// Rewire should add Location header
-	monitor.rewire(prior, next)
+	relinkLocationHeader(prior, next)
 
 	location, ok := prior.Response().Header("Location")
 	g.Expect(ok).To(BeTrue())
 	g.Expect(location).To(Equal(nextURL.String()))
 }
 
-func TestMonitorLongRunningOperation_Rewire_RemovesLocationHeader_WhenURLsSame(t *testing.T) {
+func TestRelinkLocationHeader_RemovesLocationHeader_WhenURLsSame(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-
-	monitor := &MonitorAzureLongRunningOperation{}
 
 	// Create two interactions with the same URL
 	sameURL := must.ParseURL(t, "https://management.azure.com/operations/1")
@@ -56,17 +52,15 @@ func TestMonitorLongRunningOperation_Rewire_RemovesLocationHeader_WhenURLsSame(t
 	g.Expect(ok).To(BeTrue())
 
 	// Rewire should remove Location header
-	monitor.rewire(prior, next)
+	relinkLocationHeader(prior, next)
 
 	_, ok = prior.Response().Header("Location")
 	g.Expect(ok).To(BeFalse())
 }
 
-func TestMonitorLongRunningOperation_Rewire_KeepsExistingLocationHeader_WhenURLsDiffer(t *testing.T) {
+func TestRelinkLocationHeader_KeepsExistingLocationHeader_WhenURLsDiffer(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-
-	monitor := &MonitorAzureLongRunningOperation{}
 
 	priorURL := must.ParseURL(t, "https://management.azure.com/operations/1")
 	nextURL := must.ParseURL(t, "https://management.azure.com/operations/2")
@@ -78,19 +72,17 @@ func TestMonitorLongRunningOperation_Rewire_KeepsExistingLocationHeader_WhenURLs
 	existingLocation := "https://existing.location.com"
 	prior.SetResponseHeader("Location", existingLocation)
 
-	// Rewire should keep the existing Location header
-	monitor.rewire(prior, next)
+	// Rewire should hook up the existing Location header
+	relinkLocationHeader(prior, next)
 
 	location, ok := prior.Response().Header("Location")
 	g.Expect(ok).To(BeTrue())
-	g.Expect(location).To(Equal(existingLocation))
+	g.Expect(location).To(Equal(nextURL.String()))
 }
 
-func TestMonitorLongRunningOperation_Rewire_HandlesQueryParameters(t *testing.T) {
+func TestRelinkLocationHeader_HandlesQueryParameters(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-
-	monitor := &MonitorAzureLongRunningOperation{}
 
 	// URLs with different query parameters are considered different
 	priorURL := must.ParseURL(t, "https://management.azure.com/operations/1?t=123")
@@ -100,18 +92,16 @@ func TestMonitorLongRunningOperation_Rewire_HandlesQueryParameters(t *testing.T)
 	next := fake.Interaction(nextURL, http.MethodGet, 200)
 
 	// Rewire should add Location header because URLs differ
-	monitor.rewire(prior, next)
+	relinkLocationHeader(prior, next)
 
 	location, ok := prior.Response().Header("Location")
 	g.Expect(ok).To(BeTrue())
 	g.Expect(location).To(Equal(nextURL.String()))
 }
 
-func TestMonitorLongRunningOperation_RewireSequence_LinksAllInteractions(t *testing.T) {
+func TestRelinkLocationHeaders_LinksAllInteractions(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-
-	monitor := &MonitorAzureLongRunningOperation{}
 
 	// Create a sequence of interactions with different URLs
 	url1 := must.ParseURL(t, "https://management.azure.com/operations/1")
@@ -125,7 +115,7 @@ func TestMonitorLongRunningOperation_RewireSequence_LinksAllInteractions(t *test
 	interactions := []interaction.Interface{i1, i2, i3}
 
 	// Rewire the sequence
-	monitor.rewireSequence(interactions)
+	relinkLocationHeaders(interactions)
 
 	// Verify i1 has Location header pointing to i2
 	location1, ok := i1.Response().Header("Location")
@@ -142,11 +132,9 @@ func TestMonitorLongRunningOperation_RewireSequence_LinksAllInteractions(t *test
 	g.Expect(ok).To(BeFalse())
 }
 
-func TestMonitorLongRunningOperation_RewireSequence_HandlesSingleInteraction(t *testing.T) {
+func TestRelinkLocationHeaders_HandlesSingleInteraction(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-
-	monitor := &MonitorAzureLongRunningOperation{}
 
 	url1 := must.ParseURL(t, "https://management.azure.com/operations/1")
 	i1 := fake.Interaction(url1, http.MethodGet, 200)
@@ -154,18 +142,16 @@ func TestMonitorLongRunningOperation_RewireSequence_HandlesSingleInteraction(t *
 	interactions := []interaction.Interface{i1}
 
 	// Rewire should handle single interaction gracefully
-	monitor.rewireSequence(interactions)
+	relinkLocationHeaders(interactions)
 
 	// No Location header should be added
 	_, ok := i1.Response().Header("Location")
 	g.Expect(ok).To(BeFalse())
 }
 
-func TestMonitorLongRunningOperation_RewireSequence_HandlesMixedURLs(t *testing.T) {
+func TestRelinkLocationHeaders_HandlesMixedURLs(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
-
-	monitor := &MonitorAzureLongRunningOperation{}
 
 	// Create sequence where some URLs are same, some different
 	url1 := must.ParseURL(t, "https://management.azure.com/operations/1")
@@ -182,7 +168,7 @@ func TestMonitorLongRunningOperation_RewireSequence_HandlesMixedURLs(t *testing.
 	interactions := []interaction.Interface{i1, i2, i3}
 
 	// Rewire the sequence
-	monitor.rewireSequence(interactions)
+	relinkLocationHeaders(interactions)
 
 	// i1 and i2 have same URL, so i1 should have no Location header
 	_, ok := i1.Response().Header("Location")
@@ -198,13 +184,11 @@ func TestMonitorLongRunningOperation_RewireSequence_HandlesMixedURLs(t *testing.
 	g.Expect(ok).To(BeFalse())
 }
 
-func TestMonitorLongRunningOperation_RewireSequence_EmptySlice(t *testing.T) {
+func TestRelinkLocationHeaders_GivenEmptySlice_ShouldWork(t *testing.T) {
 	t.Parallel()
 
-	monitor := &MonitorAzureLongRunningOperation{}
-
 	// Rewire should handle empty slice gracefully
-	monitor.rewireSequence([]interaction.Interface{})
+	relinkLocationHeaders([]interaction.Interface{})
 
 	// No panic should occur - test passes if it completes
 }
