@@ -8,6 +8,7 @@ import (
 
 // CleaningOptions.Options Tests
 
+//nolint:funlen // Table test cases are extensive but clear
 func TestCleaningOptions_Options(t *testing.T) {
 	t.Parallel()
 
