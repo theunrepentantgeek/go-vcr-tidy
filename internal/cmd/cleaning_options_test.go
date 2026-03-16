@@ -12,25 +12,46 @@ func TestCleaningOptions_Options(t *testing.T) {
 	t.Parallel()
 
 	cases := map[string]struct {
-		deletes       *bool
-		azureAll      *bool
-		expectedCount int
+		deferredCreations *bool
+		deletes           *bool
+		azureAll          *bool
+		expectedCount     int
 	}{
 		"WithNoOptionsSet_ReturnsEmptySlice": {
 			expectedCount: 0,
+		},
+		"WithOnlyDeferredCreationsSet_ReturnsOneDeferredCreationOption": {
+			deferredCreations: toPtr(true),
+			expectedCount:     1,
 		},
 		"WithOnlyDeletesSet_ReturnsOneDeleteOption": {
 			deletes:       toPtr(true),
 			expectedCount: 1,
 		},
+		"WithDeferredCreationsAndDeletes_ReturnsTwoOptions": {
+			deferredCreations: toPtr(true),
+			deletes:           toPtr(true),
+			expectedCount:     2,
+		},
 		"WithOnlyAzureAllSet_ReturnsFourAzureOptions": {
 			azureAll:      toPtr(true),
 			expectedCount: 4,
 		},
-		"WithDeletesAndAzureAll_ReturnsFourOptions": {
+		"WithDeletesAndAzureAll_ReturnsFiveOptions": {
 			deletes:       toPtr(true),
 			azureAll:      toPtr(true),
 			expectedCount: 5,
+		},
+		"WithDeferredCreationsAndAzureAll_ReturnsFiveOptions": {
+			deferredCreations: toPtr(true),
+			azureAll:          toPtr(true),
+			expectedCount:     5,
+		},
+		"WithAllOptions_ReturnsSixOptions": {
+			deferredCreations: toPtr(true),
+			deletes:           toPtr(true),
+			azureAll:          toPtr(true),
+			expectedCount:     6,
 		},
 	}
 
@@ -40,7 +61,8 @@ func TestCleaningOptions_Options(t *testing.T) {
 			g := NewWithT(t)
 
 			opt := &CleaningOptions{
-				Deletes: c.deletes,
+				DeferredCreations: c.deferredCreations,
+				Deletes:           c.deletes,
 				Azure: AzureCleaningOptions{
 					All: c.azureAll,
 				},
