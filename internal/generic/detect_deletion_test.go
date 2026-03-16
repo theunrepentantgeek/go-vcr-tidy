@@ -125,6 +125,7 @@ func TestDetectDeletion_NonDELETEMethods_DoesNotSpawn(t *testing.T) {
 	}
 }
 
+//nolint:dupl // Similar structure to TestDetectDeferredCreation_MultipleGET404s_SpawnsMultipleMonitors
 func TestDetectDeletion_MultipleDELETEs_SpawnsMultipleMonitors(t *testing.T) {
 	t.Parallel()
 	g := NewWithT(t)
