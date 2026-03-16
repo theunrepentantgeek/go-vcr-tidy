@@ -18,6 +18,7 @@ func TestBuildOptions(t *testing.T) {
 	t.Parallel()
 
 	cases := map[string]struct {
+		deferredCreations      *bool
 		deletes                *bool
 		longRunningOperations  *bool
 		resourceModifications  *bool
@@ -27,6 +28,10 @@ func TestBuildOptions(t *testing.T) {
 	}{
 		"WithNoOptionsSpecified_ReturnsError": {
 			expectedErrorSubstring: "no cleaning options specified",
+		},
+		"WithOnlyDeferredCreationsSet_ReturnsDeferredCreationOption": {
+			deferredCreations:    toPtr(true),
+			expectedOptionsCount: 1,
 		},
 		"WithOnlyDeletesSet_ReturnsDeleteOption": {
 			deletes:              toPtr(true),
@@ -44,17 +49,27 @@ func TestBuildOptions(t *testing.T) {
 			resourceDeletions:    toPtr(true),
 			expectedOptionsCount: 1,
 		},
-		"WithBothOptionsSet_ReturnsBothOptions": {
+		"WithDeferredCreationsAndDeletes_ReturnsTwoOptions": {
+			deferredCreations:    toPtr(true),
+			deletes:              toPtr(true),
+			expectedOptionsCount: 2,
+		},
+		"WithDeletesAndLongRunningOperations_ReturnsTwoOptions": {
 			deletes:               toPtr(true),
 			longRunningOperations: toPtr(true),
 			expectedOptionsCount:  2,
 		},
 		"WithAllOptionsSet_ReturnsAllOptions": {
+			deferredCreations:     toPtr(true),
 			deletes:               toPtr(true),
 			longRunningOperations: toPtr(true),
 			resourceModifications: toPtr(true),
 			resourceDeletions:     toPtr(true),
-			expectedOptionsCount:  4,
+			expectedOptionsCount:  5,
+		},
+		"WithDeferredCreationsSetToFalse_ReturnsError": {
+			deferredCreations:      toPtr(false),
+			expectedErrorSubstring: "no cleaning options specified",
 		},
 		"WithDeletesSetToFalse_ReturnsError": {
 			deletes:                toPtr(false),
@@ -80,6 +95,7 @@ func TestBuildOptions(t *testing.T) {
 			g := NewWithT(t)
 
 			cmd := &CleanCommand{}
+			cmd.Clean.DeferredCreations = c.deferredCreations
 			cmd.Clean.Deletes = c.deletes
 			cmd.Clean.Azure.LongRunningOperations = c.longRunningOperations
 			cmd.Clean.Azure.ResourceModifications = c.resourceModifications
