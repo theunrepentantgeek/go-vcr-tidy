@@ -69,7 +69,7 @@ func (opt *CleaningOptions) Options() []vcrcleaner.Option {
 Update `TestCleaningOptions_Options`:
 - Add `deferredCreations *bool` field to test struct.
 - Add cases: deferred creations alone (count 1), combined with deletes (count 2), combined with azure-all (count 5), all three (count 6).
-- Update existing combined case counts where `All` is involved.
+- Existing cases that don't set `deferredCreations` keep their current counts (e.g., "WithDeletesAndAzureAll" stays at 5).
 
 Add `TestCleaningOptions_ShouldCleanDeferredCreations` table test mirroring `ShouldCleanDeletes` tests:
 - True → true, false → false, nil → false.
