@@ -90,3 +90,41 @@ func TestCleaningOptions_ShouldCleanDeletes(t *testing.T) {
 		})
 	}
 }
+
+// CleaningOptions.ShouldCleanDeferredCreations Tests
+
+func TestCleaningOptions_ShouldCleanDeferredCreations(t *testing.T) {
+	t.Parallel()
+
+	cases := map[string]struct {
+		deferredCreations *bool
+		expected          bool
+	}{
+		"WithDeferredCreationsTrue_ReturnsTrue": {
+			deferredCreations: toPtr(true),
+			expected:          true,
+		},
+		"WithDeferredCreationsFalse_ReturnsFalse": {
+			deferredCreations: toPtr(false),
+			expected:          false,
+		},
+		"WithDeferredCreationsNil_ReturnsFalse": {
+			expected: false,
+		},
+	}
+
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			g := NewWithT(t)
+
+			opt := &CleaningOptions{
+				DeferredCreations: c.deferredCreations,
+			}
+
+			result := opt.ShouldCleanDeferredCreations()
+
+			g.Expect(result).To(Equal(c.expected))
+		})
+	}
+}
