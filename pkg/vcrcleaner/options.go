@@ -9,6 +9,13 @@ import (
 // Option represents a configuration option for the Cleaner.
 type Option func(*cleaner.Cleaner)
 
+// ReduceDeferredCreationMonitoring adds an analyzer that reduces deferred creation monitoring noise.
+func ReduceDeferredCreationMonitoring() Option {
+	return func(c *cleaner.Cleaner) {
+		c.AddAnalyzers(generic.NewDetectDeferredCreation())
+	}
+}
+
 // ReduceDeleteMonitoring adds an analyzer that reduces delete monitoring noise.
 func ReduceDeleteMonitoring() Option {
 	return func(c *cleaner.Cleaner) {
