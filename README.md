@@ -26,13 +26,25 @@ Arguments:
   <globs> ...    Paths to go-vcr cassette files to clean. Globbing allowed.
 
 Flags:
-  -h, --help                                   Show context-sensitive help.
-  -v, --verbose                                Enable verbose logging.
-      --clean-deletes                          Clean delete interactions.
-      --clean-azure-all                        Clean all Azure-related monitoring interactions.
-      --clean-azure-long-running-operations    Clean Azure long-running operation interactions.
-      --clean-azure-resource-modifications     Clean Azure resource modification (PUT/PATCH) monitoring interactions.
-      --clean-azure-resource-deletions         Clean Azure resource deletion monitoring interactions.
+  -h, --help               Show context-sensitive help.
+      --verbose            Enable verbose logging.
+      --debug              Enable debug logging.
+      --clean-all          Clean all supported interaction types.
+      --clean-deferred-creations
+                           Clean deferred creation interactions.
+      --clean-deletes      Clean delete interactions.
+      --clean-azure-all    Clean all Azure-related monitoring interactions.
+      --clean-azure-asynchronous-operations
+                           Clean Azure asynchronous operation monitoring
+                           interactions.
+      --clean-azure-long-running-operations
+                           Clean Azure long-running operation interactions.
+      --clean-azure-resource-modifications
+                           Clean Azure resource modification (PUT/PATCH)
+                           monitoring interactions.
+      --clean-azure-resource-deletions
+                           Clean Azure resource deletion monitoring
+                           interactions.
 ```
 
 On Linux and MacOS, globs should be "double quoted" to prevent the shell from expanding the wildcard.
