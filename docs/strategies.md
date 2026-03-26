@@ -4,6 +4,20 @@
 
 A number of different cleaning strategies are available - select the ones that make sense for your context.
 
+### Deferred creation monitoring
+
+Client issues a GET request for a resource that doesn't yet exist and receives a 404 (Not Found) response. Subsequent GET requests continue to return 404 until the resource is created, at which point the GET returns a 2xx status.
+
+| Stage   |   HTTP Method    | Status | Note            |
+| ------- | :--------------: | :----: | --------------- |
+| Trigger | GET &lt;url&gt;  |  404   |                 |
+| Monitor | GET &lt;url&gt;  |  404   | Repeats n times |
+| Finish  | GET &lt;url&gt;  |  2xx   |                 |
+
+Retain the first and last 404 GET requests. Remove the intervening 404 GET requests.
+
+Enable on the CLI with `--clean-deferred-creations` or in code by passing the `ReduceDeferredCreationMonitoring()` option to `vcrcleaner.New()`.
+
 ### Monitored deletes
 
 Client issues a DELETE request for a resource, then polls the resource URL with repeated GET requests until the resource is confirmed deleted (404).
