@@ -6,7 +6,7 @@ require (
 	github.com/alecthomas/kong v1.16.1
 	github.com/google/uuid v1.6.0
 	github.com/neilotoole/slogt v1.1.0
-	github.com/onsi/gomega v1.42.1
+	github.com/onsi/gomega v1.43.0
 	github.com/phsym/console-slog v0.3.1
 	github.com/rotisserie/eris v0.5.4
 	github.com/sebdah/goldie/v2 v2.8.0
