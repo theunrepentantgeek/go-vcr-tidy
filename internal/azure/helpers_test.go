@@ -17,6 +17,14 @@ import (
  * Helper functions for testing
  */
 
+const (
+	testStatusOK          = "200 OK"
+	testStatusNoContent   = "204 No Content"
+	testStatusBadRequest  = "400 Bad Request"
+	testStatusNotFound    = "404 Not Found"
+	testStatusServerError = "500 Server Error"
+)
+
 // runAnalyzer runs the analyzer with the provided interactions and returns the final result.
 // It fails the test if any errors occur or if the analyzer finishes prematurely.
 // t is the current test (don't pass a parent).

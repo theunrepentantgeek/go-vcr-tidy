@@ -37,9 +37,9 @@ func TestDetectResourceDeletion_Various2xxStatusCodes_SpawnsMonitor(t *testing.T
 	cases := map[string]struct {
 		statusCode int
 	}{
-		"200 OK":         {statusCode: 200},
-		"202 Accepted":   {statusCode: 202},
-		"204 No Content": {statusCode: 204},
+		testStatusOK:        {statusCode: 200},
+		"202 Accepted":      {statusCode: 202},
+		testStatusNoContent: {statusCode: 204},
 	}
 
 	for name, c := range cases {
@@ -66,9 +66,9 @@ func TestDetectResourceDeletion_FailedDELETE_DoesNotSpawn(t *testing.T) {
 	cases := map[string]struct {
 		statusCode int
 	}{
-		"400 Bad Request":  {statusCode: 400},
-		"404 Not Found":    {statusCode: 404},
-		"500 Server Error": {statusCode: 500},
+		testStatusBadRequest:  {statusCode: 400},
+		testStatusNotFound:    {statusCode: 404},
+		testStatusServerError: {statusCode: 500},
 	}
 
 	for name, c := range cases {
@@ -96,10 +96,10 @@ func TestDetectResourceDeletion_OtherMethods_DoesNotSpawn(t *testing.T) {
 	cases := map[string]struct {
 		method string
 	}{
-		"GET":   {method: http.MethodGet},
-		"POST":  {method: http.MethodPost},
-		"PUT":   {method: http.MethodPut},
-		"PATCH": {method: http.MethodPatch},
+		http.MethodGet:   {method: http.MethodGet},
+		http.MethodPost:  {method: http.MethodPost},
+		http.MethodPut:   {method: http.MethodPut},
+		http.MethodPatch: {method: http.MethodPatch},
 	}
 
 	for name, c := range cases {

@@ -56,10 +56,10 @@ func TestDetectResourceModification_Various2xxStatusCodes_SpawnsMonitor(t *testi
 	cases := map[string]struct {
 		statusCode int
 	}{
-		"200 OK":         {statusCode: 200},
-		"201 Created":    {statusCode: 201},
-		"202 Accepted":   {statusCode: 202},
-		"204 No Content": {statusCode: 204},
+		testStatusOK:        {statusCode: 200},
+		"201 Created":       {statusCode: 201},
+		"202 Accepted":      {statusCode: 202},
+		testStatusNoContent: {statusCode: 204},
 	}
 
 	for name, c := range cases {
@@ -86,9 +86,9 @@ func TestDetectResourceModification_FailedRequest_DoesNotSpawn(t *testing.T) {
 	cases := map[string]struct {
 		statusCode int
 	}{
-		"400 Bad Request":  {statusCode: 400},
-		"404 Not Found":    {statusCode: 404},
-		"500 Server Error": {statusCode: 500},
+		testStatusBadRequest:  {statusCode: 400},
+		testStatusNotFound:    {statusCode: 404},
+		testStatusServerError: {statusCode: 500},
 	}
 
 	for name, c := range cases {
@@ -116,10 +116,10 @@ func TestDetectResourceModification_OtherMethods_DoesNotSpawn(t *testing.T) {
 	cases := map[string]struct {
 		method string
 	}{
-		"GET":    {method: http.MethodGet},
-		"POST":   {method: http.MethodPost},
-		"DELETE": {method: http.MethodDelete},
-		"HEAD":   {method: http.MethodHead},
+		http.MethodGet:    {method: http.MethodGet},
+		http.MethodPost:   {method: http.MethodPost},
+		http.MethodDelete: {method: http.MethodDelete},
+		http.MethodHead:   {method: http.MethodHead},
 	}
 
 	for name, c := range cases {

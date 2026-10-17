@@ -20,7 +20,8 @@ func cassetteSummary(
 	// Build common URL prefix
 	prefix := commonURLPrefix(cas)
 
-	headers := []string{"", "Method", "Code", prefix}
+	headers := make([]string, 0, 4+len(columns))
+	headers = append(headers, "", "Method", "Code", prefix)
 
 	for _, column := range columns {
 		headers = append(headers, column.Header)
@@ -35,12 +36,13 @@ func cassetteSummary(
 		statusCode := displayStatusCode(interaction)
 
 		// Write method, URL, and other details, including custom columns (if any)
-		row := []string{
+		row := make([]string, 0, 4+len(columns))
+		row = append(row,
 			discarded,
 			interaction.Request.Method,
 			statusCode,
 			u,
-		}
+		)
 
 		for _, column := range columns {
 			row = append(row, column.fn(interaction))

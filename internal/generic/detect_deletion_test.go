@@ -100,12 +100,12 @@ func TestDetectDeletion_NonDELETEMethods_DoesNotSpawn(t *testing.T) {
 		method     string
 		statusCode int
 	}{
-		"GET":     {method: http.MethodGet, statusCode: 200},
-		"POST":    {method: http.MethodPost, statusCode: 201},
-		"PUT":     {method: http.MethodPut, statusCode: 200},
-		"PATCH":   {method: http.MethodPatch, statusCode: 200},
-		"HEAD":    {method: http.MethodHead, statusCode: 200},
-		"OPTIONS": {method: http.MethodOptions, statusCode: 200},
+		http.MethodGet:     {method: http.MethodGet, statusCode: 200},
+		http.MethodPost:    {method: http.MethodPost, statusCode: 201},
+		http.MethodPut:     {method: http.MethodPut, statusCode: 200},
+		http.MethodPatch:   {method: http.MethodPatch, statusCode: 200},
+		http.MethodHead:    {method: http.MethodHead, statusCode: 200},
+		http.MethodOptions: {method: http.MethodOptions, statusCode: 200},
 	}
 
 	for name, c := range cases {
