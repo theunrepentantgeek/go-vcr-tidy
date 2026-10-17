@@ -1,6 +1,7 @@
 package azure
 
 import (
+	"net/http"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -20,9 +21,9 @@ func TestDetectAzureAsynchronousOperation_SuccessfulRequestsWith202AndLocationHe
 	cases := map[string]struct {
 		method string
 	}{
-		"PUT":    {method: "PUT"},
-		"POST":   {method: "POST"},
-		"DELETE": {method: "DELETE"},
+		http.MethodPut:    {method: http.MethodPut},
+		http.MethodPost:   {method: http.MethodPost},
+		http.MethodDelete: {method: http.MethodDelete},
 	}
 
 	for name, c := range cases {
@@ -55,9 +56,9 @@ func TestDetectAzureAsynchronousOperation_OtherMethods_DoesNotSpawn(t *testing.T
 	cases := map[string]struct {
 		method string
 	}{
-		"GET":   {method: "GET"},
-		"PATCH": {method: "PATCH"},
-		"HEAD":  {method: "HEAD"},
+		http.MethodGet:   {method: http.MethodGet},
+		http.MethodPatch: {method: http.MethodPatch},
+		http.MethodHead:  {method: http.MethodHead},
 	}
 
 	for name, c := range cases {
@@ -87,12 +88,12 @@ func TestDetectAzureAsynchronousOperation_Non202StatusCode_DoesNotSpawn(t *testi
 	cases := map[string]struct {
 		statusCode int
 	}{
-		"200 OK":           {statusCode: 200},
-		"201 Created":      {statusCode: 201},
-		"204 No Content":   {statusCode: 204},
-		"400 Bad Request":  {statusCode: 400},
-		"404 Not Found":    {statusCode: 404},
-		"500 Server Error": {statusCode: 500},
+		testStatusOK:          {statusCode: 200},
+		"201 Created":         {statusCode: 201},
+		testStatusNoContent:   {statusCode: 204},
+		testStatusBadRequest:  {statusCode: 400},
+		testStatusNotFound:    {statusCode: 404},
+		testStatusServerError: {statusCode: 500},
 	}
 
 	for name, c := range cases {
@@ -105,7 +106,7 @@ func TestDetectAzureAsynchronousOperation_Non202StatusCode_DoesNotSpawn(t *testi
 			detector := NewDetectAzureAsynchronousOperation()
 			log := slogt.New(t)
 
-			interaction := fake.Interaction(baseURL, "PUT", c.statusCode)
+			interaction := fake.Interaction(baseURL, http.MethodPut, c.statusCode)
 			interaction.SetResponseHeader(azureLocationHeader, locationURL)
 
 			result, err := detector.Analyze(log, interaction)
@@ -124,7 +125,7 @@ func TestDetectAzureAsynchronousOperation_MissingLocationHeader_DoesNotSpawn(t *
 	detector := NewDetectAzureAsynchronousOperation()
 	log := slogt.New(t)
 
-	interaction := fake.Interaction(baseURL, "PUT", 202)
+	interaction := fake.Interaction(baseURL, http.MethodPut, 202)
 
 	result, err := detector.Analyze(log, interaction)
 
@@ -140,7 +141,7 @@ func TestDetectAzureAsynchronousOperation_EmptyLocationHeader_DoesNotSpawn(t *te
 	detector := NewDetectAzureAsynchronousOperation()
 	log := slogt.New(t)
 
-	interaction := fake.Interaction(baseURL, "PUT", 202)
+	interaction := fake.Interaction(baseURL, http.MethodPut, 202)
 	interaction.SetResponseHeader(azureLocationHeader, "")
 
 	result, err := detector.Analyze(log, interaction)
@@ -157,7 +158,7 @@ func TestDetectAzureAsynchronousOperation_InvalidLocationURL_DoesNotSpawn(t *tes
 	detector := NewDetectAzureAsynchronousOperation()
 	log := slogt.New(t)
 
-	interaction := fake.Interaction(baseURL, "PUT", 202)
+	interaction := fake.Interaction(baseURL, http.MethodPut, 202)
 	interaction.SetResponseHeader(azureLocationHeader, "://invalid")
 
 	result, err := detector.Analyze(log, interaction)
@@ -176,7 +177,7 @@ func TestDetectAzureAsynchronousOperation_ValidLocationURL_ParsesCorrectly(t *te
 	detector := NewDetectAzureAsynchronousOperation()
 	log := slogt.New(t)
 
-	interaction := fake.Interaction(baseURL, "PUT", 202)
+	interaction := fake.Interaction(baseURL, http.MethodPut, 202)
 	interaction.SetResponseHeader(azureLocationHeader, locationURL)
 
 	result, err := detector.Analyze(log, interaction)

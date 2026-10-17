@@ -20,9 +20,14 @@ func createTestRecording(t *testing.T, g Gomega, tmpDir, filename string) string
 	content, err := os.ReadFile(filepath.Join("testdata", "sample.yaml"))
 	g.Expect(err).ToNot(HaveOccurred())
 
-	cassettePath := filepath.Join(tmpDir, filename)
-	err = os.WriteFile(cassettePath, content, 0o600)
+	root, err := os.OpenRoot(tmpDir)
+	g.Expect(err).ToNot(HaveOccurred())
+	t.Cleanup(func() {
+		g.Expect(root.Close()).To(Succeed())
+	})
+
+	err = root.WriteFile(filename, content, 0o600)
 	g.Expect(err).ToNot(HaveOccurred())
 
-	return cassettePath
+	return filepath.Join(tmpDir, filename)
 }

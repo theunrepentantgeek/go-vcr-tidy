@@ -129,10 +129,10 @@ func TestMonitorDeletion_AbandonsMonitoring(t *testing.T) {
 		method     string
 		statusCode int
 	}{
-		"POST":   {method: http.MethodPost, statusCode: 201},
-		"PUT":    {method: http.MethodPut, statusCode: 200},
-		"GET500": {method: http.MethodGet, statusCode: 500},
-		"GET301": {method: http.MethodGet, statusCode: 301},
+		http.MethodPost: {method: http.MethodPost, statusCode: 201},
+		http.MethodPut:  {method: http.MethodPut, statusCode: 200},
+		"GET500":        {method: http.MethodGet, statusCode: 500},
+		"GET301":        {method: http.MethodGet, statusCode: 301},
 	}
 
 	for name, c := range cases {

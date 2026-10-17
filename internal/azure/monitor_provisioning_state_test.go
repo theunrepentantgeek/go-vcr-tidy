@@ -141,10 +141,10 @@ func TestMonitorProvisioningState_NonGETMethod_AbandonsMonitoring(t *testing.T) 
 	cases := map[string]struct {
 		method string
 	}{
-		"POST":   {method: http.MethodPost},
-		"PUT":    {method: http.MethodPut},
-		"PATCH":  {method: http.MethodPatch},
-		"DELETE": {method: http.MethodDelete},
+		http.MethodPost:   {method: http.MethodPost},
+		http.MethodPut:    {method: http.MethodPut},
+		http.MethodPatch:  {method: http.MethodPatch},
+		http.MethodDelete: {method: http.MethodDelete},
 	}
 
 	for name, c := range cases {
@@ -174,9 +174,9 @@ func TestMonitorProvisioningState_UnexpectedStatusCode_AbandonsMonitoring(t *tes
 	cases := map[string]struct {
 		statusCode int
 	}{
-		"400 Bad Request":  {statusCode: 400},
-		"404 Not Found":    {statusCode: 404},
-		"500 Server Error": {statusCode: 500},
+		testStatusBadRequest:  {statusCode: 400},
+		testStatusNotFound:    {statusCode: 404},
+		testStatusServerError: {statusCode: 500},
 	}
 
 	for name, c := range cases {

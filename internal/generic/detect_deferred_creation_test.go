@@ -67,12 +67,12 @@ func TestDetectDeferredCreation_NonGETMethodsWith404_DoesNotSpawn(t *testing.T) 
 	cases := map[string]struct {
 		method string
 	}{
-		"POST":    {method: http.MethodPost},
-		"PUT":     {method: http.MethodPut},
-		"DELETE":  {method: http.MethodDelete},
-		"PATCH":   {method: http.MethodPatch},
-		"HEAD":    {method: http.MethodHead},
-		"OPTIONS": {method: http.MethodOptions},
+		http.MethodPost:    {method: http.MethodPost},
+		http.MethodPut:     {method: http.MethodPut},
+		http.MethodDelete:  {method: http.MethodDelete},
+		http.MethodPatch:   {method: http.MethodPatch},
+		http.MethodHead:    {method: http.MethodHead},
+		http.MethodOptions: {method: http.MethodOptions},
 	}
 
 	for name, c := range cases {

@@ -17,6 +17,8 @@ import (
 func TestBuildOptions(t *testing.T) {
 	t.Parallel()
 
+	const noCleaningOptions = "no cleaning options specified"
+
 	cases := map[string]struct {
 		deferredCreations      *bool
 		deletes                *bool
@@ -27,7 +29,7 @@ func TestBuildOptions(t *testing.T) {
 		expectedErrorSubstring string
 	}{
 		"WithNoOptionsSpecified_ReturnsError": {
-			expectedErrorSubstring: "no cleaning options specified",
+			expectedErrorSubstring: noCleaningOptions,
 		},
 		"WithOnlyDeferredCreationsSet_ReturnsDeferredCreationOption": {
 			deferredCreations:    toPtr(true),
@@ -69,23 +71,23 @@ func TestBuildOptions(t *testing.T) {
 		},
 		"WithDeferredCreationsSetToFalse_ReturnsError": {
 			deferredCreations:      toPtr(false),
-			expectedErrorSubstring: "no cleaning options specified",
+			expectedErrorSubstring: noCleaningOptions,
 		},
 		"WithDeletesSetToFalse_ReturnsError": {
 			deletes:                toPtr(false),
-			expectedErrorSubstring: "no cleaning options specified",
+			expectedErrorSubstring: noCleaningOptions,
 		},
 		"WithLongRunningOperationsSetToFalse_ReturnsError": {
 			longRunningOperations:  toPtr(false),
-			expectedErrorSubstring: "no cleaning options specified",
+			expectedErrorSubstring: noCleaningOptions,
 		},
 		"WithResourceModificationsSetToFalse_ReturnsError": {
 			resourceModifications:  toPtr(false),
-			expectedErrorSubstring: "no cleaning options specified",
+			expectedErrorSubstring: noCleaningOptions,
 		},
 		"WithResourceDeletionsSetToFalse_ReturnsError": {
 			resourceDeletions:      toPtr(false),
-			expectedErrorSubstring: "no cleaning options specified",
+			expectedErrorSubstring: noCleaningOptions,
 		},
 	}
 

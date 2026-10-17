@@ -100,11 +100,11 @@ if ! [[ $GOVERACTUAL =~ $GOVERREGEX ]]; then
 fi
 
 GOMINORVER="${BASH_REMATCH[1]}"
-GOMINORREQUIRED=22
+GOMINORREQUIRED=26
 
 # We allow for Go versions above the min version, but prevent versions below. This is safe given Go's back-compat guarantees
 if ! [[ $GOMINORVER -ge $GOMINORREQUIRED ]]; then
-    write-error "Go must be version 1.$GOMINORREQUIRED, not $GOVERACTUAL; see : https://golang.org/doc/install"
+    write-error "Go must be version 1.$GOMINORREQUIRED or higher, not $GOVERACTUAL; see : https://golang.org/doc/install"
     exit 1
 fi
 
@@ -159,7 +159,7 @@ go-install() {
 }
 
 # Stricter GO formatting
-go-install gofumpt mvdan.cc/gofumpt@v0.9.2
+go-install gofumpt mvdan.cc/gofumpt@v0.12.0
 
 # Nicer reporting of test results
 go-install go-testreport github.com/becheran/go-testreport@v0.3.2
@@ -173,7 +173,7 @@ if should-install "$TOOL_DEST/golangci-lint"; then
     write-info "Installing golangci-lint"
     # golangci-lint is provided by base image if in devcontainer
     # this command copied from there
-    go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.7.2
+    go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.15.0
 fi
 
 if should-install "$TOOL_DEST/golangci-lint-custom"; then
@@ -187,7 +187,7 @@ fi
 write-verbose "Checking for $TOOL_DEST/go-task"
 if should-install "$TOOL_DEST/task"; then 
     write-info "Installing go-task"
-    curl -sL "https://github.com/go-task/task/releases/download/v3.46.1/task_${os}_${arch}.tar.gz" | tar xz -C "$TOOL_DEST" task
+    curl -sL "https://github.com/go-task/task/releases/download/v3.54.0/task_${os}_${arch}.tar.gz" | tar xz -C "$TOOL_DEST" task
 fi
 
 # Install oh-my-posh
