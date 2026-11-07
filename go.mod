@@ -11,7 +11,7 @@ require (
 	github.com/rotisserie/eris v0.5.4
 	github.com/sebdah/goldie/v2 v2.8.0
 	github.com/sergi/go-diff v1.4.0
-	go.yaml.in/yaml/v3 v3.0.5
+	go.yaml.in/yaml/v3 v3.0.6
 	gopkg.in/dnaeon/go-vcr.v4 v4.0.7
 )
 
